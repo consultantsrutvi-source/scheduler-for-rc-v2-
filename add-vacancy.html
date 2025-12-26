@@ -1,184 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Add Vacancy | Scheduler for RC</title>
+<meta charset="UTF-8">
+<title>Add Vacancy | Rutvi Consultants</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/add-vacancy.css">
+<style>
+/* ---------- RESET ---------- */
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f4f6f9;
+  color: #333;
+}
+
+/* ---------- HEADER ---------- */
+.header {
+  background: #ffffff;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.header img {
+  height: 42px;
+}
+
+.header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ---------- PAGE ---------- */
+.container {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 0 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* ---------- FORM GRID ---------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full {
+  grid-column: span 3;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+input, select, textarea {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #1976d2;
+}
+
+/* ---------- BUTTON ---------- */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+button {
+  background: linear-gradient(135deg, #1976d2, #0d47a1);
+  color: #fff;
+  border: none;
+  padding: 12px 26px;
+  font-size: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .form-group.full {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-group.full {
+    grid-column: span 1;
+  }
+}
+</style>
 </head>
 
 <body>
 
-<header class="topbar">
-  <div class="brand">
-    <img src="logo.png.jpg">
-    <span>Scheduler for RC</span>
+<!-- HEADER -->
+<div class="header">
+  <img src="logo.png" alt="Rutvi Consultants">
+  <h1>Scheduler for RC</h1>
+</div>
+
+<!-- PAGE -->
+<div class="container">
+  <div class="card">
+    <h2>Add Vacancy</h2>
+    <p style="color:#666;margin-bottom:10px;">Enter college faculty requirement details</p>
+
+    <form id="vacancyForm">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>College Name *</label>
+          <input type="text" required>
+        </div>
+
+        <div class="form-group">
+          <label>City *</label>
+          <input type="text" required>
+        </div>
+
+        <div class="form-group">
+          <label>Phone *</label>
+          <input type="tel" required>
+        </div>
+
+        <div class="form-group">
+          <label>Subject *</label>
+          <select required>
+            <option value="">Select</option>
+            <option>Physics</option>
+            <option>Chemistry</option>
+            <option>Mathematics</option>
+            <option>Biology</option>
+            <option>Botany</option>
+            <option>Zoology</option>
+            <option>Others</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Level *</label>
+          <select required>
+            <option value="">Select</option>
+            <option>Boards</option>
+            <option>KCET</option>
+            <option>NEET</option>
+            <option>JEE Main</option>
+            <option>JEE Advanced</option>
+            <option>Foundation</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Faculty Required *</label>
+          <input type="number" min="1" required>
+        </div>
+
+        <div class="form-group">
+          <label>Salary From *</label>
+          <select required>
+            <option value="">Select</option>
+            <option>₹50,000</option>
+            <option>₹75,000</option>
+            <option>₹1,00,000</option>
+            <option>₹1,50,000</option>
+            <option>₹2,00,000</option>
+            <option>₹2,50,000</option>
+            <option>₹3,00,000</option>
+            <option>₹3,50,000</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Salary To *</label>
+          <select required>
+            <option value="">Select</option>
+            <option>₹75,000</option>
+            <option>₹1,00,000</option>
+            <option>₹1,50,000</option>
+            <option>₹2,00,000</option>
+            <option>₹2,50,000</option>
+            <option>₹3,00,000</option>
+            <option>₹3,50,000</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Urgency *</label>
+          <select required>
+            <option>Immediate</option>
+            <option>Within 1 Week</option>
+            <option>Within 15 Days</option>
+            <option>Not Urgent</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Collected By *</label>
+          <input type="text" required>
+        </div>
+
+        <div class="form-group full">
+          <label>Notes</label>
+          <textarea rows="3"></textarea>
+        </div>
+
+      </div>
+
+      <div class="actions">
+        <button type="submit">💾 Save Vacancy</button>
+      </div>
+
+    </form>
   </div>
-
-  <nav>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="vacancies.html">Vacancies</a>
-    <a href="lecturers.html">Lecturers</a>
-    <a href="assignments.html">Assignments</a>
-  </nav>
-
-  <button class="logout-btn" onclick="logout()">Logout</button>
-</header>
-
-<main class="add-vacancy-container">
-
-  <h1>Add Vacancy</h1>
-  <p class="subtitle">Enter college requirement details</p>
-
-  <form id="vacancyForm">
-
-    <!-- ROW 1 -->
-    <div class="form-row">
-      <div class="form-group">
-        <label>College Name *</label>
-        <input type="text" id="college" required>
-      </div>
-
-      <div class="form-group">
-        <label>City *</label>
-        <input list="placesList" id="city" required>
-        <datalist id="placesList"></datalist>
-      </div>
-
-      <div class="form-group">
-        <label>Phone *</label>
-        <input type="tel" id="phone" required>
-      </div>
-    </div>
-
-    <!-- ROW 2 -->
-    <div class="form-row">
-      <div class="form-group">
-        <label>Subject *</label>
-        <select id="subject" onchange="toggleOtherSubject()" required>
-          <option value="">Select</option>
-          <option>Physics</option>
-          <option>Chemistry</option>
-          <option>Mathematics</option>
-          <option>Biology</option>
-          <option>Zoology</option>
-          <option>Botany</option>
-          <option>Others</option>
-        </select>
-      </div>
-
-      <div class="form-group" id="otherSubjectBox" style="display:none">
-        <label>Specify Subject *</label>
-        <input type="text" id="otherSubject">
-      </div>
-
-      <div class="form-group">
-        <label>Level *</label>
-        <select id="level" required>
-          <option value="">Select</option>
-          <option>Boards</option>
-          <option>KCET</option>
-          <option>NEET</option>
-          <option>JEE</option>
-          <option>Foundation</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- ROW 3 -->
-    <div class="form-row">
-      <div class="form-group">
-        <label>Faculty Required *</label>
-        <input type="number" id="faculty" required>
-      </div>
-
-      <div class="form-group">
-        <label>Salary From *</label>
-        <select id="salaryMin" required>
-          <option value="">Select</option>
-          <option value="50000">₹50,000</option>
-          <option value="75000">₹75,000</option>
-          <option value="100000">₹1,00,000</option>
-          <option value="150000">₹1,50,000</option>
-          <option value="200000">₹2,00,000</option>
-          <option value="250000">₹2,50,000</option>
-          <option value="300000">₹3,00,000</option>
-          <option value="350000">₹3,50,000</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Salary To *</label>
-        <select id="salaryMax" required>
-          <option value="">Select</option>
-          <option value="50000">₹50,000</option>
-          <option value="75000">₹75,000</option>
-          <option value="100000">₹1,00,000</option>
-          <option value="150000">₹1,50,000</option>
-          <option value="200000">₹2,00,000</option>
-          <option value="250000">₹2,50,000</option>
-          <option value="300000">₹3,00,000</option>
-          <option value="350000">₹3,50,000</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- ROW 4 -->
-    <div class="form-row">
-      <div class="form-group">
-        <label>Urgency *</label>
-        <select id="urgency" required>
-          <option>Immediate</option>
-          <option>Within 1 Week</option>
-          <option>Flexible</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Collected By *</label>
-        <input type="text" id="collectedBy" required>
-      </div>
-    </div>
-
-    <!-- ROW 5 -->
-    <div class="form-row">
-      <div class="form-group full">
-        <label>Notes</label>
-        <textarea id="notes"></textarea>
-      </div>
-    </div>
-
-    <div class="form-actions">
-      <button type="submit" class="save-btn">💾 Save Vacancy</button>
-      <a href="vacancies.html" class="cancel-btn">Cancel</a>
-    </div>
-
-  </form>
-</main>
-
-<script src="js/places.js"></script>
-
-<script>
-function toggleOtherSubject() {
-  const s = document.getElementById("subject").value;
-  document.getElementById("otherSubjectBox").style.display =
-    s === "Others" ? "block" : "none";
-}
-
-document.getElementById("vacancyForm").addEventListener("submit", e => {
-  e.preventDefault();
-
-  const min = +salaryMin.value;
-  const max = +salaryMax.value;
-  if (min > max) {
-    alert("Salary To must be greater than Salary From");
-    return;
-  }
-
-  alert("Vacancy will be saved to Google Sheet (backend connected)");
-});
-</script>
+</div>
 
 </body>
 </html>
