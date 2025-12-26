@@ -1,27 +1,37 @@
-const PLACES = [
+const cities = [
   // Karnataka
-  "Bagalkot","Ballari","Belagavi","Bengaluru Rural","Bengaluru Urban",
-  "Bidar","Chamarajanagar","Chikkaballapur","Chikkamagaluru","Chitradurga",
-  "Dakshina Kannada","Davanagere","Dharwad","Gadag","Hassan","Haveri",
-  "Kalaburagi","Kodagu","Kolar","Koppal","Mandya","Mysuru","Raichur",
-  "Ramanagara","Shivamogga","Tumakuru","Udupi","Uttara Kannada",
-  "Vijayanagara","Vijayapura","Yadgir",
+  "Bengaluru","Mysuru","Mangaluru","Udupi","Shivamogga","Davanagere",
+  "Ballari","Belagavi","Hubballi","Dharwad","Tumakuru","Chitradurga",
+  "Hassan","Mandya","Kolar","Chikkaballapur","Chikmagalur","Kodagu",
+  "Raichur","Yadgir","Kalaburagi","Bidar","Vijayapura","Bagalkot",
+  "Gadag","Haveri","Koppal","Ramanagara","Chamarajanagar",
 
   // Andhra Pradesh
-  "Anakapalli","Ananthapuramu","Bapatla","Chittoor","East Godavari",
-  "Eluru","Guntur","Kadapa","Kakinada","Krishna","Kurnool","Nellore",
-  "Palnadu","Prakasam","Srikakulam","Tirupati","Visakhapatnam",
-  "Vizianagaram","West Godavari",
+  "Visakhapatnam","Vijayawada","Guntur","Nellore","Tirupati",
+  "Kurnool","Anantapur","Kadapa","Rajahmundry","Eluru","Ongole",
 
   // Telangana
-  "Hyderabad","Karimnagar","Khammam","Mahabubnagar","Nalgonda",
-  "Nizamabad","Ranga Reddy","Warangal",
+  "Hyderabad","Warangal","Karimnagar","Nizamabad","Khammam",
+  "Mahabubnagar","Adilabad","Nalgonda","Siddipet",
 
   // Tamil Nadu
-  "Chennai","Coimbatore","Madurai","Salem","Tiruppur","Trichy",
-  "Thoothukudi","Tirunelveli","Vellore","Erode",
+  "Chennai","Coimbatore","Madurai","Salem","Erode","Tiruppur",
+  "Vellore","Trichy","Thanjavur","Tirunelveli","Thoothukudi",
+  "Kanchipuram","Chengalpattu",
 
   // Maharashtra
-  "Mumbai","Pune","Nagpur","Nashik","Aurangabad","Kolhapur",
-  "Solapur","Thane","Amravati","Satara"
+  "Mumbai","Pune","Nagpur","Nashik","Aurangabad","Jalgaon",
+  "Kolhapur","Satara","Sangli","Solapur","Amravati","Akola",
+  "Latur","Beed","Parbhani","Nanded"
 ];
+
+document.addEventListener("DOMContentLoaded", () => {
+  const list = document.getElementById("citiesList");
+  if (!list) return;
+
+  cities.forEach(city => {
+    const option = document.createElement("option");
+    option.value = city;
+    list.appendChild(option);
+  });
+});
