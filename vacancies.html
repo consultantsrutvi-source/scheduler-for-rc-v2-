@@ -2,98 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Vacancies | Scheduler RC</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Base -->
+  <title>Vacancies | Scheduler for RC</title>
   <link rel="stylesheet" href="css/style.css">
-  <!-- Vacancies -->
   <link rel="stylesheet" href="css/vacancies.css">
 </head>
-<body onload="requireLogin()">
 
-<header class="topbar">
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="top-bar">
   <div class="logo">Scheduler for RC</div>
 
-  <nav class="nav">
+  <nav>
     <a href="dashboard.html">Dashboard</a>
-    <a class="active" href="vacancies.html">Vacancies</a>
+    <a href="vacancies.html" class="active">Vacancies</a>
+    <a href="lecturers.html">Lecturers</a>
+    <a href="assignments.html">Assignments</a>
   </nav>
 
   <button class="logout-btn" onclick="logout()">Logout</button>
 </header>
 
-<main class="container">
+<!-- ===== MAIN ===== -->
+<main class="vacancy-container">
 
   <!-- PAGE HEADER -->
   <div class="page-header">
     <div>
-      <h1>Vacancies</h1>
+      <h2>Vacancies</h2>
       <p class="subtitle">Search, filter and manage faculty requirements</p>
     </div>
 
     <div class="header-actions">
-      <button class="btn secondary" onclick="window.print()">🖨 Print</button>
-      <button class="btn primary" onclick="location.href='add-vacancy.html'">➕ Add Vacancy</button>
+      <button class="btn btn-print" onclick="window.print()">🖨 Print</button>
+      <button class="btn btn-primary" onclick="location.href='add-vacancy.html'">＋ Add Vacancy</button>
     </div>
   </div>
 
-  <!-- FILTERS -->
-  <section class="filters">
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <input type="text" id="searchCollege" placeholder="Search College">
 
-    <!-- College Search -->
-    <input type="text" placeholder="Search College Name">
+    <input list="placesList" id="placeInput" placeholder="Search / Select City">
+    <datalist id="placesList"></datalist>
 
-    <!-- Place Search with list -->
-    <input type="text" list="placesList" placeholder="Search / Select City">
-    <datalist id="placesList">
-      <!-- Karnataka -->
-      <option>Bengaluru</option>
-      <option>Bengaluru Rural</option>
-      <option>Mysuru</option>
-      <option>Mangaluru</option>
-      <option>Udupi</option>
-      <option>Shivamogga</option>
-      <option>Chikkamagaluru</option>
-      <option>Hassan</option>
-      <option>Mandya</option>
-      <option>Tumakuru</option>
-      <option>Davanagere</option>
-      <option>Chitradurga</option>
-      <option>Ballari</option>
-      <option>Kalaburagi</option>
-      <option>Raichur</option>
-      <option>Bidar</option>
-      <option>Vijayapura</option>
-      <option>Bagalkot</option>
-      <option>Belagavi</option>
-      <option>Dharwad</option>
-      <option>Haveri</option>
-      <option>Gadag</option>
-      <option>Uttara Kannada</option>
-      <option>Kodagu</option>
-      <option>Kolar</option>
-      <option>Chikkaballapura</option>
-      <option>Ramanagara</option>
-      <option>Yadgir</option>
-      <option>Koppal</option>
-
-      <!-- Other States -->
-      <option>Hyderabad</option>
-      <option>Visakhapatnam</option>
-      <option>Vijayawada</option>
-      <option>Chennai</option>
-      <option>Coimbatore</option>
-      <option>Pune</option>
-      <option>Mumbai</option>
-      <option>Nagpur</option>
-      <option>Nashik</option>
-      <option>Aurangabad</option>
-    </datalist>
-
-    <!-- Subject -->
-    <select>
-      <option>All Subjects</option>
+    <select id="filterSubject">
+      <option value="">All Subjects</option>
       <option>Physics</option>
       <option>Chemistry</option>
       <option>Mathematics</option>
@@ -103,9 +57,8 @@
       <option>Others</option>
     </select>
 
-    <!-- Level -->
-    <select>
-      <option>All Levels</option>
+    <select id="filterLevel">
+      <option value="">All Levels</option>
       <option>Boards</option>
       <option>KCET</option>
       <option>NEET</option>
@@ -114,27 +67,23 @@
       <option>Foundation</option>
     </select>
 
-    <!-- Urgency -->
-    <select>
-      <option>All Urgency</option>
+    <select id="filterUrgency">
+      <option value="">All Urgency</option>
       <option>Immediate</option>
       <option>Within 1 Week</option>
-      <option>Within 2 Weeks</option>
-      <option>Flexible</option>
+      <option>Within 1 Month</option>
     </select>
 
-    <!-- Status -->
-    <select>
-      <option>All Status</option>
+    <select id="filterStatus">
+      <option value="">All Status</option>
       <option>Open</option>
       <option>Assigned</option>
       <option>Closed</option>
     </select>
-
-  </section>
+  </div>
 
   <!-- TABLE -->
-  <section class="table-card">
+  <div class="table-wrap">
     <table>
       <thead>
         <tr>
@@ -147,38 +96,20 @@
           <th>Urgency</th>
           <th>Faculty</th>
           <th>Status</th>
-          <th>Actions</th>
+          <th class="no-print">Actions</th>
         </tr>
       </thead>
 
-      <tbody>
+      <tbody id="vacancyTable">
         <tr>
-          <td colspan="10" class="empty">
-            No vacancies yet. Click <b>Add Vacancy</b> to create one.
-          </td>
-        </tr>
-
-        <!-- Sample preview row -->
-        <tr>
-          <td>VAC201</td>
-          <td>ABC PU College</td>
-          <td>Bengaluru</td>
-          <td>Physics</td>
-          <td>NEET</td>
-          <td>₹90,000</td>
-          <td><span class="badge urgent">Immediate</span></td>
-          <td>2</td>
-          <td><span class="status open">Open</span></td>
-          <td>
-            <button class="icon-btn">🖨</button>
-            <button class="icon-btn danger">🗑</button>
-          </td>
+          <td colspan="10" class="empty">No vacancies yet. Click <b>Add Vacancy</b>.</td>
         </tr>
       </tbody>
     </table>
-  </section>
+  </div>
 
 </main>
 
+<script src="js/vacancies.js"></script>
 </body>
 </html>
