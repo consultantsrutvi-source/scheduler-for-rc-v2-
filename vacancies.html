@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <title>Vacancies | Scheduler for RC</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/vacancies.css">
+  <link rel="stylesheet" href="css/vacancies.css" />
 </head>
 
 <body>
 
-<!-- ===== HEADER ===== -->
-<header class="top-bar">
-  <div class="logo">Scheduler for RC</div>
+<header class="topbar">
+  <div class="brand">
+    <img src="logo.png" alt="Rutvi Consultants" />
+    <span>Scheduler for RC</span>
+  </div>
 
   <nav>
     <a href="dashboard.html">Dashboard</a>
-    <a href="vacancies.html" class="active">Vacancies</a>
+    <a class="active" href="vacancies.html">Vacancies</a>
     <a href="lecturers.html">Lecturers</a>
     <a href="assignments.html">Assignments</a>
   </nav>
@@ -23,28 +24,21 @@
   <button class="logout-btn" onclick="logout()">Logout</button>
 </header>
 
-<!-- ===== MAIN ===== -->
-<main class="vacancy-container">
+<main class="container">
 
-  <!-- PAGE HEADER -->
   <div class="page-header">
-    <div>
-      <h2>Vacancies</h2>
-      <p class="subtitle">Search, filter and manage faculty requirements</p>
-    </div>
+    <h2>Vacancies</h2>
 
-    <div class="header-actions">
-      <button class="btn btn-print" onclick="window.print()">🖨 Print</button>
-      <button class="btn btn-primary" onclick="location.href='add-vacancy.html'">＋ Add Vacancy</button>
+    <div class="actions">
+      <button class="btn print" onclick="window.print()">🖨 Print</button>
+      <button class="btn add" onclick="location.href='add-vacancy.html'">➕ Add Vacancy</button>
     </div>
   </div>
 
-  <!-- FILTER BAR -->
-  <div class="filter-bar">
-    <input type="text" id="searchCollege" placeholder="Search College">
-
-    <input list="placesList" id="placeInput" placeholder="Search / Select City">
-    <datalist id="placesList"></datalist>
+  <!-- FILTERS -->
+  <div class="filters">
+    <input type="text" id="filterCollege" placeholder="Search College" />
+    <input type="text" id="filterPlace" list="placesList" placeholder="Search / Select City" />
 
     <select id="filterSubject">
       <option value="">All Subjects</option>
@@ -70,8 +64,8 @@
     <select id="filterUrgency">
       <option value="">All Urgency</option>
       <option>Immediate</option>
-      <option>Within 1 Week</option>
-      <option>Within 1 Month</option>
+      <option>Within a week</option>
+      <option>Normal</option>
     </select>
 
     <select id="filterStatus">
@@ -83,7 +77,7 @@
   </div>
 
   <!-- TABLE -->
-  <div class="table-wrap">
+  <div class="table-wrapper">
     <table>
       <thead>
         <tr>
@@ -96,34 +90,29 @@
           <th>Urgency</th>
           <th>Faculty</th>
           <th>Status</th>
-          <th class="no-print">Actions</th>
+          <th>Actions</th>
         </tr>
       </thead>
 
       <tbody id="vacancyTable">
-        <tr>
-          <td colspan="10" class="empty">No vacancies yet. Click <b>Add Vacancy</b>.</td>
-        </tr>
+        <!-- JS injects rows -->
       </tbody>
     </table>
   </div>
 
 </main>
 
-<script src="js/vacancies.js"></script>
-</body>
-</html>
-<!-- Place search -->
-<input list="placesList" id="placeFilter" placeholder="Search / Select Place">
-
 <datalist id="placesList"></datalist>
 
 <script src="js/places.js"></script>
+<script src="js/vacancies.js"></script>
+
 <script>
-  const list = document.getElementById("placesList");
-  PLACES.forEach(p => {
-    const o = document.createElement("option");
-    o.value = p;
-    list.appendChild(o);
-  });
+function logout() {
+  localStorage.clear();
+  location.href = "index.html";
+}
 </script>
+
+</body>
+</html>
