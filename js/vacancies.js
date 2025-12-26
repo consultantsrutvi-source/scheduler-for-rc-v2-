@@ -49,3 +49,25 @@ document.addEventListener("DOMContentLoaded", () => {
     list.appendChild(o);
   });
 });
+google.script.run.withSuccessHandler(renderVacancies).getVacancies();
+
+function renderVacancies(data) {
+  const tbody = document.getElementById("vacancyTable");
+  tbody.innerHTML = "";
+
+  data.forEach(v => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${v.VacancyID}</td>
+      <td>${v.CollegeName}</td>
+      <td>${v.City}</td>
+      <td>${v.Subject}</td>
+      <td>${v.Level}</td>
+      <td>${v.Salary}</td>
+      <td>${v.Urgency}</td>
+      <td>${v.FacultyRequired}</td>
+      <td>${v.Status}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
