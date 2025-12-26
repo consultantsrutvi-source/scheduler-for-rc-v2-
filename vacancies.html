@@ -113,3 +113,17 @@
 <script src="js/vacancies.js"></script>
 </body>
 </html>
+<!-- Place search -->
+<input list="placesList" id="placeFilter" placeholder="Search / Select Place">
+
+<datalist id="placesList"></datalist>
+
+<script src="js/places.js"></script>
+<script>
+  const list = document.getElementById("placesList");
+  PLACES.forEach(p => {
+    const o = document.createElement("option");
+    o.value = p;
+    list.appendChild(o);
+  });
+</script>
