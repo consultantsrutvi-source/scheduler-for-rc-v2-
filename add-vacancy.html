@@ -190,7 +190,16 @@ button.save-btn:hover {
 
         <div class="form-group">
           <label>City *</label>
-          <input required>
+<input 
+  type="text" 
+  id="city" 
+  list="citiesList" 
+  placeholder="Search / Select City" 
+  required
+>
+
+<datalist id="citiesList"></datalist>
+
         </div>
 
         <div class="form-group">
@@ -288,6 +297,7 @@ button.save-btn:hover {
     </form>
   </div>
 </div>
+<script src="js/places.js"></script>
 
 </body>
 </html>
