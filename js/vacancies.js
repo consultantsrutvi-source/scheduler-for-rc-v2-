@@ -1,24 +1,3 @@
-function logout() {
-  localStorage.clear();
-  location.href = "index.html";
-}
-
-/* ===== KARNATAKA PLACES ===== */
-const places = [
-  "Bengaluru","Mysuru","Mangaluru","Hubballi","Dharwad","Belagavi",
-  "Ballari","Kalaburagi","Bidar","Raichur","Koppal","Vijayapura",
-  "Bagalkot","Chikkamagaluru","Shivamogga","Udupi","Karwar",
-  "Hassan","Mandya","Tumakuru","Kolar","Chitradurga","Davangere"
-];
-
-const placeList = document.getElementById("placesList");
-places.forEach(p => {
-  const o = document.createElement("option");
-  o.value = p;
-  placeList.appendChild(o);
-});
-
-/* ===== SAMPLE DATA (REMOVE LATER) ===== */
 const vacancies = [
   {
     id: "VAC201",
@@ -33,12 +12,13 @@ const vacancies = [
   }
 ];
 
-function loadVacancies() {
-  const tbody = document.getElementById("vacancyTable");
-  tbody.innerHTML = "";
+const table = document.getElementById("vacancyTable");
+
+function renderTable() {
+  table.innerHTML = "";
 
   vacancies.forEach(v => {
-    tbody.innerHTML += `
+    table.innerHTML += `
       <tr>
         <td>${v.id}</td>
         <td>${v.college}</td>
@@ -46,13 +26,26 @@ function loadVacancies() {
         <td>${v.subject}</td>
         <td>${v.level}</td>
         <td>${v.salary}</td>
-        <td><span class="badge urgency-immediate">${v.urgency}</span></td>
+        <td>${v.urgency}</td>
         <td>${v.faculty}</td>
-        <td><span class="badge status-open">${v.status}</span></td>
-        <td class="no-print">✏️ 🗑</td>
+        <td><span class="status ${v.status.toLowerCase()}">${v.status}</span></td>
+        <td>
+          <span class="action-btn">✏️</span>
+          <span class="action-btn">🗑</span>
+        </td>
       </tr>
     `;
   });
 }
 
-document.addEventListener("DOMContentLoaded", loadVacancies);
+document.addEventListener("DOMContentLoaded", () => {
+  renderTable();
+
+  // load places
+  const list = document.getElementById("placesList");
+  PLACES.forEach(p => {
+    const o = document.createElement("option");
+    o.value = p;
+    list.appendChild(o);
+  });
+});
