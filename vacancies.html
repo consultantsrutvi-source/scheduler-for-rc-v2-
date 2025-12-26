@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vacancies | Scheduler RC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Base -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Vacancies -->
+  <link rel="stylesheet" href="css/vacancies.css">
+</head>
+<body onload="requireLogin()">
+
+<header class="topbar">
+  <div class="logo">Scheduler for RC</div>
+
+  <nav class="nav">
+    <a href="dashboard.html">Dashboard</a>
+    <a class="active" href="vacancies.html">Vacancies</a>
+  </nav>
+
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</header>
+
+<main class="container">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div>
+      <h1>Vacancies</h1>
+      <p class="subtitle">Search, filter and manage faculty requirements</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn secondary" onclick="window.print()">🖨 Print</button>
+      <button class="btn primary" onclick="location.href='add-vacancy.html'">➕ Add Vacancy</button>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <section class="filters">
+
+    <!-- College Search -->
+    <input type="text" placeholder="Search College Name">
+
+    <!-- Place Search with list -->
+    <input type="text" list="placesList" placeholder="Search / Select City">
+    <datalist id="placesList">
+      <!-- Karnataka -->
+      <option>Bengaluru</option>
+      <option>Bengaluru Rural</option>
+      <option>Mysuru</option>
+      <option>Mangaluru</option>
+      <option>Udupi</option>
+      <option>Shivamogga</option>
+      <option>Chikkamagaluru</option>
+      <option>Hassan</option>
+      <option>Mandya</option>
+      <option>Tumakuru</option>
+      <option>Davanagere</option>
+      <option>Chitradurga</option>
+      <option>Ballari</option>
+      <option>Kalaburagi</option>
+      <option>Raichur</option>
+      <option>Bidar</option>
+      <option>Vijayapura</option>
+      <option>Bagalkot</option>
+      <option>Belagavi</option>
+      <option>Dharwad</option>
+      <option>Haveri</option>
+      <option>Gadag</option>
+      <option>Uttara Kannada</option>
+      <option>Kodagu</option>
+      <option>Kolar</option>
+      <option>Chikkaballapura</option>
+      <option>Ramanagara</option>
+      <option>Yadgir</option>
+      <option>Koppal</option>
+
+      <!-- Other States -->
+      <option>Hyderabad</option>
+      <option>Visakhapatnam</option>
+      <option>Vijayawada</option>
+      <option>Chennai</option>
+      <option>Coimbatore</option>
+      <option>Pune</option>
+      <option>Mumbai</option>
+      <option>Nagpur</option>
+      <option>Nashik</option>
+      <option>Aurangabad</option>
+    </datalist>
+
+    <!-- Subject -->
+    <select>
+      <option>All Subjects</option>
+      <option>Physics</option>
+      <option>Chemistry</option>
+      <option>Mathematics</option>
+      <option>Biology</option>
+      <option>Zoology</option>
+      <option>Botany</option>
+      <option>Others</option>
+    </select>
+
+    <!-- Level -->
+    <select>
+      <option>All Levels</option>
+      <option>Boards</option>
+      <option>KCET</option>
+      <option>NEET</option>
+      <option>JEE Mains</option>
+      <option>JEE Advanced</option>
+      <option>Foundation</option>
+    </select>
+
+    <!-- Urgency -->
+    <select>
+      <option>All Urgency</option>
+      <option>Immediate</option>
+      <option>Within 1 Week</option>
+      <option>Within 2 Weeks</option>
+      <option>Flexible</option>
+    </select>
+
+    <!-- Status -->
+    <select>
+      <option>All Status</option>
+      <option>Open</option>
+      <option>Assigned</option>
+      <option>Closed</option>
+    </select>
+
+  </section>
+
+  <!-- TABLE -->
+  <section class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>College</th>
+          <th>City</th>
+          <th>Subject</th>
+          <th>Level</th>
+          <th>Salary</th>
+          <th>Urgency</th>
+          <th>Faculty</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td colspan="10" class="empty">
+            No vacancies yet. Click <b>Add Vacancy</b> to create one.
+          </td>
+        </tr>
+
+        <!-- Sample preview row -->
+        <tr>
+          <td>VAC201</td>
+          <td>ABC PU College</td>
+          <td>Bengaluru</td>
+          <td>Physics</td>
+          <td>NEET</td>
+          <td>₹90,000</td>
+          <td><span class="badge urgent">Immediate</span></td>
+          <td>2</td>
+          <td><span class="status open">Open</span></td>
+          <td>
+            <button class="icon-btn">🖨</button>
+            <button class="icon-btn danger">🗑</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+</body>
+</html>
