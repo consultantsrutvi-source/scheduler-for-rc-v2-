@@ -301,6 +301,57 @@ button.save-btn:hover {
   </div>
 </div>
 <script src="js/places.js"></script>
+<div id="saveStatus" style="margin-top:12px;font-weight:600;"></div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsT3dyPERKTfYhTf4BjCo8mzLrzYGxhLmS0MLfXnjX3hElLESnqchauzgxV87uJ4BOMA/exec";
+
+/* save vacancy logic */
+document.getElementById("vacancyForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const status = document.getElementById("saveStatus");
+  status.style.color = "#555";
+  status.innerText = "⏳ Saving vacancy, please wait...";
+
+  const payload = {
+    college: document.getElementById("college").value,
+    city: document.getElementById("city").value,
+    phone: document.getElementById("phone").value,
+    subject: document.getElementById("subject").value,
+    level: document.getElementById("level").value,
+    faculty: document.getElementById("faculty").value,
+    salaryFrom: document.getElementById("salaryMin").value,
+    salaryTo: document.getElementById("salaryMax").value,
+    urgency: document.getElementById("urgency").value,
+    collectedBy: document.getElementById("collectedBy").value,
+    notes: document.getElementById("notes").value
+  };
+
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+
+    const result = await res.json();
+
+    if (result.success) {
+      status.style.color = "green";
+      status.innerText = "✅ Vacancy saved successfully (ID: " + result.id + ")";
+      document.getElementById("vacancyForm").reset();
+    } else {
+      status.style.color = "red";
+      status.innerText = "❌ Could not save: " + result.error;
+    }
+  } catch (err) {
+    status.style.color = "red";
+    status.innerText = "❌ Network / Script error: " + err.message;
+  }
+});
+</script>
 
 </body>
 </html>
+
+
