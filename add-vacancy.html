@@ -1,369 +1,345 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Add Vacancy | Rutvi Consultants</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Add Vacancy | Rutvi Consultants</title>
 
-<style>
-* {
-  box-sizing: border-box;
-  font-family: "Segoe UI", system-ui, sans-serif;
-}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-body {
-  margin: 0;
-  background: #f4f6f9;
-  color: #333;
-}
+  <!-- MAIN STYLE -->
+  <link rel="stylesheet" href="css/style.css" />
 
-/* ===== NAVBAR ===== */
-.navbar {
-  background: #ffffff;
-  border-bottom: 1px solid #e0e0e0;
-  padding: 12px 26px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+  <style>
+    body {
+      background: #f4f6f9;
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+    }
 
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #ddd;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-.nav-left img {
-  height: 42px;
-}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-.nav-left span {
-  font-weight: 600;
-  font-size: 15px;
-}
+    .brand img {
+      height: 42px;
+    }
 
-.nav-links a {
-  margin-right: 18px;
-  text-decoration: none;
-  font-size: 14px;
-  color: #444;
-  font-weight: 500;
-}
+    nav a {
+      margin-right: 18px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
 
-.nav-links a.active {
-  color: #1976d2;
-  font-weight: 600;
-}
+    .logout-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
 
-.logout-btn {
-  background: #e53935;
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 13px;
-}
+    .container {
+      max-width: 980px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
 
-/* ===== PAGE ===== */
-.container {
-  max-width: 1100px;
-  margin: 32px auto;
-  padding: 0 20px;
-}
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
 
-.card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 28px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-}
+    h2 {
+      margin-top: 0;
+      margin-bottom: 6px;
+    }
 
-.card h2 {
-  margin-top: 0;
-  font-size: 22px;
-  font-weight: 600;
-}
+    .subtitle {
+      color: #666;
+      margin-bottom: 22px;
+    }
 
-/* ===== FORM ===== */
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-  margin-top: 20px;
-}
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
 
-.form-group.full {
-  grid-column: span 3;
-}
+    .grid-1 {
+      grid-template-columns: 1fr;
+    }
 
-label {
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: block;
+    }
 
-input, select, textarea {
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
 
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: #1976d2;
-}
+    textarea {
+      resize: vertical;
+    }
 
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 24px;
-}
+    .hidden {
+      display: none;
+    }
 
-button.save-btn {
-  background: linear-gradient(135deg, #1976d2, #0d47a1);
-  color: #fff;
-  border: none;
-  padding: 12px 26px;
-  font-size: 15px;
-  border-radius: 10px;
-  cursor: pointer;
-}
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 24px;
+      gap: 12px;
+    }
 
-button.save-btn:hover {
-  opacity: 0.9;
-}
-<div id="saveStatus" style="margin-top:10px;font-weight:600;"></div>
+    .save-btn {
+      background: #0d6efd;
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+    }
 
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 900px) {
-  .form-grid { grid-template-columns: repeat(2, 1fr); }
-  .form-group.full { grid-column: span 2; }
-}
-
-@media (max-width: 600px) {
-  .form-grid { grid-template-columns: 1fr; }
-  .form-group.full { grid-column: span 1; }
-}
-</style>
+    .status-msg {
+      margin-top: 16px;
+      font-weight: 600;
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- ===== NAVBAR ===== -->
-<div class="navbar">
-  <div class="nav-left">
-    <!-- 🔴 CHANGE PATH IF NEEDED -->
+<header>
+  <div class="brand">
     <img src="logo.png.jpg" alt="Rutvi Consultants">
-    <span>Scheduler for RC</span>
+    <strong>Scheduler for RC</strong>
   </div>
 
-  <div class="nav-links">
+  <nav>
     <a href="dashboard.html">Dashboard</a>
     <a href="vacancies.html">Vacancies</a>
     <a href="lecturers.html">Lecturers</a>
     <a href="assignments.html">Assignments</a>
-  </div>
+  </nav>
 
-  <button class="logout-btn" 
-    
-  <button onclick="logout()">Logout</button>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</header>
 
-<script>
-function logout() {
-  localStorage.clear();
-  sessionStorage.clear();
-  window.location.href = "index.html";
-}
-</script>
-
-</div>
-
-<!-- ===== PAGE ===== -->
 <div class="container">
   <div class="card">
     <h2>Add Vacancy</h2>
-    <p style="color:#666">Enter college faculty requirement details</p>
+    <div class="subtitle">Enter college faculty requirement details</div>
 
-    <form>
+    <form id="vacancyForm">
+      <div class="grid">
 
-      <div class="form-grid">
-
-        <div class="form-group">
+        <div>
           <label>College Name *</label>
-          <input required>
+          <input id="college" required />
         </div>
 
-        <div class="form-group">
+        <div>
           <label>City *</label>
-<input 
-  type="text" 
-  id="city" 
-  list="citiesList" 
-  placeholder="Search / Select City" 
-  required
->
-
-<datalist id="citiesList"></datalist>
-
+          <input list="cityList" id="city" required />
+          <datalist id="cityList"></datalist>
         </div>
 
-        <div class="form-group">
+        <div>
           <label>Phone *</label>
-          <input required>
+          <input id="phone" required />
         </div>
 
-        <div class="form-group">
+        <div>
           <label>Subject *</label>
-          <select required>
+          <select id="subject" required>
             <option value="">Select</option>
             <option>Physics</option>
             <option>Chemistry</option>
             <option>Mathematics</option>
             <option>Biology</option>
-            <option>Botany</option>
             <option>Zoology</option>
+            <option>Botany</option>
             <option>Others</option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div id="subjectOtherBox" class="hidden">
+          <label>Other Subject</label>
+          <input id="subjectOther" />
+        </div>
+
+        <div>
           <label>Level *</label>
-          <select required>
+          <select id="level" required>
             <option value="">Select</option>
             <option>Boards</option>
             <option>KCET</option>
             <option>NEET</option>
-            <option>JEE Main</option>
+            <option>JEE Mains</option>
             <option>JEE Advanced</option>
             <option>Foundation</option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div>
           <label>Faculty Required *</label>
-          <input type="number" min="1" required>
+          <input type="number" id="faculty" required />
         </div>
 
-        <div class="form-group">
+        <div>
           <label>Salary From *</label>
-          <select required>
-            <option value="">Select</option>
-            <option>₹50,000</option>
-            <option>₹75,000</option>
-            <option>₹1,00,000</option>
-            <option>₹1,50,000</option>
-            <option>₹2,00,000</option>
-            <option>₹2,50,000</option>
-            <option>₹3,00,000</option>
-            <option>₹3,50,000</option>
-          </select>
+          <select id="salaryFrom" required></select>
         </div>
 
-        <div class="form-group">
+        <div>
           <label>Salary To *</label>
-          <select required>
-            <option value="">Select</option>
-            <option>₹75,000</option>
-            <option>₹1,00,000</option>
-            <option>₹1,50,000</option>
-            <option>₹2,00,000</option>
-            <option>₹2,50,000</option>
-            <option>₹3,00,000</option>
-            <option>₹3,50,000</option>
-          </select>
+          <select id="salaryTo" required></select>
         </div>
 
-        <div class="form-group">
+        <div>
           <label>Urgency *</label>
-          <select required>
+          <select id="urgency" required>
             <option>Immediate</option>
             <option>Within 1 Week</option>
             <option>Within 15 Days</option>
-            <option>Not Urgent</option>
+            <option>Within 1 Month</option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div>
           <label>Collected By *</label>
-          <input required>
+          <input id="collectedBy" required />
         </div>
 
-        <div class="form-group full">
+      </div>
+
+      <div class="grid grid-1" style="margin-top:16px">
+        <div>
           <label>Notes</label>
-          <textarea rows="3"></textarea>
+          <textarea id="notes" rows="3"></textarea>
         </div>
-
       </div>
 
       <div class="actions">
-        <button class="save-btn">💾 Save Vacancy</button>
+        <button type="submit" class="save-btn">💾 Save Vacancy</button>
       </div>
 
+      <div id="status" class="status-msg"></div>
     </form>
-    
   </div>
 </div>
+
+<!-- 🔹 PLACES SCRIPT (REPLACE URL IF NEEDED) -->
 <script src="js/places.js"></script>
-<div id="saveStatus" style="margin-top:12px;font-weight:600;"></div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsT3dyPERKTfYhTf4BjCo8mzLrzYGxhLmS0MLfXnjX3hElLESnqchauzgxV87uJ4BOMA/exec";
-
-/* save vacancy logic */
-document.getElementById("vacancyForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
-console.log("SAVE BUTTON CLICKED");
-
-  const status = document.getElementById("saveStatus");
-  status.style.color = "#555";
-  status.innerText = "⏳ Saving vacancy, please wait...";
-
-  const payload = {
-    college: document.getElementById("college").value,
-    city: document.getElementById("city").value,
-    phone: document.getElementById("phone").value,
-    subject: document.getElementById("subject").value,
-    level: document.getElementById("level").value,
-    faculty: document.getElementById("faculty").value,
-    salaryFrom: document.getElementById("salaryMin").value,
-    salaryTo: document.getElementById("salaryMax").value,
-    urgency: document.getElementById("urgency").value,
-    collectedBy: document.getElementById("collectedBy").value,
-    notes: document.getElementById("notes").value
-  };
-
-  try {
-    const res = await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
-
-    const result = await res.json();
-
-    if (result.success) {
-      status.style.color = "green";
-      status.innerText = "✅ Vacancy saved successfully (ID: " + result.id + ")";
-      document.getElementById("vacancyForm").reset();
-    } else {
-      status.style.color = "red";
-      status.innerText = "❌ Could not save: " + result.error;
-    }
-  } catch (err) {
-    status.style.color = "red";
-    status.innerText = "❌ Network / Script error: " + err.message;
+  /* ---------- LOGOUT ---------- */
+  function logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = "index.html";
   }
-});
+
+  /* ---------- LOAD CITIES ---------- */
+  const cityList = document.getElementById("cityList");
+  if (typeof cities !== "undefined") {
+   cities.forEach(c => {
+      const o = document.createElement("option");
+      o.value = c;
+      cityList.appendChild(o);
+    });
+  }
+
+  /* ---------- SALARY DROPDOWN ---------- */
+  const salaryFrom = document.getElementById("salaryFrom");
+  const salaryTo = document.getElementById("salaryTo");
+
+  for (let s = 50000; s <= 350000; s += 25000) {
+    const label = "₹" + (s/1000) + "k";
+    salaryFrom.add(new Option(label, s));
+    salaryTo.add(new Option(label, s));
+  }
+
+  /* ---------- SUBJECT OTHER ---------- */
+  document.getElementById("subject").addEventListener("change", e => {
+    document.getElementById("subjectOtherBox")
+      .classList.toggle("hidden", e.target.value !== "Others");
+  });
+
+  /* ---------- SUBMIT ---------- */
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsT3dyPERKTfYhTf4BjCo8mzLrzYGxhLmS0MLfXnjX3hElLESnqchauzgxV87uJ4BOMA/exec";
+
+  document.getElementById("vacancyForm").addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const status = document.getElementById("status");
+    status.style.color = "#333";
+    status.innerText = "⏳ Saving vacancy...";
+
+    const payload = {
+      college: college.value,
+      city: city.value,
+      phone: phone.value,
+      subject: subject.value === "Others" ? subjectOther.value : subject.value,
+      level: level.value,
+      faculty: faculty.value,
+      salaryFrom: salaryFrom.value,
+      salaryTo: salaryTo.value,
+      urgency: urgency.value,
+      collectedBy: collectedBy.value,
+      notes: notes.value
+    };
+
+    try {
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+
+      const result = await res.json();
+
+      if (result.success) {
+        status.style.color = "green";
+        status.innerText = "✅ Vacancy saved successfully (ID: " + result.id + ")";
+        e.target.reset();
+      } else {
+        status.style.color = "red";
+        status.innerText = "❌ Could not save: " + result.error;
+      }
+    } catch (err) {
+      status.style.color = "red";
+      status.innerText = "❌ Network / Script error";
+    }
+  });
 </script>
 
 </body>
 </html>
-
-
