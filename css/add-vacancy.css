@@ -62,3 +62,23 @@ input, select, textarea {
   text-decoration: none;
   color: #333;
 }
+/* ---- spacing & clarity patch ---- */
+.grid > div {
+  margin-bottom: 6px;
+}
+
+label {
+  margin-bottom: 6px;
+}
+
+input, select, textarea {
+  background: #fafafa;
+}
+
+input:focus, select:focus, textarea:focus {
+  background: #ffffff;
+}
+
+.card {
+  line-height: 1.4;
+}
