@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Vacancy</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2>Add Vacancy</h2>
+
+<form id="vacancyForm">
+  <input placeholder="College Name *" id="college" required>
+  <input list="placesList" placeholder="City *" id="city" required>
+  <input placeholder="Phone *" id="phone" required>
+
+  <select id="subject" required>
+    <option value="">Subject *</option>
+    <option>Physics</option>
+    <option>Chemistry</option>
+    <option>Mathematics</option>
+    <option>Biology</option>
+    <option>Zoology</option>
+    <option>Botany</option>
+  </select>
+
+  <select id="level" required>
+    <option value="">Level *</option>
+    <option>Boards</option>
+    <option>KCET</option>
+    <option>NEET</option>
+    <option>JEE</option>
+    <option>Foundation</option>
+  </select>
+
+  <input placeholder="Salary Offered *" id="salary" required>
+  <input placeholder="Faculty Required *" id="faculty" required>
+
+  <select id="urgency" required>
+    <option value="">Urgency *</option>
+    <option>Immediate</option>
+    <option>Within 1 Week</option>
+    <option>Normal</option>
+  </select>
+
+  <input placeholder="Collected By" id="collectedBy">
+  <textarea placeholder="Notes" id="notes"></textarea>
+
+  <button type="submit">Save Vacancy</button>
+</form>
+
+<datalist id="placesList"></datalist>
+
+<script src="js/places.js"></script>
+<script>
+/* load places */
+const list = document.getElementById("placesList");
+PLACES.forEach(p => {
+  const o = document.createElement("option");
+  o.value = p;
+  list.appendChild(o);
+});
+
+/* generate simple ID */
+function generateVacancyId() {
+  return "VAC" + Math.floor(100 + Math.random() * 900);
+}
+
+document.getElementById("vacancyForm").addEventListener("submit", e => {
+  e.preventDefault();
+
+  const data = {
+    vacancyId: generateVacancyId(),
+    collegeName: college.value,
+    city: city.value,
+    phone: phone.value,
+    subject: subject.value,
+    level: level.value,
+    salary: salary.value,
+    facultyRequired: faculty.value,
+    urgency: urgency.value,
+    notes: notes.value,
+    collectedBy: collectedBy.value
+  };
+
+  google.script.run
+    .withSuccessHandler(() => {
+      alert("Vacancy saved successfully");
+      e.target.reset();
+    })
+    .addVacancy(data);
+});
+</script>
+
+</body>
+</html>
