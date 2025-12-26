@@ -1,93 +1,182 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Add Vacancy</title>
+  <meta charset="UTF-8" />
+  <title>Add Vacancy | Scheduler for RC</title>
+
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/add-vacancy.css">
 </head>
+
 <body>
 
-<h2>Add Vacancy</h2>
+<header class="topbar">
+  <div class="brand">
+    <img src="logo.png.jpg">
+    <span>Scheduler for RC</span>
+  </div>
 
-<form id="vacancyForm">
-  <input placeholder="College Name *" id="college" required>
-  <input list="placesList" placeholder="City *" id="city" required>
-  <input placeholder="Phone *" id="phone" required>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="vacancies.html">Vacancies</a>
+    <a href="lecturers.html">Lecturers</a>
+    <a href="assignments.html">Assignments</a>
+  </nav>
 
-  <select id="subject" required>
-    <option value="">Subject *</option>
-    <option>Physics</option>
-    <option>Chemistry</option>
-    <option>Mathematics</option>
-    <option>Biology</option>
-    <option>Zoology</option>
-    <option>Botany</option>
-  </select>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</header>
 
-  <select id="level" required>
-    <option value="">Level *</option>
-    <option>Boards</option>
-    <option>KCET</option>
-    <option>NEET</option>
-    <option>JEE</option>
-    <option>Foundation</option>
-  </select>
+<main class="add-vacancy-container">
 
-  <input placeholder="Salary Offered *" id="salary" required>
-  <input placeholder="Faculty Required *" id="faculty" required>
+  <h1>Add Vacancy</h1>
+  <p class="subtitle">Enter college requirement details</p>
 
-  <select id="urgency" required>
-    <option value="">Urgency *</option>
-    <option>Immediate</option>
-    <option>Within 1 Week</option>
-    <option>Normal</option>
-  </select>
+  <form id="vacancyForm">
 
-  <input placeholder="Collected By" id="collectedBy">
-  <textarea placeholder="Notes" id="notes"></textarea>
+    <!-- ROW 1 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>College Name *</label>
+        <input type="text" id="college" required>
+      </div>
 
-  <button type="submit">Save Vacancy</button>
-</form>
+      <div class="form-group">
+        <label>City *</label>
+        <input list="placesList" id="city" required>
+        <datalist id="placesList"></datalist>
+      </div>
 
-<datalist id="placesList"></datalist>
+      <div class="form-group">
+        <label>Phone *</label>
+        <input type="tel" id="phone" required>
+      </div>
+    </div>
+
+    <!-- ROW 2 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>Subject *</label>
+        <select id="subject" onchange="toggleOtherSubject()" required>
+          <option value="">Select</option>
+          <option>Physics</option>
+          <option>Chemistry</option>
+          <option>Mathematics</option>
+          <option>Biology</option>
+          <option>Zoology</option>
+          <option>Botany</option>
+          <option>Others</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="otherSubjectBox" style="display:none">
+        <label>Specify Subject *</label>
+        <input type="text" id="otherSubject">
+      </div>
+
+      <div class="form-group">
+        <label>Level *</label>
+        <select id="level" required>
+          <option value="">Select</option>
+          <option>Boards</option>
+          <option>KCET</option>
+          <option>NEET</option>
+          <option>JEE</option>
+          <option>Foundation</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ROW 3 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>Faculty Required *</label>
+        <input type="number" id="faculty" required>
+      </div>
+
+      <div class="form-group">
+        <label>Salary From *</label>
+        <select id="salaryMin" required>
+          <option value="">Select</option>
+          <option value="50000">₹50,000</option>
+          <option value="75000">₹75,000</option>
+          <option value="100000">₹1,00,000</option>
+          <option value="150000">₹1,50,000</option>
+          <option value="200000">₹2,00,000</option>
+          <option value="250000">₹2,50,000</option>
+          <option value="300000">₹3,00,000</option>
+          <option value="350000">₹3,50,000</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Salary To *</label>
+        <select id="salaryMax" required>
+          <option value="">Select</option>
+          <option value="50000">₹50,000</option>
+          <option value="75000">₹75,000</option>
+          <option value="100000">₹1,00,000</option>
+          <option value="150000">₹1,50,000</option>
+          <option value="200000">₹2,00,000</option>
+          <option value="250000">₹2,50,000</option>
+          <option value="300000">₹3,00,000</option>
+          <option value="350000">₹3,50,000</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ROW 4 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>Urgency *</label>
+        <select id="urgency" required>
+          <option>Immediate</option>
+          <option>Within 1 Week</option>
+          <option>Flexible</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Collected By *</label>
+        <input type="text" id="collectedBy" required>
+      </div>
+    </div>
+
+    <!-- ROW 5 -->
+    <div class="form-row">
+      <div class="form-group full">
+        <label>Notes</label>
+        <textarea id="notes"></textarea>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="save-btn">💾 Save Vacancy</button>
+      <a href="vacancies.html" class="cancel-btn">Cancel</a>
+    </div>
+
+  </form>
+</main>
 
 <script src="js/places.js"></script>
-<script>
-/* load places */
-const list = document.getElementById("placesList");
-PLACES.forEach(p => {
-  const o = document.createElement("option");
-  o.value = p;
-  list.appendChild(o);
-});
 
-/* generate simple ID */
-function generateVacancyId() {
-  return "VAC" + Math.floor(100 + Math.random() * 900);
+<script>
+function toggleOtherSubject() {
+  const s = document.getElementById("subject").value;
+  document.getElementById("otherSubjectBox").style.display =
+    s === "Others" ? "block" : "none";
 }
 
 document.getElementById("vacancyForm").addEventListener("submit", e => {
   e.preventDefault();
 
-  const data = {
-    vacancyId: generateVacancyId(),
-    collegeName: college.value,
-    city: city.value,
-    phone: phone.value,
-    subject: subject.value,
-    level: level.value,
-    salary: salary.value,
-    facultyRequired: faculty.value,
-    urgency: urgency.value,
-    notes: notes.value,
-    collectedBy: collectedBy.value
-  };
+  const min = +salaryMin.value;
+  const max = +salaryMax.value;
+  if (min > max) {
+    alert("Salary To must be greater than Salary From");
+    return;
+  }
 
-  google.script.run
-    .withSuccessHandler(() => {
-      alert("Vacancy saved successfully");
-      e.target.reset();
-    })
-    .addVacancy(data);
+  alert("Vacancy will be saved to Google Sheet (backend connected)");
 });
 </script>
 
