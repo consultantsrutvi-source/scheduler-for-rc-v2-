@@ -261,3 +261,266 @@ button:hover {
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add Vacancy | Rutvi Consultants</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ---------- RESET ---------- */
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f4f6f9;
+  color: #333;
+}
+
+/* ---------- HEADER ---------- */
+.header {
+  background: #ffffff;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.header img {
+  height: 42px;
+}
+
+.header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ---------- PAGE ---------- */
+.container {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 0 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* ---------- FORM GRID ---------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full {
+  grid-column: span 3;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+input, select, textarea {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #1976d2;
+}
+
+/* ---------- BUTTON ---------- */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+button {
+  background: linear-gradient(135deg, #1976d2, #0d47a1);
+  color: #fff;
+  border: none;
+  padding: 12px 26px;
+  font-size: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .form-group.full {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-group.full {
+    grid-column: span 1;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <img src="logo.png.jpg" alt="Rutvi Consultants">
+  <h1>Scheduler for RC</h1>
+</div>
+
+<!-- PAGE -->
+<div class="container">
+  <div class="card">
+    <h2>Add Vacancy</h2>
+    <p style="color:#666;margin-bottom:10px;">Enter college faculty requirement details</p>
+
+    <form id="vacancyForm">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>College Name *</label>
+          <input type="text" required>
+        </div>
+
+        <div class="form-group">
+          <label>City *</label>
+          <input type="text" required>
+        </div>
+
+        <div class="form-group">
+          <label>Phone *</label>
+          <input type="tel" required>
+        </div>
+
+        <div class="form-group">
+          <label>Subject *</label>
+          <select required>
+            <option value="">Select</option>
+            <option>Physics</option>
+            <option>Chemistry</option>
+            <option>Mathematics</option>
+            <option>Biology</option>
+            <option>Botany</option>
+            <option>Zoology</option>
+            <option>Others</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Level *</label>
+          <select required>
+            <option value="">Select</option>
+            <option>Boards</option>
+            <option>KCET</option>
+            <option>NEET</option>
+            <option>JEE Main</option>
+            <option>JEE Advanced</option>
+            <option>Foundation</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Faculty Required *</label>
+          <input type="number" min="1" required>
+        </div>
+
+        <div class="form-group">
+          <label>Salary From *</label>
+          <select required>
+            <option value="">Select</option>
+            <option>₹50,000</option>
+            <option>₹75,000</option>
+            <option>₹1,00,000</option>
+            <option>₹1,50,000</option>
+            <option>₹2,00,000</option>
+            <option>₹2,50,000</option>
+            <option>₹3,00,000</option>
+            <option>₹3,50,000</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Salary To *</label>
+          <select required>
+            <option value="">Select</option>
+            <option>₹75,000</option>
+            <option>₹1,00,000</option>
+            <option>₹1,50,000</option>
+            <option>₹2,00,000</option>
+            <option>₹2,50,000</option>
+            <option>₹3,00,000</option>
+            <option>₹3,50,000</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Urgency *</label>
+          <select required>
+            <option>Immediate</option>
+            <option>Within 1 Week</option>
+            <option>Within 15 Days</option>
+            <option>Not Urgent</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Collected By *</label>
+          <input type="text" required>
+        </div>
+
+        <div class="form-group full">
+          <label>Notes</label>
+          <textarea rows="3"></textarea>
+        </div>
+
+      </div>
+
+      <div class="actions">
+        <button type="submit">💾 Save Vacancy</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
