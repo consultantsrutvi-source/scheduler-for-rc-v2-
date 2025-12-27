@@ -95,3 +95,19 @@ function applySalaryFilter() {
 
 document.getElementById("salaryFromFilter").onchange = applySalaryFilter;
 document.getElementById("salaryToFilter").onchange = applySalaryFilter;
+async function deleteVacancy(id) {
+  if (!confirm("Delete vacancy " + id + "?")) return;
+
+  const res = await fetch(`${SCRIPT_URL}?id=${id}`, {
+    method: "DELETE"
+  });
+
+  const result = await res.json();
+
+  if (result.success) {
+    alert("Vacancy deleted");
+    loadVacancies();
+  } else {
+    alert("Delete failed: " + result.error);
+  }
+}
