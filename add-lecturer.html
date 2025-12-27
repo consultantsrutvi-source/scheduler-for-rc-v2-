@@ -3,85 +3,114 @@
 <head>
 <meta charset="UTF-8">
 <title>Add Lecturer | Scheduler for RC</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 *{box-sizing:border-box;font-family:Inter}
-body{margin:0;background:#f4f6f9;color:#222}
+body{margin:0;background:#f4f6fb;color:#1f2937}
 
+/* HEADER */
 header{
   background:#fff;
-  padding:12px 30px;
+  padding:14px 28px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  box-shadow:0 2px 10px rgba(0,0,0,.08)
+  border-bottom:1px solid #e5e7eb;
 }
 
 .brand{display:flex;align-items:center;gap:12px}
-.brand img{height:40px}
+.brand img{height:42px}
+
 nav a{
-  margin:0 12px;
+  margin:0 14px;
   text-decoration:none;
   font-weight:600;
-  color:#444
+  color:#374151;
 }
 nav a.active{color:#2563eb}
 
 .logout{
-  background:#ef4444;color:#fff;
-  border:none;padding:8px 14px;
-  border-radius:6px;cursor:pointer
-}
-
-.container{
-  max-width:850px;
-  margin:40px auto;
-  background:#fff;
-  padding:30px;
-  border-radius:14px;
-  box-shadow:0 15px 40px rgba(0,0,0,.1)
-}
-
-h2{margin-top:0}
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px
-}
-
-label{font-weight:600;font-size:14px}
-
-input,select,textarea{
-  width:100%;
-  padding:10px;
-  border-radius:8px;
-  border:1px solid #ccc;
-  font-size:14px
-}
-
-textarea{resize:none}
-
-.full{grid-column:1/3}
-
-button.save{
-  margin-top:25px;
-  width:100%;
-  padding:14px;
-  background:#2563eb;
+  background:#ef4444;
   color:#fff;
   border:none;
-  border-radius:10px;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer
+  padding:8px 16px;
+  border-radius:6px;
+  cursor:pointer;
 }
 
-button.save:disabled{opacity:.6}
+/* MAIN CARD */
+.container{
+  max-width:900px;
+  margin:40px auto;
+  background:#fff;
+  padding:32px;
+  border-radius:14px;
+  box-shadow:0 18px 40px rgba(0,0,0,.1);
+}
 
-.status{text-align:center;margin-top:12px;font-weight:600}
+h2{margin:0 0 26px;color:#2563eb}
+
+/* FORM */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:22px;
+}
+
+.field{display:flex;flex-direction:column}
+.field label{font-size:13px;font-weight:600;margin-bottom:6px}
+.field input,.field select,.field textarea{
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid #d1d5db;
+  font-size:14px;
+}
+
+textarea{resize:none;min-height:90px}
+.full{grid-column:span 3}
+
+.actions{
+  margin-top:30px;
+  display:flex;
+  justify-content:flex-end;
+}
+
+.save{
+  background:linear-gradient(135deg,#2563eb,#1e40af);
+  color:#fff;
+  border:none;
+  padding:14px 28px;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.status{
+  margin-top:14px;
+  text-align:right;
+  font-weight:600;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .full{grid-column:span 2}
+}
+@media(max-width:600px){
+  .grid{grid-template-columns:1fr}
+  .full{grid-column:span 1}
+}
+
+/* PRINT */
+@media print{
+  header,.actions,.status{display:none}
+  body{background:#fff}
+  .container{box-shadow:none}
+}
 </style>
 </head>
 
@@ -89,14 +118,15 @@ button.save:disabled{opacity:.6}
 
 <header>
   <div class="brand">
-    <img src="logo.png.jpg">
+    <img src="logo.png.jpg" alt="Rutvi Consultants">
     <strong>Scheduler for RC</strong>
   </div>
 
   <nav>
     <a href="dashboard.html">Dashboard</a>
     <a href="vacancies.html">Vacancies</a>
-    <a class="active">Add Lecturer</a>
+    <a href="lecturers.html" class="active">Lecturers</a>
+    <a href="assignments.html">Assignments</a>
   </nav>
 
   <button class="logout" onclick="logout()">Logout</button>
@@ -108,74 +138,84 @@ button.save:disabled{opacity:.6}
 <form id="lecturerForm">
 <div class="grid">
 
-<div>
-<label>Name</label>
-<input id="lecName" required>
+  <div class="field">
+    <label>Name *</label>
+    <input id="lecName" required>
+  </div>
+
+  <div class="field">
+    <label>Phone *</label>
+    <input id="lecPhone" required>
+  </div>
+
+  <div class="field">
+    <label>City *</label>
+    <input id="lecCity" list="citiesList" required>
+  </div>
+
+  <div class="field">
+    <label>Subject *</label>
+    <select id="lecSubject" required>
+      <option value="">Select</option>
+      <option>Physics</option>
+      <option>Chemistry</option>
+      <option>Mathematics</option>
+      <option>Biology</option>
+      <option>Zoology</option>
+      <option>Botany</option>
+      <option>Others</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Level *</label>
+    <select id="lecLevel" required>
+      <option value="">Select</option>
+      <option>Boards</option>
+      <option>KCET</option>
+      <option>NEET</option>
+      <option>JEE Mains</option>
+      <option>JEE Advanced</option>
+      <option>Foundation</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Experience (Years)</label>
+    <input id="experience" type="number" min="0">
+  </div>
+
+  <div class="field">
+    <label>Salary From *</label>
+    <select id="salaryFrom" required></select>
+  </div>
+
+  <div class="field">
+    <label>Salary To *</label>
+    <select id="salaryTo" required></select>
+  </div>
+
+  <div class="field">
+    <label>Availability *</label>
+    <select id="availability" required>
+      <option>Immediate</option>
+      <option>Within 1 Week</option>
+      <option>Within 15 Days</option>
+      <option>Within 1 Month</option>
+    </select>
+  </div>
+
+  <div class="field full">
+    <label>Notes</label>
+    <textarea id="notes"></textarea>
+  </div>
+
 </div>
 
-<div>
-<label>Phone</label>
-<input id="lecPhone" required>
+<div class="actions">
+  <button type="button" class="save" onclick="saveLecturer()">💾 Save Lecturer</button>
 </div>
 
-<div>
-<label>City</label>
-<input id="lecCity" list="citiesList">
-</div>
-
-<div>
-<label>Subject</label>
-<select id="lecSubject">
-<option>Physics</option>
-<option>Chemistry</option>
-<option>Biology</option>
-<option>Mathematics</option>
-</select>
-</div>
-
-<div>
-<label>Level</label>
-<select id="lecLevel">
-<option>Boards</option>
-<option>KCET</option>
-<option>NEET</option>
-<option>JEE</option>
-</select>
-</div>
-
-<div>
-<label>Experience (Years)</label>
-<input id="experience" type="number">
-</div>
-
-<div>
-<label>Salary From</label>
-<select id="salaryFrom"></select>
-</div>
-
-<div>
-<label>Salary To</label>
-<select id="salaryTo"></select>
-</div>
-
-<div>
-<label>Availability</label>
-<select id="availability">
-<option>Immediate</option>
-<option>Within 1 Week</option>
-<option>Within 15 Days</option>
-<option>Within 1 Month</option>
-</select>
-</div>
-
-<div class="full">
-<label>Notes</label>
-<textarea id="notes" rows="3"></textarea>
-</div>
-
-</div>
-
-<button type="button" class="save" onclick="saveLecturer()">Save Lecturer</button>
 <div class="status" id="status"></div>
 </form>
 </div>
@@ -187,22 +227,28 @@ button.save:disabled{opacity:.6}
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsT3dyPERKTfYhTf4BjCo8mzLrzYGxhLmS0MLfXnjX3hElLESnqchauzgxV87uJ4BOMA/exec";
 
-function fillSalary(){
-  const f=document.getElementById("salaryFrom");
-  const t=document.getElementById("salaryTo");
+/* Load cities from places.js */
+if(typeof cities !== "undefined"){
+  const list=document.getElementById("citiesList");
+  cities.forEach(c=>{
+    const o=document.createElement("option");
+    o.value=c;
+    list.appendChild(o);
+  });
+}
+
+/* Salary dropdown ₹50k → ₹350k */
+function loadSalary(){
+  const f=salaryFrom, t=salaryTo;
   for(let i=50;i<=350;i+=25){
-    const o1=new Option("₹"+i+"k",i*1000);
-    const o2=new Option("₹"+i+"k",i*1000);
-    f.add(o1); t.add(o2);
+    f.add(new Option("₹"+i+"k",i*1000));
+    t.add(new Option("₹"+i+"k",i*1000));
   }
 }
-fillSalary();
+loadSalary();
 
 async function saveLecturer(){
-  const btn=document.querySelector(".save");
   const status=document.getElementById("status");
-
-  btn.disabled=true;
   status.innerText="Saving...";
 
   const payload={
@@ -232,8 +278,6 @@ async function saveLecturer(){
   }else{
     status.innerText="Error: "+r.error;
   }
-
-  btn.disabled=false;
 }
 
 function logout(){
