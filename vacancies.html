@@ -371,6 +371,13 @@ function logout() {
 
 document.addEventListener("DOMContentLoaded", loadVacancies);
 </script>
+<script>
+function logout() {
+  localStorage.clear();
+  sessionStorage.clear();
+  location.href = "index.html";
+}
+</script>
 
 </body>
 </html>
