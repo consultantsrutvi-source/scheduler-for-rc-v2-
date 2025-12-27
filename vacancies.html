@@ -195,7 +195,16 @@ th {
 
 <div class="filters">
   <input type="text" id="filterCollege" placeholder="Search College" oninput="applyFilters()">
-  <input type="text" id="filterCity" placeholder="Search City" oninput="applyFilters()">
+<input
+  type="text"
+  id="filterCity"
+  list="citiesList"
+  placeholder="Search / Select City"
+  oninput="applyFilters()"
+/>
+
+<datalist id="citiesList"></datalist>
+
 
   <select id="filterSubject" onchange="applyFilters()">
     <option value="">All Subjects</option>
@@ -232,25 +241,40 @@ th {
     <option>Closed</option>
   </select>
 
-  <select id="salaryFromFilter" onchange="applyFilters()">
-    <option value="">Min Salary</option>
-    <option value="50000">₹50k</option>
-    <option value="75000">₹75k</option>
-    <option value="100000">₹1L</option>
-    <option value="150000">₹1.5L</option>
-    <option value="200000">₹2L</option>
-    <option value="300000">₹3L</option>
-  </select>
+ <select id="salaryFromFilter" onchange="applyFilters()">
+  <option value="">Min Salary</option>
+  <option value="50000">₹50k</option>
+  <option value="75000">₹75k</option>
+  <option value="100000">₹100k</option>
+  <option value="125000">₹125k</option>
+  <option value="150000">₹150k</option>
+  <option value="175000">₹175k</option>
+  <option value="200000">₹200k</option>
+  <option value="225000">₹225k</option>
+  <option value="250000">₹250k</option>
+  <option value="275000">₹275k</option>
+  <option value="300000">₹300k</option>
+  <option value="325000">₹325k</option>
+  <option value="350000">₹350k</option>
+</select>
 
-  <select id="salaryToFilter" onchange="applyFilters()">
-    <option value="">Max Salary</option>
-    <option value="50000">₹50k</option>
-    <option value="75000">₹75k</option>
-    <option value="100000">₹1L</option>
-    <option value="150000">₹1.5L</option>
-    <option value="200000">₹2L</option>
-    <option value="300000">₹3L</option>
-  </select>
+<select id="salaryToFilter" onchange="applyFilters()">
+  <option value="">Max Salary</option>
+  <option value="50000">₹50k</option>
+  <option value="75000">₹75k</option>
+  <option value="100000">₹100k</option>
+  <option value="125000">₹125k</option>
+  <option value="150000">₹150k</option>
+  <option value="175000">₹175k</option>
+  <option value="200000">₹200k</option>
+  <option value="225000">₹225k</option>
+  <option value="250000">₹250k</option>
+  <option value="275000">₹275k</option>
+  <option value="300000">₹300k</option>
+  <option value="325000">₹325k</option>
+  <option value="350000">₹350k</option>
+</select>
+
 </div>
 
 <div class="table-wrapper">
@@ -275,6 +299,7 @@ th {
 </div>
 
 </main>
+<script src="js/places.js"></script>
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsT3dyPERKTfYhTf4BjCo8mzLrzYGxhLmS0MLfXnjX3hElLESnqchauzgxV87uJ4BOMA/exec";
