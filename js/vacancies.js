@@ -71,3 +71,27 @@ function renderVacancies(data) {
     tbody.appendChild(tr);
   });
 }
+function applySalaryFilter() {
+  const min = Number(document.getElementById("salaryFromFilter").value);
+  const max = Number(document.getElementById("salaryToFilter").value);
+
+  document.querySelectorAll("#vacanciesBody tr").forEach(row => {
+    const salaryText = row.children[5].innerText;
+    const numbers = salaryText.match(/\d+/g).map(Number);
+
+    const from = numbers[0];
+    const to = numbers[1];
+
+    if (
+      (min && from < min) ||
+      (max && to > max)
+    ) {
+      row.style.display = "none";
+    } else {
+      row.style.display = "";
+    }
+  });
+}
+
+document.getElementById("salaryFromFilter").onchange = applySalaryFilter;
+document.getElementById("salaryToFilter").onchange = applySalaryFilter;
