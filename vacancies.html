@@ -40,7 +40,8 @@
     <input type="text" id="filterCollege" placeholder="Search College" />
     <input type="text" id="city" list="placesList" placeholder="Search / Select City" />
 
-    <select id="filterSubject">
+    <select id="filterSubject" onchange="applyFilters()">
+
       <option value="">All Subjects</option>
       <option>Physics</option>
       <option>Chemistry</option>
@@ -51,7 +52,8 @@
       <option>Others</option>
     </select>
 
-    <select id="filterLevel">
+   <select id="filterLevel" onchange="applyFilters()">
+
       <option value="">All Levels</option>
       <option>Boards</option>
       <option>KCET</option>
@@ -61,21 +63,23 @@
       <option>Foundation</option>
     </select>
 
-    <select id="filterUrgency">
+    <select id="filterUrgency" onchange="applyFilters()">
+
       <option value="">All Urgency</option>
       <option>Immediate</option>
       <option>Within a week</option>
       <option>Normal</option>
     </select>
 
-    <select id="filterStatus">
+  <select id="filterStatus" onchange="applyFilters()">
       <option value="">All Status</option>
       <option>Open</option>
       <option>Assigned</option>
       <option>Closed</option>
     </select>
   </div>
-<select id="salaryFromFilter">
+ <select id="salaryFromFilter" onchange="applyFilters()">
+
   <option value="">Min Salary</option>
   <option value="50000">₹50k</option>
   <option value="100000">₹1L</option>
@@ -83,7 +87,8 @@
   <option value="200000">₹2L</option>
 </select>
 
-<select id="salaryToFilter">
+<select id="salaryToFilter" onchange="applyFilters()">
+
   <option value="">Max Salary</option>
   <option value="100000">₹1L</option>
   <option value="150000">₹1.5L</option>
