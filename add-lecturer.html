@@ -1,187 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Add Lecturer | Scheduler for RC</title>
+<meta charset="UTF-8">
+<title>Add Lecturer | Scheduler for RC</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+:root{
+  --primary:#2563eb;
+  --accent:#22c55e;
+  --danger:#ef4444;
+  --bg:#f4f7fb;
+  --card:#ffffff;
+  --border:#e5e7eb;
+  --text:#1f2937;
+}
 
-  <style>
-    :root {
-      --primary: #2563eb;
-      --bg: #f4f6fb;
-      --card: #ffffff;
-      --text: #1f2937;
-      --border: #e5e7eb;
-    }
+*{box-sizing:border-box;font-family:Segoe UI,system-ui,sans-serif}
 
-    * {
-      box-sizing: border-box;
-      font-family: "Segoe UI", system-ui, sans-serif;
-    }
+body{margin:0;background:var(--bg);color:var(--text)}
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-    }
+/* HEADER */
+header{
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  padding:14px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
 
-    /* ===== HEADER ===== */
-    header {
-      background: #fff;
-      border-bottom: 1px solid var(--border);
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{height:42px}
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+nav a{
+  margin:0 12px;
+  text-decoration:none;
+  color:#374151;
+  font-weight:500;
+}
+nav a.active{color:var(--primary);font-weight:600}
 
-    .brand img {
-      height: 40px;
-    }
+.logout{
+  background:var(--danger);
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  border-radius:6px;
+  cursor:pointer;
+}
 
-    nav a {
-      margin: 0 12px;
-      text-decoration: none;
-      color: #374151;
-      font-weight: 500;
-    }
+/* MAIN */
+main{padding:40px 20px}
 
-    nav a.active {
-      color: var(--primary);
-      font-weight: 600;
-    }
+.card{
+  max-width:950px;
+  margin:auto;
+  background:var(--card);
+  border-radius:14px;
+  padding:30px;
+  box-shadow:0 15px 30px rgba(0,0,0,.08);
+}
 
-    .logout-btn {
-      background: #ef4444;
-      color: #fff;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 500;
-    }
+.card h2{
+  margin:0 0 25px;
+  color:var(--primary);
+}
 
-    /* ===== PAGE ===== */
-    main {
-      padding: 40px 20px;
-    }
+/* FORM */
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
 
-    .card {
-      max-width: 900px;
-      margin: auto;
-      background: var(--card);
-      border-radius: 12px;
-      padding: 30px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
-    }
+.field{display:flex;flex-direction:column}
+.field label{font-size:13px;margin-bottom:6px;font-weight:600}
+.field input,.field select,.field textarea{
+  padding:10px 12px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  font-size:14px;
+}
 
-    .card h2 {
-      margin-top: 0;
-      margin-bottom: 25px;
-      font-size: 22px;
-      color: var(--primary);
-    }
+textarea{min-height:90px;resize:vertical}
 
-    /* ===== FORM ===== */
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
+.full{grid-column:span 3}
 
-    .field {
-      display: flex;
-      flex-direction: column;
-    }
+.actions{
+  margin-top:30px;
+  display:flex;
+  justify-content:flex-end;
+}
 
-    .field label {
-      font-size: 13px;
-      margin-bottom: 6px;
-      font-weight: 500;
-    }
+.save{
+  background:linear-gradient(135deg,var(--primary),#1e40af);
+  color:#fff;
+  border:none;
+  padding:12px 26px;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+}
 
-    .field input,
-    .field select,
-    .field textarea {
-      padding: 10px 12px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      font-size: 14px;
-    }
+/* RESPONSIVE */
+@media(max-width:900px){
+  .form-grid{grid-template-columns:repeat(2,1fr)}
+  .full{grid-column:span 2}
+}
+@media(max-width:600px){
+  .form-grid{grid-template-columns:1fr}
+  .full{grid-column:span 1}
+}
 
-    .field textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    .full {
-      grid-column: span 3;
-    }
-
-    .actions {
-      margin-top: 30px;
-      text-align: right;
-    }
-
-    .save-btn {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 12px 22px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 900px) {
-      .form-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .full {
-        grid-column: span 2;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-      .full {
-        grid-column: span 1;
-      }
-    }
-
-    /* ===== PRINT ===== */
-    @media print {
-      body {
-        background: #fff;
-      }
-      header, .actions {
-        display: none;
-      }
-      .card {
-        box-shadow: none;
-        border: none;
-      }
-    }
-  </style>
+/* PRINT */
+@media print{
+  header,.actions{display:none}
+  body{background:#fff}
+  .card{box-shadow:none}
+}
+</style>
 </head>
 
 <body>
 
 <header>
   <div class="brand">
-    <!-- CHANGE LOGO PATH IF NEEDED -->
-    <img src="logo.png.jpg" alt="Rutvi Consultants" />
+    <img src="logo.png.jpg" alt="Rutvi Consultants">
     <strong>Scheduler for RC</strong>
   </div>
 
@@ -192,135 +138,174 @@
     <a href="assignments.html">Assignments</a>
   </nav>
 
-  <button class="logout-btn" onclick="logout()">Logout</button>
+  <button class="logout" onclick="logout()">Logout</button>
 </header>
 
 <main>
-  <div class="card">
-    <h2>Add Lecturer</h2>
+<div class="card">
+<h2>Add Lecturer</h2>
 
-    <form id="lecturerForm">
-      <div class="form-grid">
+<form id="lecturerForm">
+<div class="form-grid">
 
-        <div class="field">
-          <label>Name *</label>
-          <input required />
-        </div>
-
-        <div class="field">
-          <label>Phone *</label>
-          <input required />
-        </div>
-
-        <div class="field">
-          <label>City *</label>
-          <input required />
-        </div>
-
-        <div class="field">
-          <label>Subject *</label>
-          <select required>
-            <option value="">Select</option>
-            <option>Physics</option>
-            <option>Chemistry</option>
-            <option>Mathematics</option>
-            <option>Biology</option>
-            <option>Zoology</option>
-            <option>Botany</option>
-            <option>Others</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Level *</label>
-          <select required>
-            <option value="">Select</option>
-            <option>Boards</option>
-            <option>KCET</option>
-            <option>NEET</option>
-            <option>JEE Mains</option>
-            <option>JEE Advanced</option>
-            <option>Foundation</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Experience (Years)</label>
-          <input type="number" min="0" />
-        </div>
-
-        <div class="field">
-          <label>Min Salary *</label>
-          <select required>
-            <option value="">Select</option>
-            <option>₹50k</option><option>₹75k</option><option>₹100k</option>
-            <option>₹125k</option><option>₹150k</option><option>₹175k</option>
-            <option>₹200k</option><option>₹225k</option><option>₹250k</option>
-            <option>₹275k</option><option>₹300k</option><option>₹325k</option>
-            <option>₹350k</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Max Salary *</label>
-          <select required>
-            <option value="">Select</option>
-            <option>₹50k</option><option>₹75k</option><option>₹100k</option>
-            <option>₹125k</option><option>₹150k</option><option>₹175k</option>
-            <option>₹200k</option><option>₹225k</option><option>₹250k</option>
-            <option>₹275k</option><option>₹300k</option><option>₹325k</option>
-            <option>₹350k</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Availability *</label>
-          <select required>
-            <option>Immediate</option>
-            <option>Within 1 Week</option>
-            <option>Within 15 Days</option>
-            <option>Within 1 Month</option>
-          </select>
-        </div>
-
-        <div class="field full">
-          <label>Notes</label>
-          <textarea></textarea>
-        </div>
-
-      </div>
-
-      <div class="actions">
-        <button class="save-btn" type="submit">💾 Save Lecturer</button>
-      </div>
-    </form>
+  <div class="field">
+    <label>Name *</label>
+    <input required>
   </div>
+
+  <div class="field">
+    <label>Phone *</label>
+    <input required>
+  </div>
+
+  <div class="field">
+    <label>City *</label>
+    <input list="citiesList" required>
+  </div>
+
+  <div class="field">
+    <label>Subject *</label>
+    <select required>
+      <option value="">Select</option>
+      <option>Physics</option>
+      <option>Chemistry</option>
+      <option>Mathematics</option>
+      <option>Biology</option>
+      <option>Zoology</option>
+      <option>Botany</option>
+      <option>Others</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Level *</label>
+    <select required>
+      <option value="">Select</option>
+      <option>Boards</option>
+      <option>KCET</option>
+      <option>NEET</option>
+      <option>JEE Mains</option>
+      <option>JEE Advanced</option>
+      <option>Foundation</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Experience (Years)</label>
+    <input type="number" min="0">
+  </div>
+
+  <div class="field">
+    <label>Salary From *</label>
+    <select required>
+      <option value="">Select</option>
+      <option value="50000">₹50k</option>
+      <option value="75000">₹75k</option>
+      <option value="100000">₹100k</option>
+      <option value="125000">₹125k</option>
+      <option value="150000">₹150k</option>
+      <option value="175000">₹175k</option>
+      <option value="200000">₹200k</option>
+      <option value="225000">₹225k</option>
+      <option value="250000">₹250k</option>
+      <option value="275000">₹275k</option>
+      <option value="300000">₹300k</option>
+      <option value="325000">₹325k</option>
+      <option value="350000">₹350k</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Salary To *</label>
+    <select required>
+      <option value="">Select</option>
+      <option value="50000">₹50k</option>
+      <option value="75000">₹75k</option>
+      <option value="100000">₹100k</option>
+      <option value="125000">₹125k</option>
+      <option value="150000">₹150k</option>
+      <option value="175000">₹175k</option>
+      <option value="200000">₹200k</option>
+      <option value="225000">₹225k</option>
+      <option value="250000">₹250k</option>
+      <option value="275000">₹275k</option>
+      <option value="300000">₹300k</option>
+      <option value="325000">₹325k</option>
+      <option value="350000">₹350k</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Availability *</label>
+    <select required>
+      <option>Immediate</option>
+      <option>Within 1 Week</option>
+      <option>Within 15 Days</option>
+      <option>Within 1 Month</option>
+    </select>
+  </div>
+
+  <div class="field full">
+    <label>Notes</label>
+    <textarea></textarea>
+  </div>
+
+</div>
+
+<div class="actions">
+  <button class="save">💾 Save Lecturer</button>
+</div>
+</form>
+
+</div>
 </main>
 
+<datalist id="citiesList"></datalist>
+
+<script src="js/places.js"></script>
+
 <script>
-  function logout() {
-    localStorage.clear();
-    location.href = "index.html";
-  }
+function logout(){
+  localStorage.clear();
+  location.href="index.html";
+}
 
-  document.getElementById("lecturerForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+/* LOAD CITIES */
+if(typeof cities !== "undefined"){
+  const list=document.getElementById("citiesList");
+  cities.forEach(c=>{
+    const o=document.createElement("option");
+    o.value=c;
+    list.appendChild(o);
+  });
+}
 
-    // 👉 paste your Apps Script URL here
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsT3dyPERKTfYhTf4BjCo8mzLrzYGxhLmS0MLfXnjX3hElLESnqchauzgxV87uJ4BOMA/exec";
+/* SAVE LECTURER */
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzsT3dyPERKTfYhTf4BjCo8mzLrzYGxhLmS0MLfXnjX3hElLESnqchauzgxV87uJ4BOMA/exec";
 
-    const data = Array.from(e.target.elements)
-      .filter(el => el.tagName !== "BUTTON")
-      .map(el => el.value);
+document.getElementById("lecturerForm").addEventListener("submit",async e=>{
+  e.preventDefault();
 
-    await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify({ type: "lecturer", data })
-    });
+  const data=[...e.target.elements]
+    .filter(el=>el.tagName!=="BUTTON")
+    .map(el=>el.value);
 
+  const res=await fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify({
+      action:"addLecturer",
+      data
+    })
+  });
+
+  const r=await res.json();
+  if(r.success){
     alert("Lecturer saved successfully");
     e.target.reset();
-  });
+  }else{
+    alert("Error: "+r.error);
+  }
+});
 </script>
 
 </body>
