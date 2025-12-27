@@ -220,6 +220,8 @@ async function deleteVacancy(id) {
 </script>
 <script>
 function applyFilters() {
+  const college = document.getElementById("filterCollege").value.toLowerCase();
+  const city = document.getElementById("filterPlace").value.toLowerCase();
   const subject = document.getElementById("filterSubject").value;
   const level = document.getElementById("filterLevel").value;
   const urgency = document.getElementById("filterUrgency").value;
@@ -228,30 +230,41 @@ function applyFilters() {
   const minSalary = parseInt(document.getElementById("salaryFromFilter").value || 0);
   const maxSalary = parseInt(document.getElementById("salaryToFilter").value || 99999999);
 
-  const rows = document.querySelectorAll("#vacancyTable tbody tr");
+  const rows = document.querySelectorAll("#vacancyTable tr");
 
   rows.forEach(row => {
     const tds = row.querySelectorAll("td");
+    if (!tds.length) return;
 
-    // 🔑 THESE INDEXES MATCH YOUR ACTUAL TABLE
-    const rowSubject = tds[3]?.innerText.trim();
-    const rowLevel   = tds[4]?.innerText.trim();
-    const rowSalary  = parseInt(tds[5]?.innerText.replace(/[^0-9]/g, "")) || 0;
-    const rowUrgency = tds[6]?.innerText.trim();
-    const rowStatus  = tds[8]?.innerText.trim();
+    const rowCollege = tds[1].innerText.toLowerCase();
+    const rowCity = tds[2].innerText.toLowerCase();
+    const rowSubject = tds[3].innerText.trim();
+    const rowLevel = tds[4].innerText.trim();
+
+    // Salary like: ₹75000 - ₹125000
+    const salaryNums = tds[5].innerText.replace(/[^0-9]/g, " ").trim().split(/\s+/).map(Number);
+    const rowMinSalary = salaryNums[0] || 0;
+    const rowMaxSalary = salaryNums[1] || rowMinSalary;
+
+    const rowUrgency = tds[6].innerText.trim();
+    const rowFaculty = tds[7].innerText.trim();
+    const rowStatus = tds[8].innerText.trim();
 
     let show = true;
 
+    if (college && !rowCollege.includes(college)) show = false;
+    if (city && !rowCity.includes(city)) show = false;
     if (subject && subject !== rowSubject) show = false;
     if (level && level !== rowLevel) show = false;
     if (urgency && urgency !== rowUrgency) show = false;
     if (status && status !== rowStatus) show = false;
-    if (rowSalary < minSalary || rowSalary > maxSalary) show = false;
+    if (rowMaxSalary < minSalary || rowMinSalary > maxSalary) show = false;
 
     row.style.display = show ? "" : "none";
   });
 }
 </script>
+
 
 </body>
 </html>
