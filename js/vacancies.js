@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderTable();
 
   // load places
-  const list = document.getElementById("placesList");
+  const list = document.getElementById("citiesList");
   PLACES.forEach(p => {
     const o = document.createElement("option");
     o.value = p;
