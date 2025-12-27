@@ -128,37 +128,48 @@ function logout() {
   location.href = "index.html";
 }
 </script>
+
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsT3dyPERKTfYhTf4BjCo8mzLrzYGxhLmS0MLfXnjX3hElLESnqchauzgxV87uJ4BOMA/exec";
 
 async function loadVacancies() {
-  const res = await fetch(SCRIPT_URL);
-  const result = await res.json();
+  try {
+    const res = await fetch(SCRIPT_URL);
+    const data = await res.json();
 
-  if (!result.success) return;
+    const tbody = document.getElementById("vacancyTable");
+    tbody.innerHTML = "";
 
-  const tbody = document.getElementById("vacancyTable");
-  tbody.innerHTML = "";
+    data.forEach(v => {
+      const tr = document.createElement("tr");
 
-  result.data.forEach(v => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${v.id}</td>
-      <td>${v.college}</td>
-      <td>${v.city}</td>
-      <td>${v.subject}</td>
-      <td>${v.level}</td>
-      <td>₹${v.salaryFrom} – ₹${v.salaryTo}</td>
-      <td>${v.urgency}</td>
-      <td>${v.faculty}</td>
-      <td>${v.collectedBy || ""}</td>
-    `;
-    tbody.appendChild(tr);
-  });
+      tr.innerHTML = `
+        <td>${v.id}</td>
+        <td>${v.college}</td>
+        <td>${v.city}</td>
+        <td>${v.subject}</td>
+        <td>${v.level}</td>
+        <td>₹${v.salaryFrom} - ₹${v.salaryTo}</td>
+        <td>${v.faculty}</td>
+        <td><span class="status-badge ${v.status || 'open'}">${v.status || 'Open'}</span></td>
+        <td>
+          ✏️
+          🗑️
+        </td>
+      `;
+
+      tbody.appendChild(tr);
+    });
+
+  } catch (e) {
+    console.error("Failed to load vacancies", e);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", loadVacancies);
+</script>
 
+<script>
   function applySalaryFilter() {
   const min = Number(document.getElementById("salaryFromFilter").value);
   const max = Number(document.getElementById("salaryToFilter").value);
@@ -183,6 +194,8 @@ document.addEventListener("DOMContentLoaded", loadVacancies);
 
 document.getElementById("salaryFromFilter").onchange = applySalaryFilter;
 document.getElementById("salaryToFilter").onchange = applySalaryFilter;
+  <script>
+    <script>
 async function deleteVacancy(id) {
   if (!confirm("Delete vacancy " + id + "?")) return;
 
