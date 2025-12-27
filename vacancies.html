@@ -3,45 +3,163 @@
 <head>
   <meta charset="UTF-8" />
   <title>Vacancies | Scheduler for RC</title>
+
   <link rel="stylesheet" href="css/vacancies.css" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: #f5f7fb;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header nav a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #374151;
+      font-weight: 500;
+    }
+
+    header nav a.active {
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    .logout-btn {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    main {
+      padding: 24px;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .actions button {
+      margin-left: 8px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .btn-print {
+      background: #10b981;
+      color: white;
+    }
+
+    .btn-add {
+      background: #2563eb;
+      color: white;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .filters input,
+    .filters select {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f9fafb;
+      font-weight: 600;
+    }
+
+    .status {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .status.open {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .actions-icons button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-right: 6px;
+      font-size: 16px;
+    }
+  </style>
 </head>
 
 <body>
 
-<header class="topbar">
-  <div class="brand">
-    <img src="logo.png.jpg" alt="Rutvi Consultants" />
-    <span>Scheduler for RC</span>
-  </div>
-
+<header>
+  <strong>Scheduler for RC</strong>
   <nav>
     <a href="dashboard.html">Dashboard</a>
-    <a class="active" href="vacancies.html">Vacancies</a>
+    <a href="vacancies.html" class="active">Vacancies</a>
     <a href="lecturers.html">Lecturers</a>
     <a href="assignments.html">Assignments</a>
   </nav>
-
   <button class="logout-btn" onclick="logout()">Logout</button>
 </header>
 
-<main class="container">
+<main>
 
   <div class="page-header">
     <h2>Vacancies</h2>
-
     <div class="actions">
-      <button class="btn print" onclick="window.print()">🖨 Print</button>
-      <button class="btn add" onclick="location.href='add-vacancy.html'">➕ Add Vacancy</button>
+      <button class="btn-print" onclick="window.print()">Print</button>
+      <button class="btn-add" onclick="location.href='add-vacancy.html'">+ Add Vacancy</button>
     </div>
   </div>
 
   <!-- FILTERS -->
   <div class="filters">
-    <input type="text" id="filterCollege" placeholder="Search College" />
-    <input type="text" id="city" list="placesList" placeholder="Search / Select City" />
+    <input type="text" id="filterCollege" placeholder="Search College">
+    <input type="text" id="filterCity" list="citiesList" placeholder="Search / Select City">
 
-    <select id="filterSubject" onchange="applyFilters()">
-
+    <select id="filterSubject">
       <option value="">All Subjects</option>
       <option>Physics</option>
       <option>Chemistry</option>
@@ -52,8 +170,7 @@
       <option>Others</option>
     </select>
 
-   <select id="filterLevel" onchange="applyFilters()">
-
+    <select id="filterLevel">
       <option value="">All Levels</option>
       <option>Boards</option>
       <option>KCET</option>
@@ -63,208 +180,134 @@
       <option>Foundation</option>
     </select>
 
-    <select id="filterUrgency" onchange="applyFilters()">
-
+    <select id="filterUrgency">
       <option value="">All Urgency</option>
       <option>Immediate</option>
       <option>Within a week</option>
       <option>Normal</option>
     </select>
 
-  <select id="filterStatus" onchange="applyFilters()">
+    <select id="filterStatus">
       <option value="">All Status</option>
       <option>Open</option>
       <option>Assigned</option>
       <option>Closed</option>
     </select>
+
+    <select id="salaryFrom">
+      <option value="">Min Salary</option>
+      <option value="50000">₹50k</option>
+      <option value="75000">₹75k</option>
+      <option value="100000">₹100k</option>
+      <option value="150000">₹150k</option>
+      <option value="200000">₹200k</option>
+    </select>
+
+    <select id="salaryTo">
+      <option value="">Max Salary</option>
+      <option value="100000">₹100k</option>
+      <option value="150000">₹150k</option>
+      <option value="200000">₹200k</option>
+      <option value="250000">₹250k</option>
+      <option value="350000">₹350k</option>
+    </select>
   </div>
- <select id="salaryFromFilter" onchange="applyFilters()">
-
-  <option value="">Min Salary</option>
-  <option value="50000">₹50k</option>
-  <option value="100000">₹1L</option>
-  <option value="150000">₹1.5L</option>
-  <option value="200000">₹2L</option>
-</select>
-
-<select id="salaryToFilter" onchange="applyFilters()">
-
-  <option value="">Max Salary</option>
-  <option value="100000">₹1L</option>
-  <option value="150000">₹1.5L</option>
-  <option value="200000">₹2L</option>
-  <option value="350000">₹3.5L</option>
-</select>
 
   <!-- TABLE -->
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>College</th>
-          <th>City</th>
-          <th>Subject</th>
-          <th>Level</th>
-          <th>Salary</th>
-          <th>Urgency</th>
-          <th>Faculty</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-
-      <tbody id="vacancyTable">
-        <!-- JS injects rows -->
-      </tbody>
-    </table>
-  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>College</th>
+        <th>City</th>
+        <th>Subject</th>
+        <th>Level</th>
+        <th>Salary</th>
+        <th>Urgency</th>
+        <th>Faculty</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="vacancyTable"></tbody>
+  </table>
 
 </main>
 
 <datalist id="citiesList"></datalist>
 
 <script src="js/places.js"></script>
-<script src="js/vacancies.js"></script>
-
-<script>
-function logout() {
-  localStorage.clear();
-  location.href = "index.html";
-}
-</script>
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsT3dyPERKTfYhTf4BjCo8mzLrzYGxhLmS0MLfXnjX3hElLESnqchauzgxV87uJ4BOMA/exec";
 
-async function loadVacancies() {
-  try {
-    const res = await fetch(SCRIPT_URL);
-    const data = await res.json();
+let allVacancies = [];
 
-    const tbody = document.getElementById("vacancyTable");
-    tbody.innerHTML = "";
-
-    data.forEach(v => {
-      const tr = document.createElement("tr");
-
-      tr.innerHTML = `
-        <td>${v.id}</td>
-        <td>${v.college}</td>
-        <td>${v.city}</td>
-        <td>${v.subject}</td>
-        <td>${v.level}</td>
-        <td>₹${v.salaryFrom} - ₹${v.salaryTo}</td>
-        <td>${v.faculty}</td>
-        <td><span class="status-badge ${v.status || 'open'}">${v.status || 'Open'}</span></td>
-        <td>
-          ✏️
-          🗑️
-        </td>
-      `;
-
-      tbody.appendChild(tr);
-    });
-
-  } catch (e) {
-    console.error("Failed to load vacancies", e);
-  }
+function logout() {
+  localStorage.clear();
+  location.href = "index.html";
 }
+
+async function loadVacancies() {
+  const res = await fetch(SCRIPT_URL);
+  allVacancies = await res.json();
+  renderTable(allVacancies);
+}
+
+function renderTable(data) {
+  const tbody = document.getElementById("vacancyTable");
+  tbody.innerHTML = "";
+
+  data.forEach(v => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${v.id}</td>
+      <td>${v.college}</td>
+      <td>${v.city}</td>
+      <td>${v.subject}</td>
+      <td>${v.level}</td>
+      <td>₹${v.salaryFrom} - ₹${v.salaryTo}</td>
+      <td>${v.urgency}</td>
+      <td>${v.faculty}</td>
+      <td><span class="status open">${v.status || "Open"}</span></td>
+      <td class="actions-icons">
+        ✏️ 🗑️
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function applyFilters() {
+  const subject = filterSubject.value;
+  const level = filterLevel.value;
+  const urgency = filterUrgency.value;
+  const status = filterStatus.value;
+  const city = filterCity.value.toLowerCase();
+  const college = filterCollege.value.toLowerCase();
+  const min = Number(salaryFrom.value || 0);
+  const max = Number(salaryTo.value || 9999999);
+
+  const filtered = allVacancies.filter(v =>
+    (!subject || v.subject === subject) &&
+    (!level || v.level === level) &&
+    (!urgency || v.urgency === urgency) &&
+    (!status || v.status === status) &&
+    (!city || v.city.toLowerCase().includes(city)) &&
+    (!college || v.college.toLowerCase().includes(college)) &&
+    v.salaryFrom >= min &&
+    v.salaryTo <= max
+  );
+
+  renderTable(filtered);
+}
+
+document.querySelectorAll(".filters input, .filters select")
+  .forEach(el => el.addEventListener("change", applyFilters));
 
 document.addEventListener("DOMContentLoaded", loadVacancies);
 </script>
-
-<script>
-  function applySalaryFilter() {
-  const min = Number(document.getElementById("salaryFromFilter").value);
-  const max = Number(document.getElementById("salaryToFilter").value);
-
-  document.querySelectorAll("#vacanciesBody tr").forEach(row => {
-    const salaryText = row.children[5].innerText;
-    const numbers = salaryText.match(/\d+/g).map(Number);
-
-    const from = numbers[0];
-    const to = numbers[1];
-
-    if (
-      (min && from < min) ||
-      (max && to > max)
-    ) {
-      row.style.display = "none";
-    } else {
-      row.style.display = "";
-    }
-  });
-}
-
-document.getElementById("salaryFromFilter").onchange = applySalaryFilter;
-document.getElementById("salaryToFilter").onchange = applySalaryFilter;
-  <script>
-    <script>
-async function deleteVacancy(id) {
-  if (!confirm("Delete vacancy " + id + "?")) return;
-
-  const res = await fetch(`${SCRIPT_URL}?id=${id}`, {
-    method: "DELETE"
-  });
-
-  const result = await res.json();
-
-  if (result.success) {
-    alert("Vacancy deleted");
-    loadVacancies();
-  } else {
-    alert("Delete failed: " + result.error);
-  }
-}
-</script>
-<script>
-function applyFilters() {
-  const college = document.getElementById("filterCollege").value.toLowerCase();
-  const city = document.getElementById("filterPlace").value.toLowerCase();
-  const subject = document.getElementById("filterSubject").value;
-  const level = document.getElementById("filterLevel").value;
-  const urgency = document.getElementById("filterUrgency").value;
-  const status = document.getElementById("filterStatus").value;
-
-  const minSalary = parseInt(document.getElementById("salaryFromFilter").value || 0);
-  const maxSalary = parseInt(document.getElementById("salaryToFilter").value || 99999999);
-
-  const rows = document.querySelectorAll("#vacancyTable tr");
-
-  rows.forEach(row => {
-    const tds = row.querySelectorAll("td");
-    if (!tds.length) return;
-
-    const rowCollege = tds[1].innerText.toLowerCase();
-    const rowCity = tds[2].innerText.toLowerCase();
-    const rowSubject = tds[3].innerText.trim();
-    const rowLevel = tds[4].innerText.trim();
-
-    // Salary like: ₹75000 - ₹125000
-    const salaryNums = tds[5].innerText.replace(/[^0-9]/g, " ").trim().split(/\s+/).map(Number);
-    const rowMinSalary = salaryNums[0] || 0;
-    const rowMaxSalary = salaryNums[1] || rowMinSalary;
-
-    const rowUrgency = tds[6].innerText.trim();
-    const rowFaculty = tds[7].innerText.trim();
-    const rowStatus = tds[8].innerText.trim();
-
-    let show = true;
-
-    if (college && !rowCollege.includes(college)) show = false;
-    if (city && !rowCity.includes(city)) show = false;
-    if (subject && subject !== rowSubject) show = false;
-    if (level && level !== rowLevel) show = false;
-    if (urgency && urgency !== rowUrgency) show = false;
-    if (status && status !== rowStatus) show = false;
-    if (rowMaxSalary < minSalary || rowMinSalary > maxSalary) show = false;
-
-    row.style.display = show ? "" : "none";
-  });
-}
-</script>
-
 
 </body>
 </html>
