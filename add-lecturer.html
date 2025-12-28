@@ -233,7 +233,7 @@ level.onchange=()=>levelOther.classList.toggle("hidden",level.value!=="Other");
 /* SAVE */
 function saveLecturer(){
   const data={
-    name:name.value,
+    name: document.getElementById("name").value.trim(),
     phone:phone.value,
     city:city.value,
     subject:subject.value==="Other"?subjectOther.value:subject.value,
