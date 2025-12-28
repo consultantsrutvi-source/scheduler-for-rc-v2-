@@ -25,10 +25,14 @@ header{
   justify-content:space-between
 }
 header img{height:38px}
+header nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px
+}
 header nav a{
   color:#fff;
   text-decoration:none;
-  margin-right:18px;
   font-weight:500;
   font-size:14px
 }
@@ -106,7 +110,11 @@ h1{margin-bottom:24px}
     <nav>
       <a href="dashboard.html">Dashboard</a>
       <a href="vacancies.html">Vacancies</a>
+      <a href="add-vacancy.html">Add Vacancy</a>
       <a href="lecturers.html">Lecturers</a>
+      <a href="add-lecturer.html">Add Lecturer</a>
+      <a href="assignment-manual.html">Manual Assignment</a>
+      <a href="assignment-auto.html">Auto Assignment</a>
     </nav>
   </div>
   <button onclick="logout()">Logout</button>
@@ -138,7 +146,7 @@ h1{margin-bottom:24px}
   <div class="card">
     <h2>Pending Matches</h2>
     <div class="count">0</div>
-    <small>To be processed</small>
+    <small>Auto-match queue</small>
   </div>
 </div>
 
@@ -154,8 +162,7 @@ h1{margin-bottom:24px}
 <script>
 /* ===== SESSION PROTECTION ===== */
 (function(){
-  const session = localStorage.getItem("scheduler_session");
-  if(!session){
+  if(localStorage.getItem("scheduler_session")!=="active"){
     location.replace("index.html");
   }
 })();
