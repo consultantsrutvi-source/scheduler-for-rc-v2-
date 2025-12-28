@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Assignments | Scheduler for RC</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{margin:0;font-family:Inter,system-ui;background:#f1f5f9}
+header{
+  background:linear-gradient(135deg,#2563eb,#0f766e);
+  color:#fff;padding:14px 24px;
+  display:flex;justify-content:space-between;align-items:center
+}
+header .left{display:flex;gap:12px;align-items:center}
+.logo{height:36px;width:36px;border-radius:10px;background:#fff;padding:4px}
+nav a{color:#fff;margin-left:18px;text-decoration:none}
+
+.container{padding:30px}
+.card{
+  background:#fff;border-radius:16px;
+  padding:22px;margin-bottom:22px;
+  box-shadow:0 18px 40px rgba(0,0,0,.1)
+}
+
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+select,button{
+  padding:10px;border-radius:10px;border:1px solid #cbd5e1
+}
+button{
+  background:linear-gradient(135deg,#2563eb,#0f766e);
+  color:#fff;font-weight:600;cursor:pointer;border:none
+}
+
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{padding:10px;border-bottom:1px solid #e5e7eb;font-size:13px}
+th{background:#f8fafc}
+
+.badge{
+  padding:4px 10px;border-radius:20px;
+  font-size:12px;font-weight:600
+}
+.active{background:#dcfce7;color:#166534}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="left">
+    <img src="logo.png.jpg" class="logo">
+    <strong>Scheduler for RC</strong>
+  </div>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="vacancies.html">Vacancies</a>
+    <a href="lecturers.html">Lecturers</a>
+    <a href="assignments.html">Assignments</a>
+    <a href="index.html" onclick="logout()">Logout</a>
+  </nav>
+</header>
+
+<div class="container">
+
+<!-- SELECT VACANCY -->
+<div class="card">
+  <h3>Select Vacancy</h3>
+  <select id="vacancySelect"></select>
+</div>
+
+<!-- FILTER LECTURERS -->
+<div class="card">
+  <h3>Available Lecturers</h3>
+  <div class="grid">
+    <select id="fCity"><option value="">City</option></select>
+    <select id="fSubject"><option value="">Subject</option></select>
+    <select id="fLevel"><option value="">Level</option></select>
+    <button onclick="applyFilters()">Filter</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Name</th><th>City</th>
+        <th>Subject</th><th>Level</th>
+        <th>Salary</th><th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="lecturerBody"></tbody>
+  </table>
+</div>
+
+<!-- ASSIGNMENTS LIST -->
+<div class="card">
+  <h3>Assignments</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Vacancy</th><th>Lecturer</th>
+        <th>Salary</th><th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="assignmentBody"></tbody>
+  </table>
+</div>
+
+</div>
+
+<script src="js/places.js"></script>
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+
+let vacancies=[], lecturers=[], assignments=[];
+
+/* LOAD */
+document.addEventListener("DOMContentLoaded",()=>{
+  loadVacancies();
+  loadLecturers();
+  loadAssignments();
+});
+
+/* VACANCIES */
+function loadVacancies(){
+  fetch(`${SCRIPT_URL}?action=getVacancies`)
+    .then(r=>r.json())
+    .then(d=>{
+      vacancies=d;
+      vacancySelect.innerHTML="";
+      d.forEach(v=>{
+        vacancySelect.add(new Option(
+          `${v.college} (${v.subject})`, v.id
+        ));
+      });
+    });
+}
+
+/* LECTURERS */
+function loadLecturers(){
+  fetch(`${SCRIPT_URL}?action=getLecturers`)
+    .then(r=>r.json())
+    .then(d=>{
+      lecturers=d;
+      renderLecturers(d);
+      loadFilters(d);
+    });
+}
+
+function loadFilters(data){
+  [...new Set(data.map(x=>x.city))].forEach(c=>fCity.add(new Option(c,c)));
+  [...new Set(data.map(x=>x.subject))].forEach(s=>fSubject.add(new Option(s,s)));
+  [...new Set(data.map(x=>x.level))].forEach(l=>fLevel.add(new Option(l,l)));
+}
+
+function renderLecturers(data){
+  lecturerBody.innerHTML="";
+  data.forEach(l=>{
+    lecturerBody.innerHTML+=`
+    <tr>
+      <td>${l.id}</td>
+      <td>${l.name}</td>
+      <td>${l.city}</td>
+      <td>${l.subject}</td>
+      <td>${l.level}</td>
+      <td>₹${l.salaryFrom}–₹${l.salaryTo}</td>
+      <td>
+        <button onclick="assign('${l.id}','${l.name}')">Assign</button>
+      </td>
+    </tr>`;
+  });
+}
+
+function applyFilters(){
+  let d=[...lecturers];
+  if(fCity.value)d=d.filter(x=>x.city===fCity.value);
+  if(fSubject.value)d=d.filter(x=>x.subject===fSubject.value);
+  if(fLevel.value)d=d.filter(x=>x.level===fLevel.value);
+  renderLecturers(d);
+}
+
+/* ASSIGN */
+function assign(lecturerId, lecturerName){
+  const vacancyId = vacancySelect.value;
+  const salary = prompt("Agreed Salary?");
+  if(!salary)return;
+
+  fetch(`${SCRIPT_URL}?action=addAssignment`,{
+    method:"POST",
+    body:JSON.stringify({
+      vacancyId,
+      lecturerId,
+      lecturerName,
+      salary
+    })
+  })
+  .then(()=>loadAssignments());
+}
+
+/* ASSIGNMENTS */
+function loadAssignments(){
+  fetch(`${SCRIPT_URL}?action=getAssignments`)
+    .then(r=>r.json())
+    .then(d=>{
+      assignmentBody.innerHTML="";
+      d.forEach(a=>{
+        assignmentBody.innerHTML+=`
+        <tr>
+          <td>${a.id}</td>
+          <td>${a.vacancyId}</td>
+          <td>${a.lecturerName}</td>
+          <td>₹${a.salary}</td>
+          <td><span class="badge active">${a.status}</span></td>
+        </tr>`;
+      });
+    });
+}
+
+function logout(){
+  localStorage.removeItem("scheduler_session");
+}
+</script>
+
+</body>
+</html>
