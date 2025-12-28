@@ -1,31 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Scheduler for RC</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<title>Login | Scheduler CRM</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#2563eb,#1e40af);
+  font-family:Inter,Arial,sans-serif;
+}
+.login-card{
+  background:#fff;
+  padding:36px;
+  border-radius:14px;
+  width:340px;
+  box-shadow:0 20px 40px rgba(0,0,0,.25);
+  text-align:center;
+}
+.login-card img{
+  height:48px;
+  margin-bottom:18px;
+}
+.login-card h2{
+  margin-bottom:20px;
+  color:#1f2937;
+}
+.pin-box{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+.pin-box input{
+  width:48px;
+  height:54px;
+  text-align:center;
+  font-size:22px;
+  border:1px solid #c7d2fe;
+  border-radius:10px;
+}
+button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:#2563eb;
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+}
+button:hover{opacity:.95}
+.msg{
+  margin-top:12px;
+  font-size:14px;
+  color:#dc2626;
+}
+</style>
 </head>
 
-<body class="login-body">
+<body>
 
-  <div class="login-card">
-    <img src="logo.png.jpg" class="logo">
+<div class="login-card">
+  <img src="logo.png.jpg" alt="Logo">
+  <h2>Scheduler Login</h2>
 
-    <h1>Scheduler for RC</h1>
-    <p class="subtitle">Internal Scheduling System</p>
-
-    <div class="pin-row">
-      <input id="pin1" class="pin-box" maxlength="1" inputmode="numeric">
-      <input id="pin2" class="pin-box" maxlength="1" inputmode="numeric">
-      <input id="pin3" class="pin-box" maxlength="1" inputmode="numeric">
-      <input id="pin4" class="pin-box" maxlength="1" inputmode="numeric">
-    </div>
-
-    <button onclick="login()">Login</button>
-
-    <div id="status"></div>
+  <div class="pin-box">
+    <input type="password" maxlength="1" oninput="move(this,1)">
+    <input type="password" maxlength="1" oninput="move(this,2)">
+    <input type="password" maxlength="1" oninput="move(this,3)">
+    <input type="password" maxlength="1" oninput="move(this,4)">
   </div>
 
-  <script src="js/app.js"></script>
+  <button onclick="login()">Login</button>
+  <div class="msg" id="msg"></div>
+</div>
+
+<script>
+const CORRECT_PIN = "3011";
+
+/* AUTO-REDIRECT IF ALREADY LOGGED IN */
+if(localStorage.getItem("scheduler_session")==="active"){
+  location.replace("dashboard.html");
+}
+
+/* PIN AUTO MOVE */
+function move(el,index){
+  if(el.value && index<4){
+    el.nextElementSibling.focus();
+  }
+}
+
+/* LOGIN FUNCTION */
+function login(){
+  const inputs=document.querySelectorAll(".pin-box input");
+  let pin="";
+  inputs.forEach(i=>pin+=i.value);
+
+  if(pin.length<4){
+    document.getElementById("msg").innerText="Enter complete PIN";
+    return;
+  }
+
+  if(pin===CORRECT_PIN){
+    localStorage.setItem("scheduler_session","active");
+    location.replace("dashboard.html");
+  }else{
+    document.getElementById("msg").innerText="Invalid PIN";
+    inputs.forEach(i=>i.value="");
+    inputs[0].focus();
+  }
+}
+</script>
+
 </body>
 </html>
