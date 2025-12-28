@@ -6,18 +6,22 @@
 
 <style>
 :root{
-  --primary:#2563eb;
-  --secondary:#1e40af;
+  --blue:#2563eb;
+  --indigo:#4f46e5;
+  --green:#10b981;
+  --orange:#f59e0b;
+  --pink:#ec4899;
+  --gray:#6b7280;
   --bg:#f4f6fb;
   --card:#ffffff;
-  --text:#1f2937;
   --danger:#ef4444;
 }
 *{box-sizing:border-box;font-family:Inter,Arial,sans-serif}
-body{margin:0;background:var(--bg);color:var(--text)}
+body{margin:0;background:var(--bg);color:#1f2937}
 
+/* HEADER */
 header{
-  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  background:linear-gradient(135deg,#2563eb,#1e40af);
   color:#fff;
   padding:14px 24px;
   display:flex;
@@ -27,8 +31,8 @@ header{
 header img{height:38px}
 header nav{
   display:flex;
-  flex-wrap:wrap;
-  gap:16px
+  gap:20px;
+  align-items:center
 }
 header nav a{
   color:#fff;
@@ -43,62 +47,69 @@ header button{
   color:#fff;
   padding:8px 14px;
   border-radius:6px;
-  cursor:pointer;
-  font-weight:500
+  cursor:pointer
 }
 
-main{padding:28px}
-
+/* LAYOUT */
+main{padding:32px}
 h1{margin-bottom:24px}
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:22px
-}
-
-.card{
-  background:var(--card);
-  border-radius:14px;
-  padding:24px;
-  box-shadow:0 12px 26px rgba(0,0,0,.08);
-  transition:.2s ease
-}
-.card:hover{transform:translateY(-4px)}
-
-.card h2{
-  margin:0;
-  font-size:17px;
-  color:#374151
-}
-.card .count{
-  font-size:38px;
-  font-weight:700;
-  margin-top:12px;
-  color:var(--primary)
-}
-.card small{color:#6b7280}
-
-.actions{
-  margin-top:36px;
+/* COUNT CARDS */
+.count-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:18px
+  gap:22px;
+  margin-bottom:40px
 }
-.action-btn{
-  background:linear-gradient(135deg,#2563eb,#1e40af);
+.count-card{
+  background:#fff;
+  border-radius:16px;
+  padding:26px;
+  box-shadow:0 14px 30px rgba(0,0,0,.08)
+}
+.count-card h3{
+  margin:0;
+  font-size:15px;
+  color:#374151
+}
+.count-card .num{
+  font-size:40px;
+  font-weight:800;
+  margin-top:14px
+}
+.blue{color:var(--blue)}
+.green{color:var(--green)}
+.orange{color:var(--orange)}
+.pink{color:var(--pink)}
+
+/* ACTION CARDS */
+.action-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:22px
+}
+.action{
+  border-radius:18px;
+  padding:30px;
   color:#fff;
-  padding:16px;
-  border-radius:12px;
   text-decoration:none;
-  font-weight:600;
+  box-shadow:0 18px 36px rgba(0,0,0,.25);
+  transition:.25s ease;
   display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  box-shadow:0 8px 18px rgba(37,99,235,.35)
+  flex-direction:column;
+  gap:10px
 }
-.action-btn:hover{opacity:.95}
+.action:hover{
+  transform:translateY(-6px);
+  opacity:.96
+}
+.action h2{margin:0;font-size:22px}
+.action p{margin:0;font-size:14px;opacity:.9}
+
+.bg-blue{background:linear-gradient(135deg,#2563eb,#1e40af)}
+.bg-green{background:linear-gradient(135deg,#10b981,#059669)}
+.bg-orange{background:linear-gradient(135deg,#f59e0b,#d97706)}
+.bg-pink{background:linear-gradient(135deg,#ec4899,#be185d)}
 </style>
 </head>
 
@@ -110,11 +121,8 @@ h1{margin-bottom:24px}
     <nav>
       <a href="dashboard.html">Dashboard</a>
       <a href="vacancies.html">Vacancies</a>
-      <a href="add-vacancy.html">Add Vacancy</a>
       <a href="lecturers.html">Lecturers</a>
-      <a href="add-lecturer.html">Add Lecturer</a>
-      <a href="assignment-manual.html">Manual Assignment</a>
-      <a href="assignment-auto.html">Auto Assignment</a>
+      <a href="assignment-manual.html">Assignments</a>
     </nav>
   </div>
   <button onclick="logout()">Logout</button>
@@ -124,68 +132,73 @@ h1{margin-bottom:24px}
 
 <h1>Dashboard</h1>
 
-<div class="grid">
-  <div class="card">
-    <h2>Total Vacancies</h2>
-    <div class="count" id="totalVacancies">0</div>
-    <small>All active requirements</small>
+<!-- LIVE COUNTS -->
+<div class="count-grid">
+  <div class="count-card">
+    <h3>Total Vacancies</h3>
+    <div class="num blue" id="totalVacancies">0</div>
   </div>
-
-  <div class="card">
-    <h2>Active Lecturers</h2>
-    <div class="count" id="activeLecturers">0</div>
-    <small>Currently available faculty</small>
+  <div class="count-card">
+    <h3>Active Lecturers</h3>
+    <div class="num green" id="activeLecturers">0</div>
   </div>
-
-  <div class="card">
-    <h2>Assignments Today</h2>
-    <div class="count">0</div>
-    <small>Manual / Auto</small>
+  <div class="count-card">
+    <h3>Assignments Today</h3>
+    <div class="num orange" id="assignmentsToday">0</div>
   </div>
-
-  <div class="card">
-    <h2>Pending Matches</h2>
-    <div class="count">0</div>
-    <small>Auto-match queue</small>
+  <div class="count-card">
+    <h3>Pending Matches</h3>
+    <div class="num pink" id="pendingMatches">0</div>
   </div>
 </div>
 
-<div class="actions">
-  <a class="action-btn" href="add-vacancy.html">➕ Add Vacancy</a>
-  <a class="action-btn" href="add-lecturer.html">➕ Add Lecturer</a>
-  <a class="action-btn" href="assignment-manual.html">📝 Manual Assignment</a>
-  <a class="action-btn" href="assignment-auto.html">⚙️ Auto Assignment</a>
+<!-- ACTIONS -->
+<div class="action-grid">
+  <a class="action bg-blue" href="add-vacancy.html">
+    <h2>➕ Add Vacancy</h2>
+    <p>Create new college requirement</p>
+  </a>
+
+  <a class="action bg-green" href="add-lecturer.html">
+    <h2>➕ Add Lecturer</h2>
+    <p>Register available faculty</p>
+  </a>
+
+  <a class="action bg-orange" href="assignment-manual.html">
+    <h2>📝 Manual Assignment</h2>
+    <p>Assign lecturer manually</p>
+  </a>
+
+  <a class="action bg-pink" href="assignment-auto.html">
+    <h2>⚙️ Auto Assignment</h2>
+    <p>System-based matching</p>
+  </a>
 </div>
 
 </main>
 
 <script>
-/* ===== SESSION PROTECTION ===== */
-(function(){
-  if(localStorage.getItem("scheduler_session")!=="active"){
-    location.replace("index.html");
-  }
-})();
+/* SESSION PROTECTION */
+if(localStorage.getItem("scheduler_session")!=="active"){
+  location.replace("index.html");
+}
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
 
-/* ===== LOGOUT ===== */
 function logout(){
   localStorage.removeItem("scheduler_session");
   location.replace("index.html");
 }
 
-/* ===== LOAD DASHBOARD COUNTS ===== */
 async function loadDashboard(){
-  try{
-    const res = await fetch(SCRIPT_URL + "?action=getDashboard");
-    const data = await res.json();
+  const res = await fetch(SCRIPT_URL+"?action=getDashboard");
+  const d = await res.json();
 
-    document.getElementById("totalVacancies").innerText = data.totalVacancies || 0;
-    document.getElementById("activeLecturers").innerText = data.activeLecturers || 0;
-  }catch(e){
-    console.error("Dashboard load failed",e);
-  }
+  document.getElementById("totalVacancies").innerText = d.totalVacancies || 0;
+  document.getElementById("activeLecturers").innerText = d.activeLecturers || 0;
+  document.getElementById("assignmentsToday").innerText = d.assignmentsToday || 0;
+  document.getElementById("pendingMatches").innerText = d.pendingMatches || 0;
 }
 
 loadDashboard();
