@@ -2,267 +2,255 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Add Vacancy | Scheduler CRM</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Vacancy | Rutvi Consultants CRM</title>
 
-<script src="places.js"></script>
+<link rel="stylesheet" href="css/style.css">
+<script src="js/places.js"></script>
 
 <style>
-:root{
-  --bg:#f4f7ff;
-  --card:#ffffff;
-  --text:#1f2937;
-  --blue:#6366f1;
-  --green:#22c55e;
-  --orange:#f59e0b;
-  --red:#ef4444;
+body{
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(120deg,#f8fafc,#eef2ff);
+  margin:0;
 }
-*{box-sizing:border-box;font-family:Inter,Arial,sans-serif}
-body{margin:0;background:var(--bg);color:var(--text)}
-
 header{
-  background:linear-gradient(135deg,#eef2ff,#ffffff);
-  padding:14px 26px;
+  background: linear-gradient(135deg,#6366f1,#22c55e);
+  color:white;
+  padding:14px 28px;
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  border-bottom:1px solid #e5e7eb
+  justify-content:space-between;
 }
-header img{height:38px}
+header img{height:40px}
 nav a{
-  margin-right:16px;
+  color:white;
+  margin:0 14px;
   text-decoration:none;
-  color:#374151;
-  font-weight:500
+  font-weight:500;
 }
-nav a:hover{color:var(--blue)}
+nav a:hover{text-decoration:underline}
 .logout{
   background:#ef4444;
-  border:none;
-  color:#fff;
   padding:8px 16px;
   border-radius:10px;
-  cursor:pointer;
-  font-weight:600
+  color:white;
 }
 
-main{
+.container{
   max-width:900px;
-  margin:30px auto;
-  background:var(--card);
-  padding:32px;
+  margin:50px auto;
+}
+.card{
+  background:white;
   border-radius:20px;
-  box-shadow:0 25px 50px rgba(0,0,0,.12)
+  padding:35px;
+  box-shadow:0 25px 45px rgba(0,0,0,.08);
 }
-h1{margin-bottom:24px}
+.card h2{
+  margin-bottom:25px;
+  color:#334155;
+}
 
-.form-grid{
+.grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:20px
+  grid-template-columns:1fr 1fr 1fr;
+  gap:20px;
 }
-label{font-weight:600;font-size:14px}
-input,select{
-  width:100%;
-  padding:10px 12px;
-  border-radius:10px;
-  border:1px solid #d1d5db;
-  font-size:14px
-}
-.hidden{display:none}
 
-.actions{
-  margin-top:28px;
-  display:flex;
-  gap:16px;
-  align-items:center
+label{
+  font-size:13px;
+  color:#475569;
 }
-button{
-  padding:12px 26px;
-  border-radius:14px;
+input,select,textarea{
+  width:100%;
+  padding:11px;
+  border-radius:10px;
+  border:1px solid #c7d2fe;
+  margin-top:6px;
+}
+textarea{grid-column:1/4}
+
+.primary-btn{
+  background: linear-gradient(135deg,#6366f1,#22c55e);
+  color:white;
+  padding:14px 40px;
   border:none;
-  font-size:16px;
-  font-weight:700;
-  cursor:pointer
+  border-radius:14px;
+  font-size:15px;
+  font-weight:600;
+  box-shadow:0 12px 25px rgba(99,102,241,.35);
+  cursor:pointer;
 }
-.save{
-  background:linear-gradient(135deg,#6366f1,#818cf8);
-  color:#fff
-}
-.save:disabled{opacity:.6}
+.primary-btn:hover{transform:translateY(-1px)}
+
 .status{
-  font-weight:600
+  margin-top:15px;
+  font-weight:600;
 }
-.success{color:var(--green)}
-.error{color:var(--red)}
+.success{color:#16a34a}
+.error{color:#dc2626}
 </style>
 </head>
 
-<body onload="requireLogin();loadCities()">
+<body>
 
 <header>
-  <div>
-    <img src="logo.png.jpg">
-    <nav>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="vacancies.html">Vacancies</a>
-      <a href="lecturers.html">Lecturers</a>
-    </nav>
+  <div style="display:flex;align-items:center;gap:12px">
+    <img src="logo.png" alt="logo">
+    <strong>Rutvi Consultants CRM</strong>
   </div>
-  <button class="logout" onclick="logout()">Logout</button>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="vacancies.html">Vacancies</a>
+    <a href="lecturers.html">Lecturers</a>
+    <a href="assignments.html">Assignments</a>
+    <a class="logout" href="index.html">Logout</a>
+  </nav>
 </header>
 
-<main>
-<h1>Add Vacancy</h1>
+<div class="container">
+<div class="card">
+<h2>Add Vacancy</h2>
 
-<div class="form-grid">
-
-  <div>
-    <label>College Name *</label>
-    <input id="college" required>
-  </div>
-
-  <div>
-    <label>City *</label>
-    <select id="city"></select>
-  </div>
-
-  <div>
-    <label>Subject *</label>
-    <select id="subject" onchange="toggleOther(this,'subjectOther')">
-      <option value="">Select</option>
-      <option>Physics</option>
-      <option>Chemistry</option>
-      <option>Mathematics</option>
-      <option>Biology</option>
-      <option>Botany</option>
-      <option>Zoology</option>
-      <option>Other</option>
-    </select>
-    <input id="subjectOther" class="hidden" placeholder="Enter subject">
-  </div>
-
-  <div>
-    <label>Level *</label>
-    <select id="level" onchange="toggleOther(this,'levelOther')">
-      <option value="">Select</option>
-      <option>PU</option>
-      <option>KCET</option>
-      <option>NEET</option>
-      <option>JEE</option>
-      <option>Foundation</option>
-      <option>Other</option>
-    </select>
-    <input id="levelOther" class="hidden" placeholder="Enter level">
-  </div>
-
-  <div>
-    <label>Salary From *</label>
-    <select id="salaryFrom"></select>
-  </div>
-
-  <div>
-    <label>Salary To *</label>
-    <select id="salaryTo"></select>
-  </div>
-
-  <div>
-    <label>Urgency *</label>
-    <select id="urgency">
-      <option value="">Select</option>
-      <option>Immediate</option>
-      <option>Within 1 Week</option>
-      <option>Within 1 Month</option>
-    </select>
-  </div>
-
-  <div>
-    <label>Phone</label>
-    <input id="phone">
-  </div>
-
+<div class="grid">
+<div>
+<label>College Name *</label>
+<input id="college">
 </div>
 
-<div class="actions">
-  <button class="save" onclick="saveVacancy()">Save Vacancy</button>
-  <span id="status" class="status"></span>
+<div>
+<label>City *</label>
+<select id="city"></select>
 </div>
 
-</main>
+<div>
+<label>Phone *</label>
+<input id="phone">
+</div>
+
+<div>
+<label>Subject *</label>
+<select id="subject">
+<option value="">Select</option>
+<option>Physics</option>
+<option>Chemistry</option>
+<option>Biology</option>
+<option>Mathematics</option>
+<option>Other</option>
+</select>
+<input id="subjectOther" placeholder="Enter subject" style="display:none">
+</div>
+
+<div>
+<label>Level *</label>
+<select id="level">
+<option value="">Select</option>
+<option>NEET</option>
+<option>KCET</option>
+<option>Boards</option>
+<option>Other</option>
+</select>
+<input id="levelOther" placeholder="Enter level" style="display:none">
+</div>
+
+<div>
+<label>Faculty Required *</label>
+<input id="faculty">
+</div>
+
+<div>
+<label>Salary From *</label>
+<select id="salaryFrom"></select>
+</div>
+
+<div>
+<label>Salary To *</label>
+<select id="salaryTo"></select>
+</div>
+
+<div>
+<label>Urgency *</label>
+<select id="urgency">
+<option value="">Select</option>
+<option>Immediate</option>
+<option>Within 7 Days</option>
+<option>Within 15 Days</option>
+<option>Flexible</option>
+</select>
+</div>
+
+<div>
+<label>Collected By *</label>
+<input id="collectedBy">
+</div>
+
+<textarea id="notes" placeholder="Notes (optional)"></textarea>
+</div>
+
+<br>
+<button class="primary-btn" onclick="saveVacancy()">Save Vacancy</button>
+<div id="msg" class="status"></div>
+
+</div>
+</div>
 
 <script>
-const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
 
-function requireLogin(){
-  if(!localStorage.getItem("scheduler_session")){
-    location.href="index.html";
-  }
-}
-function logout(){
-  localStorage.clear();
-  location.href="index.html";
-}
+const salaries=[
+{l:"₹50k",v:50000},{l:"₹75k",v:75000},{l:"₹1L",v:100000},
+{l:"₹1.25L",v:125000},{l:"₹1.5L",v:150000},
+{l:"₹1.75L",v:175000},{l:"₹2L",v:200000},
+{l:"₹2.5L",v:250000},{l:"₹3L",v:300000},
+{l:"₹3.5L",v:350000}
+];
 
-function loadCities(){
-  const c=document.getElementById("city");
-  c.innerHTML='<option value="">Select</option>';
-  cities.forEach(x=>{
-    const o=document.createElement("option");
-    o.textContent=x;o.value=x;c.appendChild(o);
-  });
-
-  for(let s=50000;s<=350000;s+=25000){
-    salaryFrom.innerHTML+=`<option>${s}</option>`;
-    salaryTo.innerHTML+=`<option>${s}</option>`;
-  }
+function loadSalary(){
+["salaryFrom","salaryTo"].forEach(id=>{
+const s=document.getElementById(id);
+s.innerHTML="<option value=''>Select</option>";
+salaries.forEach(x=>s.add(new Option(x.l,x.v)));
+});
 }
 
-function toggleOther(sel,id){
-  document.getElementById(id).classList.toggle("hidden",sel.value!=="Other");
+document.getElementById("subject").onchange=()=>subjectOther.style.display=subject.value==="Other"?"block":"none";
+document.getElementById("level").onchange=()=>levelOther.style.display=level.value==="Other"?"block":"none";
+
+function saveVacancy(){
+msg.textContent="Saving...";
+msg.className="status";
+
+fetch(SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify({
+action:"addVacancy",
+CollegeName:college.value,
+City:city.value,
+Phone:phone.value,
+Subject:subject.value==="Other"?subjectOther.value:subject.value,
+Level:level.value==="Other"?levelOther.value:level.value,
+FacultyRequired:faculty.value,
+SalaryFrom:Number(salaryFrom.value),
+SalaryTo:Number(salaryTo.value),
+Urgency:urgency.value,
+CollectedBy:collectedBy.value,
+Notes:notes.value
+})
+}).then(r=>r.json()).then(res=>{
+if(res.success){
+msg.textContent="Vacancy saved successfully";
+msg.className="status success";
+}else{
+msg.textContent="Could not save vacancy";
+msg.className="status error";
+}
+});
 }
 
-async function saveVacancy(){
-  const status=document.getElementById("status");
-  status.textContent="Saving...";
-  status.className="status";
-
-  const data={
-    action:"addVacancy",
-    college:college.value.trim(),
-    city:city.value,
-    subject:subject.value==="Other"?subjectOther.value:subject.value,
-    level:level.value==="Other"?levelOther.value:level.value,
-    salaryFrom:salaryFrom.value,
-    salaryTo:salaryTo.value,
-    urgency:urgency.value,
-    phone:phone.value
-  };
-
-  if(!data.college||!data.city||!data.subject||!data.level||!data.salaryFrom||!data.salaryTo||!data.urgency){
-    status.textContent="Please fill all mandatory fields";
-    status.classList.add("error");
-    return;
-  }
-
-  try{
-    const res=await fetch(SCRIPT_URL,{
-      method:"POST",
-      body:JSON.stringify(data)
-    });
-    const r=await res.json();
-    if(r.success){
-      status.textContent="Vacancy saved successfully";
-      status.classList.add("success");
-    }else{
-      status.textContent=r.message||"Could not save vacancy";
-      status.classList.add("error");
-    }
-  }catch(e){
-    status.textContent="Server error while saving";
-    status.classList.add("error");
-  }
-}
+document.addEventListener("DOMContentLoaded",()=>{
+loadSalary();
+loadCities("city");
+});
 </script>
 
 </body>
