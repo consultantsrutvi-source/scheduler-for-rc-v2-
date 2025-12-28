@@ -1,256 +1,303 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Add Vacancy | Rutvi Consultants CRM</title>
+  <meta charset="UTF-8" />
+  <title>Add Vacancy – Rutvi Consultants CRM</title>
 
-<link rel="stylesheet" href="css/style.css">
-<script src="js/places.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<style>
-body{
-  font-family: "Segoe UI", sans-serif;
-  background: linear-gradient(120deg,#f8fafc,#eef2ff);
-  margin:0;
-}
-header{
-  background: linear-gradient(135deg,#6366f1,#22c55e);
-  color:white;
-  padding:14px 28px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-header img{height:40px}
-nav a{
-  color:white;
-  margin:0 14px;
-  text-decoration:none;
-  font-weight:500;
-}
-nav a:hover{text-decoration:underline}
-.logout{
-  background:#ef4444;
-  padding:8px 16px;
-  border-radius:10px;
-  color:white;
-}
+  <!-- Premium font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-.container{
-  max-width:900px;
-  margin:50px auto;
-}
-.card{
-  background:white;
-  border-radius:20px;
-  padding:35px;
-  box-shadow:0 25px 45px rgba(0,0,0,.08);
-}
-.card h2{
-  margin-bottom:25px;
-  color:#334155;
-}
+  <style>
+    * { box-sizing: border-box; font-family: Inter, sans-serif; }
 
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:20px;
-}
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #eef4ff, #f6fff9);
+      min-height: 100vh;
+    }
 
-label{
-  font-size:13px;
-  color:#475569;
-}
-input,select,textarea{
-  width:100%;
-  padding:11px;
-  border-radius:10px;
-  border:1px solid #c7d2fe;
-  margin-top:6px;
-}
-textarea{grid-column:1/4}
+    /* HEADER */
+    header {
+      background: linear-gradient(90deg, #0f766e, #2563eb);
+      color: #fff;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(0,0,0,.15);
+    }
 
-.primary-btn{
-  background: linear-gradient(135deg,#6366f1,#22c55e);
-  color:white;
-  padding:14px 40px;
-  border:none;
-  border-radius:14px;
-  font-size:15px;
-  font-weight:600;
-  box-shadow:0 12px 25px rgba(99,102,241,.35);
-  cursor:pointer;
-}
-.primary-btn:hover{transform:translateY(-1px)}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 18px;
+    }
 
-.status{
-  margin-top:15px;
-  font-weight:600;
-}
-.success{color:#16a34a}
-.error{color:#dc2626}
-</style>
+    .brand img {
+      height: 38px;
+      border-radius: 6px;
+    }
+
+    nav a {
+      color: #e0f2fe;
+      margin-left: 22px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav a:hover { text-decoration: underline; }
+
+    /* CARD */
+    .container {
+      display: flex;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 980px;
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 30px 60px rgba(0,0,0,.1);
+    }
+
+    h1 {
+      margin: 0 0 22px;
+      font-size: 26px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+    }
+
+    textarea { resize: vertical; }
+
+    .full { grid-column: span 3; }
+
+    button {
+      margin-top: 24px;
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      background: linear-gradient(90deg, #2563eb, #16a34a);
+      box-shadow: 0 10px 25px rgba(37,99,235,.4);
+    }
+
+    button:disabled {
+      opacity: .7;
+      cursor: not-allowed;
+    }
+
+    .status {
+      margin-top: 12px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .ok { color: #16a34a; }
+    .err { color: #dc2626; }
+  </style>
 </head>
 
 <body>
 
 <header>
-  <div style="display:flex;align-items:center;gap:12px">
-    <img src="logo.png" alt="logo">
-    <strong>Rutvi Consultants CRM</strong>
+  <div class="brand">
+    <img src="logo.png.jpg">
+    Rutvi Consultants – CRM
   </div>
   <nav>
     <a href="dashboard.html">Dashboard</a>
     <a href="vacancies.html">Vacancies</a>
     <a href="lecturers.html">Lecturers</a>
-    <a href="assignments.html">Assignments</a>
-    <a class="logout" href="index.html">Logout</a>
   </nav>
 </header>
 
 <div class="container">
-<div class="card">
-<h2>Add Vacancy</h2>
+  <div class="card">
+    <h1>Add Vacancy</h1>
 
-<div class="grid">
-<div>
-<label>College Name *</label>
-<input id="college">
+    <div class="grid">
+      <div>
+        <label>College Name *</label>
+        <input id="college" />
+      </div>
+
+      <div>
+        <label>City *</label>
+        <select id="city"></select>
+      </div>
+
+      <div>
+        <label>Phone *</label>
+        <input id="phone" />
+      </div>
+
+      <div>
+        <label>Subject *</label>
+        <select id="subject">
+          <option value="">Select</option>
+          <option>Physics</option>
+          <option>Chemistry</option>
+          <option>Maths</option>
+          <option>Biology</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Level *</label>
+        <select id="level">
+          <option value="">Select</option>
+          <option>KCET</option>
+          <option>NEET</option>
+          <option>Boards</option>
+          <option>JEE</option>
+          <option>Foundation</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Faculty Required *</label>
+        <input id="faculty" type="number" min="1">
+      </div>
+
+      <div>
+        <label>Salary From *</label>
+        <select id="salaryFrom"></select>
+      </div>
+
+      <div>
+        <label>Salary To *</label>
+        <select id="salaryTo"></select>
+      </div>
+
+      <div>
+        <label>Urgency *</label>
+        <select id="urgency">
+          <option value="">Select</option>
+          <option>Immediate</option>
+          <option>Within 7 Days</option>
+          <option>Within 15 Days</option>
+          <option>Flexible</option>
+        </select>
+      </div>
+
+      <div class="full">
+        <label>Collected By *</label>
+        <input id="collectedBy">
+      </div>
+
+      <div class="full">
+        <label>Notes</label>
+        <textarea id="notes"></textarea>
+      </div>
+    </div>
+
+    <button id="saveBtn" onclick="saveVacancy()">Save Vacancy</button>
+    <div id="msg" class="status"></div>
+  </div>
 </div>
 
-<div>
-<label>City *</label>
-<select id="city"></select>
-</div>
-
-<div>
-<label>Phone *</label>
-<input id="phone">
-</div>
-
-<div>
-<label>Subject *</label>
-<select id="subject">
-<option value="">Select</option>
-<option>Physics</option>
-<option>Chemistry</option>
-<option>Biology</option>
-<option>Mathematics</option>
-<option>Other</option>
-</select>
-<input id="subjectOther" placeholder="Enter subject" style="display:none">
-</div>
-
-<div>
-<label>Level *</label>
-<select id="level">
-<option value="">Select</option>
-<option>NEET</option>
-<option>KCET</option>
-<option>Boards</option>
-<option>Other</option>
-</select>
-<input id="levelOther" placeholder="Enter level" style="display:none">
-</div>
-
-<div>
-<label>Faculty Required *</label>
-<input id="faculty">
-</div>
-
-<div>
-<label>Salary From *</label>
-<select id="salaryFrom"></select>
-</div>
-
-<div>
-<label>Salary To *</label>
-<select id="salaryTo"></select>
-</div>
-
-<div>
-<label>Urgency *</label>
-<select id="urgency">
-<option value="">Select</option>
-<option>Immediate</option>
-<option>Within 7 Days</option>
-<option>Within 15 Days</option>
-<option>Flexible</option>
-</select>
-</div>
-
-<div>
-<label>Collected By *</label>
-<input id="collectedBy">
-</div>
-
-<textarea id="notes" placeholder="Notes (optional)"></textarea>
-</div>
-
-<br>
-<button class="primary-btn" onclick="saveVacancy()">Save Vacancy</button>
-<div id="msg" class="status"></div>
-
-</div>
-</div>
+<!-- IMPORTANT: places.js -->
+<script src="js/places.js"></script>
 
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
 
-const salaries=[
-{l:"₹50k",v:50000},{l:"₹75k",v:75000},{l:"₹1L",v:100000},
-{l:"₹1.25L",v:125000},{l:"₹1.5L",v:150000},
-{l:"₹1.75L",v:175000},{l:"₹2L",v:200000},
-{l:"₹2.5L",v:250000},{l:"₹3L",v:300000},
-{l:"₹3.5L",v:350000}
+const salarySteps = [
+  { l:"₹50k", v:50000 },{ l:"₹1L", v:100000 },
+  { l:"₹1.5L", v:150000 },{ l:"₹2L", v:200000 },
+  { l:"₹2.5L", v:250000 },{ l:"₹3L", v:300000 },
+  { l:"₹3.5L", v:350000 }
 ];
 
-function loadSalary(){
-["salaryFrom","salaryTo"].forEach(id=>{
-const s=document.getElementById(id);
-s.innerHTML="<option value=''>Select</option>";
-salaries.forEach(x=>s.add(new Option(x.l,x.v)));
-});
+function fillSalary(id){
+  const s=document.getElementById(id);
+  s.innerHTML='<option value="">Select</option>';
+  salarySteps.forEach(o=>{
+    const op=document.createElement("option");
+    op.value=o.v;
+    op.textContent=o.l;
+    s.appendChild(op);
+  });
 }
 
-document.getElementById("subject").onchange=()=>subjectOther.style.display=subject.value==="Other"?"block":"none";
-document.getElementById("level").onchange=()=>levelOther.style.display=level.value==="Other"?"block":"none";
+fillSalary("salaryFrom");
+fillSalary("salaryTo");
 
 function saveVacancy(){
-msg.textContent="Saving...";
-msg.className="status";
+  const btn=document.getElementById("saveBtn");
+  const msg=document.getElementById("msg");
+  btn.disabled=true;
+  btn.textContent="Saving…";
+  msg.textContent="";
 
-fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify({
-action:"addVacancy",
-CollegeName:college.value,
-City:city.value,
-Phone:phone.value,
-Subject:subject.value==="Other"?subjectOther.value:subject.value,
-Level:level.value==="Other"?levelOther.value:level.value,
-FacultyRequired:faculty.value,
-SalaryFrom:Number(salaryFrom.value),
-SalaryTo:Number(salaryTo.value),
-Urgency:urgency.value,
-CollectedBy:collectedBy.value,
-Notes:notes.value
-})
-}).then(r=>r.json()).then(res=>{
-if(res.success){
-msg.textContent="Vacancy saved successfully";
-msg.className="status success";
-}else{
-msg.textContent="Could not save vacancy";
-msg.className="status error";
-}
-});
-}
+  const payload={
+    action:"addVacancy",
+    college:college.value.trim(),
+    city:city.value,
+    phone:phone.value.trim(),
+    subject:subject.value,
+    level:level.value,
+    faculty:Number(faculty.value),
+    salaryFrom:Number(salaryFrom.value),
+    salaryTo:Number(salaryTo.value),
+    urgency:urgency.value,
+    collectedBy:collectedBy.value.trim(),
+    notes:notes.value.trim()
+  };
 
-document.addEventListener("DOMContentLoaded",()=>{
-loadSalary();
-loadCities("city");
-});
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify(payload)
+  })
+  .then(r=>r.json())
+  .then(j=>{
+    if(j.success){
+      msg.textContent="Vacancy saved successfully";
+      msg.className="status ok";
+      btn.textContent="Saved";
+    } else throw j;
+  })
+  .catch(()=>{
+    msg.textContent="Could not save vacancy";
+    msg.className="status err";
+    btn.disabled=false;
+    btn.textContent="Save Vacancy";
+  });
+}
 </script>
 
 </body>
