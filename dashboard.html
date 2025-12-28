@@ -1,111 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Scheduler for RC – Dashboard</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<title>Dashboard | Scheduler CRM</title>
+
+<style>
+:root{
+  --primary:#2563eb;
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --danger:#ef4444;
+}
+*{box-sizing:border-box;font-family:Inter,Arial,sans-serif}
+body{margin:0;background:var(--bg);color:var(--text)}
+
+header{
+  background:linear-gradient(135deg,#2563eb,#1e40af);
+  color:#fff;
+  padding:16px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between
+}
+header img{height:36px}
+header nav a{
+  color:#fff;
+  text-decoration:none;
+  margin-right:16px;
+  font-weight:500
+}
+header button{
+  background:var(--danger);
+  border:none;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:6px;
+  cursor:pointer
+}
+
+main{padding:32px}
+
+h1{margin-bottom:24px}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px
+}
+
+.card{
+  background:var(--card);
+  border-radius:12px;
+  padding:24px;
+  box-shadow:0 12px 24px rgba(0,0,0,.08);
+  transition:transform .2s
+}
+.card:hover{transform:translateY(-4px)}
+
+.card h2{
+  margin:0;
+  font-size:18px;
+  color:#374151
+}
+.card .count{
+  font-size:36px;
+  font-weight:700;
+  margin-top:12px;
+  color:var(--primary)
+}
+.card small{
+  color:#6b7280
+}
+
+.quick{
+  margin-top:32px;
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap
+}
+.quick a{
+  background:var(--primary);
+  color:#fff;
+  padding:12px 18px;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:500
+}
+</style>
 </head>
 
-<body class="app-body" onload="requireLogin()">
+<body>
 
-  <!-- ===== TOP NAV ===== -->
-  <header class="app-header">
-    <div class="header-left">
-      <img src="logo.png.jpg" class="app-logo">
-      <span class="app-name">Scheduler for RC</span>
-    </div>
+<header>
+  <div style="display:flex;align-items:center;gap:16px">
+    <img src="logo.png.jpg" alt="Logo">
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="vacancies.html">Vacancies</a>
+      <a href="add-vacancy.html">Add Vacancy</a>
+      <a href="lecturers.html">Lecturers</a>
+    </nav>
+  </div>
+  <button onclick="logout()">Logout</button>
+</header>
 
-  <nav class="header-nav">
-  <a class="active" href="dashboard.html">Dashboard</a>
-  
-  <nav>
-  <a href="vacancies.html">Vacancies</a>
-  <a href="lecturers.html">Lecturers</a>
-  <a href="assignments.html">Assignments</a>
-</nav>
+<main>
 
-    <div class="nav-right">
+<h1>Dashboard</h1>
 
-    <button class="logout-btn" onclick="logout()">Logout</button>
-    </div>
-  </header>
+<div class="grid">
+  <div class="card">
+    <h2>Total Vacancies</h2>
+    <div class="count" id="totalVacancies">0</div>
+    <small>All active job requirements</small>
+  </div>
 
-  <!-- ===== MAIN CONTENT ===== -->
-  <main class="app-container">
+  <div class="card">
+    <h2>Active Lecturers</h2>
+    <div class="count" id="activeLecturers">0</div>
+    <small>Available faculty pool</small>
+  </div>
 
-    <h2 class="section-title">Overview</h2>
+  <div class="card">
+    <h2>Assignments Today</h2>
+    <div class="count">0</div>
+    <small>To be enabled</small>
+  </div>
 
-    <!-- ===== STATS ===== -->
-    <div class="stats-grid">
+  <div class="card">
+    <h2>Pending Matches</h2>
+    <div class="count">0</div>
+    <small>Auto-matching queue</small>
+  </div>
+</div>
 
-      <div class="stat-box blue">
-        <h4>Total Vacancies</h4>
-        <span id="totalVacancies">0</span>
+<div class="quick">
+  <a href="add-vacancy.html">➕ Add Vacancy</a>
+  <a href="vacancies.html">📋 View Vacancies</a>
+  <a href="lecturers.html">👨‍🏫 View Lecturers</a>
+</div>
 
-      </div>
+</main>
 
-      <div class="stat-box green">
-        <h4>Active Lecturers</h4>
-        <span>0</span>
-      </div>
-
-      <div class="stat-box purple">
-        <h4>Assignments Today</h4>
-        <span>0</span>
-      </div>
-
-      <div class="stat-box orange">
-        <h4>Pending Matches</h4>
-        <span>0</span>
-      </div>
-
-    </div>
-
-    <!-- ===== QUICK ACTIONS ===== -->
-    <h2 class="section-title">Quick Actions</h2>
-
-    <div class="action-grid">
-
-      <div class="action-card" onclick="location.href='add-vacancy.html'">
-        ➕<br>
-        <strong>Add Vacancy</strong>
-      <p>Create a new college requirement</p>
-      </div>
-
-      <div class="action-card" onclick="location.href='add-lecturer.html'">
-        ➕<br>
-        <strong>Add Lecturer</strong>
-        <p>Register available faculty</p>
-      </div>
-
-      <div class="action-card">
-        ⚡<br>
-        <strong>Create Assignment</strong>
-        <p>Auto or manual matching</p>
-      </div>
-
-    </div>
-
-  </main>
-
-  <script src="js/app.js"></script>
-  <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzavtUCQIuWK53poEkRRd16Db8T0jL2g18aZkfk4_6hdrz3J3g6zlkEKFvZBzz2Enh9-Q/exec";
-
-async function loadDashboard() {
-  const res = await fetch(SCRIPT_URL);
-  const data = await res.json();
-  document.getElementById("totalVacancies").innerText = data.length;
-}
-
-document.addEventListener("DOMContentLoaded", loadDashboard);
-</script>
 <script>
-function logout() {
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+
+function logout(){
   localStorage.clear();
-  sessionStorage.clear();
-  location.href = "index.html";
+  location.href="index.html";
 }
+
+async function loadDashboard(){
+  const res = await fetch(SCRIPT_URL + "?action=getDashboard");
+  const data = await res.json();
+
+  document.getElementById("totalVacancies").innerText = data.totalVacancies || 0;
+  document.getElementById("activeLecturers").innerText = data.activeLecturers || 0;
+}
+
+loadDashboard();
 </script>
 
 </body>
