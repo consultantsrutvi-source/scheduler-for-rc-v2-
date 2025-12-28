@@ -1,153 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Add Vacancy – Rutvi Consultants CRM</title>
+<meta charset="UTF-8" />
+<title>Add Vacancy | Rutvi Consultants</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Premium font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Styles -->
+<style>
+body{
+  margin:0;
+  font-family: Inter, Arial, sans-serif;
+  background: linear-gradient(135deg,#eef4ff,#f7fbff);
+}
 
-  <style>
-    * { box-sizing: border-box; font-family: Inter, sans-serif; }
+header{
+  height:58px;
+  background: linear-gradient(90deg,#0f766e,#2563eb);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 22px;
+  color:#fff;
+}
 
-    body {
-      margin: 0;
-      background: linear-gradient(135deg, #eef4ff, #f6fff9);
-      min-height: 100vh;
-    }
+header .left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
 
-    /* HEADER */
-    header {
-      background: linear-gradient(90deg, #0f766e, #2563eb);
-      color: #fff;
-      padding: 14px 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 4px 20px rgba(0,0,0,.15);
-    }
+header img{
+  height:36px;
+}
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 700;
-      font-size: 18px;
-    }
+nav a{
+  color:#fff;
+  text-decoration:none;
+  margin-left:20px;
+  font-weight:500;
+}
 
-    .brand img {
-      height: 38px;
-      border-radius: 6px;
-    }
+.container{
+  max-width:960px;
+  margin:40px auto;
+}
 
-    nav a {
-      color: #e0f2fe;
-      margin-left: 22px;
-      text-decoration: none;
-      font-weight: 500;
-    }
+.card{
+  background:rgba(255,255,255,0.95);
+  border-radius:16px;
+  padding:30px;
+  box-shadow:0 20px 45px rgba(0,0,0,.15);
+}
 
-    nav a:hover { text-decoration: underline; }
+h2{
+  text-align:center;
+  margin-bottom:24px;
+}
 
-    /* CARD */
-    .container {
-      display: flex;
-      justify-content: center;
-      padding: 40px 16px;
-    }
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
 
-    .card {
-      width: 100%;
-      max-width: 980px;
-      background: #fff;
-      border-radius: 16px;
-      padding: 32px;
-      box-shadow: 0 30px 60px rgba(0,0,0,.1);
-    }
+label{
+  font-size:13px;
+  font-weight:600;
+  margin-bottom:6px;
+  display:block;
+}
 
-    h1 {
-      margin: 0 0 22px;
-      font-size: 26px;
-      font-weight: 700;
-      text-align: center;
-    }
+input,select,textarea{
+  width:100%;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #cfd8e3;
+  font-size:14px;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
+textarea{resize:none;height:70px;}
 
-    label {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      display: block;
-    }
+.full{grid-column:1/-1;}
 
-    input, select, textarea {
-      width: 100%;
-      padding: 11px 12px;
-      border-radius: 10px;
-      border: 1px solid #d1d5db;
-      font-size: 14px;
-    }
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(90deg,#2563eb,#0f766e);
+  color:#fff;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+}
 
-    textarea { resize: vertical; }
+button:disabled{opacity:.6}
 
-    .full { grid-column: span 3; }
-
-    button {
-      margin-top: 24px;
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-      border: none;
-      border-radius: 999px;
-      cursor: pointer;
-      background: linear-gradient(90deg, #2563eb, #16a34a);
-      box-shadow: 0 10px 25px rgba(37,99,235,.4);
-    }
-
-    button:disabled {
-      opacity: .7;
-      cursor: not-allowed;
-    }
-
-    .status {
-      margin-top: 12px;
-      font-weight: 600;
-      text-align: center;
-    }
-
-    .ok { color: #16a34a; }
-    .err { color: #dc2626; }
-  </style>
+.status{
+  margin-top:12px;
+  text-align:center;
+  font-weight:600;
+}
+.success{color:#15803d}
+.error{color:#b91c1c}
+</style>
 </head>
 
 <body>
 
 <header>
-  <div class="brand">
-    <img src="logo.png.jpg">
-    Rutvi Consultants – CRM
+  <div class="left">
+    <img src="logo.png" alt="Rutvi Consultants" />
+    <strong>Rutvi Consultants – CRM</strong>
   </div>
   <nav>
     <a href="dashboard.html">Dashboard</a>
     <a href="vacancies.html">Vacancies</a>
     <a href="lecturers.html">Lecturers</a>
+    <a href="assignments.html">Assignments</a>
   </nav>
 </header>
 
 <div class="container">
   <div class="card">
-    <h1>Add Vacancy</h1>
+    <h2>Add Vacancy</h2>
 
     <div class="grid">
+
       <div>
         <label>College Name *</label>
         <input id="college" />
@@ -171,8 +151,10 @@
           <option>Chemistry</option>
           <option>Maths</option>
           <option>Biology</option>
-          <option value="Other">Other</option>
+          <option>Other</option>
         </select>
+        <input id="subjectOther" placeholder="Enter subject"
+               style="display:none;margin-top:6px;" />
       </div>
 
       <div>
@@ -186,43 +168,23 @@
           <option>Foundation</option>
           <option>Other</option>
         </select>
+        <input id="levelOther" placeholder="Enter level"
+               style="display:none;margin-top:6px;" />
       </div>
 
       <div>
         <label>Faculty Required *</label>
-        <input id="faculty" type="number" min="1">
+        <input id="faculty" type="number" />
       </div>
 
       <div>
         <label>Salary From *</label>
-        <select id="salaryFrom">
-  <option value="">Select</option>
-  <option value="50000">₹50,000</option>
-  <option value="75000">₹75,000</option>
-  <option value="100000">₹1,00,000</option>
-  <option value="150000">₹1,50,000</option>
-  <option value="200000">₹2,00,000</option>
-  <option value="250000">₹2,50,000</option>
-  <option value="300000">₹3,00,000</option>
-  <option value="350000">₹3,50,000</option>
-</select>
-
+        <select id="salaryFrom"></select>
       </div>
 
       <div>
         <label>Salary To *</label>
-        <select id="salaryTo">
-  <option value="">Select</option>
-  <option value="50000">₹50,000</option>
-  <option value="75000">₹75,000</option>
-  <option value="100000">₹1,00,000</option>
-  <option value="150000">₹1,50,000</option>
-  <option value="200000">₹2,00,000</option>
-  <option value="250000">₹2,50,000</option>
-  <option value="300000">₹3,00,000</option>
-  <option value="350000">₹3,50,000</option>
-</select>
-
+        <select id="salaryTo"></select>
       </div>
 
       <div>
@@ -232,95 +194,92 @@
           <option>Immediate</option>
           <option>Within 7 Days</option>
           <option>Within 15 Days</option>
-          <option>Flexible</option>
         </select>
       </div>
 
-      <div class="full">
+      <div>
         <label>Collected By *</label>
-        <input id="collectedBy">
+        <input id="collectedBy" />
       </div>
 
       <div class="full">
         <label>Notes</label>
         <textarea id="notes"></textarea>
       </div>
-    </div>
 
-    <button id="saveBtn" onclick="saveVacancy()">Save Vacancy</button>
-    <div id="msg" class="status"></div>
+      <div class="full">
+        <button onclick="saveVacancy()">Save Vacancy</button>
+        <div id="msg" class="status"></div>
+      </div>
+
+    </div>
   </div>
 </div>
-<div id="statusMsg" style="margin-top:10px;font-weight:600;"></div>
 
-<!-- IMPORTANT: places.js -->
-
+<!-- Cities -->
 <script src="js/places.js"></script>
 
 <script>
-  window.addEventListener("load", () => {
-    if (typeof loadCities === "function") {
-      loadCities("city");
-    } else {
-      console.error("places.js not loaded");
-    }
-  });
-</script>
-<script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+const salaryOptions = [
+  ["50000","₹50k"],["75000","₹75k"],["100000","₹1L"],
+  ["150000","₹1.5L"],["200000","₹2L"],
+  ["250000","₹2.5L"],["300000","₹3L"],["350000","₹3.5L"]
+];
 
-async function saveVacancy() {
-  const data = {
-    college: document.getElementById("college").value.trim(),
-    city: document.getElementById("city").value,
-    phone: document.getElementById("phone").value.trim(),
-    subject: document.getElementById("subject").value,
-    level: document.getElementById("level").value,
-    faculty: document.getElementById("faculty").value,   // 🔥 REQUIRED
-    salaryFrom: document.getElementById("salaryFrom").value,
-    salaryTo: document.getElementById("salaryTo").value,
-    urgency: document.getElementById("urgency").value,
-    collectedBy: document.getElementById("collectedBy").value,
-    notes: document.getElementById("notes").value
+function fillSalary(){
+  salaryOptions.forEach(s=>{
+    salaryFrom.add(new Option(s[1],s[0]));
+    salaryTo.add(new Option(s[1],s[0]));
+  });
+}
+
+fillSalary();
+
+subject.onchange=()=>subjectOther.style.display=
+  subject.value==="Other"?"block":"none";
+
+level.onchange=()=>levelOther.style.display=
+  level.value==="Other"?"block":"none";
+
+function saveVacancy(){
+  msg.textContent="Saving...";
+  msg.className="status";
+
+  const data={
+    college:college.value,
+    city:city.value,
+    phone:phone.value,
+    subject:subject.value==="Other"?subjectOther.value:subject.value,
+    level:level.value==="Other"?levelOther.value:level.value,
+    faculty:faculty.value,
+    salaryFrom:salaryFrom.value,
+    salaryTo:salaryTo.value,
+    urgency:urgency.value,
+    collectedBy:collectedBy.value,
+    notes:notes.value
   };
 
-  // basic validation
-  for (let k in data) {
-    if (!data[k] && k !== "notes") {
-      showMessage("Please fill all required fields", false);
-      return;
+  fetch("YOUR_SCRIPT_URL_HERE?action=addVacancy",{
+    method:"POST",
+    body:JSON.stringify(data)
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    if(res.success){
+      msg.textContent="Saved! Vacancy ID: "+res.id;
+      msg.className="status success";
+      document.querySelectorAll("input,select,textarea")
+        .forEach(e=>e.value="");
+    }else{
+      throw "Save failed";
     }
-  }
-
-  showMessage("Saving...", true);
-
-  const res = await fetch(SCRIPT_URL + "?action=addVacancy", {
-    method: "POST",
-    body: JSON.stringify(data)
+  })
+  .catch(()=>{
+    msg.textContent="Could not save vacancy";
+    msg.className="status error";
   });
-
-  const json = await res.json();
-
-  if (json.success) {
-    showMessage(`Vacancy Saved ✅ ID: ${json.id}`, true);
-    clearForm();
-  } else {
-    showMessage(json.error || "Could not save vacancy", false);
-  }
-}
-
-function clearForm() {
-  document.querySelectorAll("input, select, textarea").forEach(el => {
-    if (el.tagName !== "SELECT") el.value = "";
-    else el.selectedIndex = 0;
-  });
-}
-
-function showMessage(msg, success) {
-  const box = document.getElementById("statusMsg");
-  box.innerText = msg;
-  box.style.color = success ? "green" : "red";
 }
 </script>
+
 </body>
 </html>
