@@ -1,94 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<title>Assignments | Scheduler</title>
+<meta charset="UTF-8">
+<title>Assignments | Scheduler CRM</title>
 
 <style>
 body {
   margin: 0;
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  background: #f4f6f9;
-  color: #222;
+  font-family: Segoe UI, Arial;
+  background: #f2f4f8;
 }
-
 header {
-  background: linear-gradient(90deg, #1f3c88, #3a6ea5);
+  background: #2b4f81;
   color: white;
-  padding: 14px 22px;
+  padding: 14px 24px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
-
-header img {
-  height: 38px;
-  border-radius: 8px;
-}
-
+header img { height: 36px; }
 nav a {
-  color: #fff;
-  margin-left: 18px;
+  color: white;
+  margin-left: 16px;
   text-decoration: none;
   font-weight: 500;
 }
+main { padding: 24px; }
+h2 { margin-top: 30px; }
 
-main {
-  padding: 24px;
-}
-
-.section-title {
-  font-size: 20px;
-  margin: 18px 0 12px;
-}
-
-.card-grid {
+.grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 18px;
 }
 
 .card {
-  background: #fff;
+  background: white;
   border-radius: 12px;
   padding: 16px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-}
-
-.card h3 {
-  margin: 0 0 6px;
-}
-
-.badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  background: #e8edf5;
-  margin-right: 6px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
 }
 
 .btn {
-  padding: 8px 14px;
-  border: none;
+  padding: 8px 12px;
   border-radius: 6px;
-  cursor: pointer;
-  margin-right: 6px;
+  border: none;
   font-weight: 600;
+  cursor: pointer;
 }
+.auto { background:#2b6cb0; color:white; }
+.manual { background:#6b46c1; color:white; }
+.assign { background:#2f855a; color:white; }
+.ok { background:#2f855a; color:white; }
+.no { background:#c53030; color:white; }
 
-.btn-auto { background: #3a6ea5; color: white; }
-.btn-manual { background: #6a5acd; color: white; }
-.btn-assign { background: #28a745; color: white; }
-.btn-selected { background: #28a745; color: white; }
-.btn-reject { background: #dc3545; color: white; }
-
-.hidden { display: none; }
-
-.print-btn {
-  background: #444;
-  color: #fff;
-  float: right;
+.badge {
+  display:inline-block;
+  background:#edf2f7;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:12px;
+  margin-right:6px;
 }
 </style>
 </head>
@@ -96,7 +68,7 @@ main {
 <body>
 
 <header>
-  <img src="logo.png.jpg" alt="Logo">
+  <img src="logo.png.jpg">
   <nav>
     <a href="dashboard.html">Dashboard</a>
     <a href="vacancies.html">Vacancies</a>
@@ -107,114 +79,102 @@ main {
 
 <main>
 
-<h2 class="section-title">Open Vacancies</h2>
-<div id="vacancyCards" class="card-grid"></div>
+<h2>Open Vacancies</h2>
+<div id="vacancies" class="grid"></div>
 
-<h2 class="section-title">
-  Assigned Today
-  <button class="btn print-btn" onclick="window.print()">Print</button>
-</h2>
-<div id="assignedCards" class="card-grid"></div>
+<h2>Assigned Today</h2>
+<div id="assigned" class="grid"></div>
 
 </main>
 
 <script>
-const API_BASE = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+const API = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
 
-function safe(v) {
-  return v === undefined || v === null || v === "" ? "-" : v;
-}
+const get = url => fetch(url).then(r => r.json());
 
-async function fetchJSON(url) {
-  const res = await fetch(url);
-  return res.json();
-}
+function safe(v){ return v ?? "-"; }
 
 async function loadVacancies() {
-  const data = await fetchJSON(`${API_BASE}?action=getOpenVacancies`);
-  const container = document.getElementById("vacancyCards");
-  container.innerHTML = "";
+  const rows = await get(`${API}?action=getVacancies`);
+  const box = document.getElementById("vacancies");
+  box.innerHTML = "";
 
-  data.forEach(v => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <h3>${safe(v.CollegeName)}</h3>
-      <div class="badge">${safe(v.VacancyID)}</div>
-      <div class="badge">${safe(v.Subject)} | ${safe(v.Level)}</div>
-      <p>City: ${safe(v.City)}</p>
-      <p>Salary: ${safe(v.SalaryFrom)} – ${safe(v.SalaryTo)}</p>
-      <p>Faculty Required: ${safe(v.FacultyRequired)}</p>
-      <p>${safe(v.Notes)}</p>
-      <button class="btn btn-auto" onclick="autoAssign('${v.VacancyID}')">Auto Assign</button>
-      <button class="btn btn-manual" onclick="manualAssign('${v.VacancyID}')">Manual Assign</button>
-    `;
-    container.appendChild(card);
-  });
+  rows
+    .filter(v => v.Status === "Open")
+    .forEach(v => {
+      box.innerHTML += `
+      <div class="card">
+        <h3>${safe(v.CollegeName)}</h3>
+        <div class="badge">${v.VacancyID}</div>
+        <div class="badge">${v.Subject} | ${v.Level}</div>
+        <p>City: ${v.City}</p>
+        <p>Salary: ₹${v.SalaryFrom} - ₹${v.SalaryTo}</p>
+        <p>Faculty Required: ${v.FacultyRequired}</p>
+        <p>${safe(v.Notes)}</p>
+        <button class="btn auto" onclick="autoAssign('${v.VacancyID}')">Auto Assign</button>
+        <button class="btn manual" onclick="manualAssign('${v.VacancyID}')">Manual Assign</button>
+      </div>`;
+    });
 }
 
 async function autoAssign(vacancyId) {
-  const data = await fetchJSON(`${API_BASE}?action=autoAssign&vacancyId=${vacancyId}`);
-  renderLecturers(data, vacancyId);
+  const lecturers = await get(`${API}?action=getLecturers`);
+  const top3 = lecturers.slice(0,3);
+  showLecturers(vacancyId, top3);
 }
 
 async function manualAssign(vacancyId) {
-  const data = await fetchJSON(`${API_BASE}?action=getMatchingLecturers&vacancyId=${vacancyId}`);
-  renderLecturers(data, vacancyId);
+  const lecturers = await get(`${API}?action=getLecturers`);
+  showLecturers(vacancyId, lecturers);
 }
 
-function renderLecturers(list, vacancyId) {
-  const container = document.getElementById("vacancyCards");
-  container.innerHTML = "";
+function showLecturers(vacancyId, list) {
+  const box = document.getElementById("vacancies");
+  box.innerHTML = "";
 
   list.forEach(l => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <h3>${safe(l.Name)}</h3>
-      <div class="badge">${safe(l.LecturerID)}</div>
-      <p>City: ${safe(l.City)}</p>
-      <p>Salary: ${safe(l.SalaryFrom)} – ${safe(l.SalaryTo)}</p>
-      <button class="btn btn-assign" onclick="assign('${vacancyId}','${l.LecturerID}')">Assign</button>
-    `;
-    container.appendChild(card);
+    box.innerHTML += `
+    <div class="card">
+      <h3>${l.Name}</h3>
+      <div class="badge">${l.LecturerID}</div>
+      <p>${l.City}</p>
+      <p>₹${l.SalaryFrom} - ₹${l.SalaryTo}</p>
+      <button class="btn assign" onclick="assign('${vacancyId}','${l.LecturerID}')">Assign</button>
+    </div>`;
   });
 }
 
 async function assign(vacancyId, lecturerId) {
-  await fetchJSON(`${API_BASE}?action=assign&vacancyId=${vacancyId}&lecturerId=${lecturerId}`);
+  await get(`${API}?action=assign&vacancyId=${vacancyId}&lecturerId=${lecturerId}`);
   loadAssignments();
   loadVacancies();
 }
 
 async function loadAssignments() {
-  const data = await fetchJSON(`${API_BASE}?action=getTodayAssignments`);
-  const container = document.getElementById("assignedCards");
-  container.innerHTML = "";
+  const rows = await get(`${API}?action=getAssignmentsToday`);
+  const box = document.getElementById("assigned");
+  box.innerHTML = "";
 
-  data.forEach(a => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <h3>${safe(a.CollegeName)}</h3>
-      <p>${safe(a.LecturerName)}</p>
-      <div class="badge">${safe(a.AssignmentStatus)}</div>
-      <button class="btn btn-selected" onclick="updateStatus('${a.AssignmentID}','Selected')">Selected</button>
-      <button class="btn btn-reject" onclick="updateStatus('${a.AssignmentID}','Not Selected')">Not Selected</button>
-    `;
-    container.appendChild(card);
+  rows.forEach(a => {
+    box.innerHTML += `
+    <div class="card">
+      <h3>${a.CollegeName}</h3>
+      <p>${a.LecturerName}</p>
+      <button class="btn ok" onclick="update('${a.AssignmentID}','Selected')">Selected</button>
+      <button class="btn no" onclick="update('${a.AssignmentID}','Not Selected')">Not Selected</button>
+    </div>`;
   });
 }
 
-async function updateStatus(id, status) {
-  await fetchJSON(`${API_BASE}?action=updateAssignmentStatus&id=${id}&status=${status}`);
+async function update(id,status){
+  await get(`${API}?action=updateAssignmentStatus&id=${id}&status=${status}`);
   loadAssignments();
   loadVacancies();
 }
 
-function logout() {
+function logout(){
   localStorage.clear();
-  location.href = "index.html";
+  location.href="index.html";
 }
 
 loadVacancies();
