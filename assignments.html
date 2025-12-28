@@ -1,184 +1,284 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Assignments | Scheduler CRM</title>
+  <meta charset="UTF-8" />
+  <title>Assignments | Scheduler CRM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<style>
-body {
-  margin: 0;
-  font-family: Segoe UI, Arial;
-  background: #f2f4f8;
-}
-header {
-  background: #2b4f81;
-  color: white;
-  padding: 14px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-header img { height: 36px; }
-nav a {
-  color: white;
-  margin-left: 16px;
-  text-decoration: none;
-  font-weight: 500;
-}
-main { padding: 24px; }
-h2 { margin-top: 30px; }
+  <!-- ====== CONFIG ====== -->
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+  </script>
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 18px;
-}
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --card:#ffffff;
+      --primary:#2563eb;
+      --secondary:#0ea5e9;
+      --accent:#22c55e;
+      --text:#0f172a;
+      --muted:#64748b;
+      --border:#e5e7eb;
+    }
 
-.card {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
+      background:linear-gradient(180deg,#eef2ff,#f8fafc);
+      color:var(--text);
+    }
 
-.btn {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-}
-.auto { background:#2b6cb0; color:white; }
-.manual { background:#6b46c1; color:white; }
-.assign { background:#2f855a; color:white; }
-.ok { background:#2f855a; color:white; }
-.no { background:#c53030; color:white; }
+    /* ===== HEADER ===== */
+    header{
+      height:64px;
+      background:linear-gradient(90deg,#1e40af,#2563eb,#0ea5e9);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 24px;
+      box-shadow:0 8px 20px rgba(0,0,0,.15);
+    }
+    header .brand{display:flex;align-items:center;gap:12px;font-weight:700}
+    header img{height:40px;border-radius:10px;background:#fff;padding:4px}
+    nav a{color:#fff;text-decoration:none;margin:0 10px;font-weight:500;opacity:.9}
+    nav a:hover{opacity:1}
 
-.badge {
-  display:inline-block;
-  background:#edf2f7;
-  padding:4px 10px;
-  border-radius:20px;
-  font-size:12px;
-  margin-right:6px;
-}
-</style>
+    /* ===== PAGE ===== */
+    .page{padding:24px}
+    h2{margin:10px 0 16px}
+
+    /* ===== FILTER BAR ===== */
+    .filters{
+      display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px
+    }
+    select{
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background:#fff;
+      min-width:160px
+    }
+
+    /* ===== CARDS GRID ===== */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+      gap:16px
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:0 15px 30px rgba(0,0,0,.08);
+      border:1px solid var(--border);
+      display:flex;
+      flex-direction:column;
+      gap:6px
+    }
+    .card h3{margin:0;font-size:18px}
+    .muted{color:var(--muted);font-size:13px}
+
+    .badge{
+      display:inline-block;
+      padding:4px 10px;
+      border-radius:999px;
+      font-size:12px;
+      background:#e0e7ff;
+      color:#1e40af
+    }
+
+    .actions{margin-top:10px;display:flex;gap:8px}
+    button{
+      border:none;
+      padding:10px 14px;
+      border-radius:10px;
+      font-weight:600;
+      cursor:pointer
+    }
+    .auto{background:#22c55e;color:#fff}
+    .manual{background:#2563eb;color:#fff}
+    .assign{background:#0ea5e9;color:#fff}
+    .selected{background:#16a34a;color:#fff}
+    .notselected{background:#dc2626;color:#fff}
+
+    /* ===== LECTURER LIST ===== */
+    .lecturers{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+    .lect{
+      border:1px solid var(--border);
+      padding:10px;
+      border-radius:10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center
+    }
+
+    /* ===== ASSIGNED ===== */
+    .assigned{margin-top:32px}
+
+    /* ===== PRINT ===== */
+    @media print{
+      header,.filters,.actions,button{display:none!important}
+      body{background:#fff}
+      .card{box-shadow:none}
+    }
+  </style>
 </head>
-
 <body>
 
 <header>
-  <img src="logo.png.jpg">
+  <div class="brand">
+    <img src="logo.png.jpg" />
+    Scheduler CRM
+  </div>
   <nav>
     <a href="dashboard.html">Dashboard</a>
     <a href="vacancies.html">Vacancies</a>
-    <a href="lectures.html">Lecturers</a>
-    <a href="#" onclick="logout()">Logout</a>
+    <a href="lecturers.html">Lecturers</a>
+    <a href="assignments.html"><b>Assignments</b></a>
   </nav>
 </header>
 
-<main>
+<div class="page">
 
-<h2>Open Vacancies</h2>
-<div id="vacancies" class="grid"></div>
+  <h2>Open Vacancies</h2>
 
-<h2>Assigned Today</h2>
-<div id="assigned" class="grid"></div>
+  <div class="filters">
+    <select id="cityFilter"></select>
+    <select id="subjectFilter"></select>
+    <select id="levelFilter"></select>
+  </div>
 
-</main>
+  <div id="vacancies" class="grid"></div>
+
+  <div class="assigned">
+    <h2>Assigned Today</h2>
+    <div id="assigned" class="grid"></div>
+  </div>
+</div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+let vacancies=[], lecturers=[], assignments=[];
 
-const get = url => fetch(url).then(r => r.json());
-
-function safe(v){ return v ?? "-"; }
-
-async function loadVacancies() {
-  const rows = await get(`${API}?action=getVacancies`);
-  const box = document.getElementById("vacancies");
-  box.innerHTML = "";
-
-  rows
-    .filter(v => v.Status === "Open")
-    .forEach(v => {
-      box.innerHTML += `
-      <div class="card">
-        <h3>${safe(v.CollegeName)}</h3>
-        <div class="badge">${v.VacancyID}</div>
-        <div class="badge">${v.Subject} | ${v.Level}</div>
-        <p>City: ${v.City}</p>
-        <p>Salary: ₹${v.SalaryFrom} - ₹${v.SalaryTo}</p>
-        <p>Faculty Required: ${v.FacultyRequired}</p>
-        <p>${safe(v.Notes)}</p>
-        <button class="btn auto" onclick="autoAssign('${v.VacancyID}')">Auto Assign</button>
-        <button class="btn manual" onclick="manualAssign('${v.VacancyID}')">Manual Assign</button>
-      </div>`;
-    });
+function api(action, params=""){
+  return fetch(`${SCRIPT_URL}?action=${action}${params}`)
+    .then(r=>r.json());
 }
 
-async function autoAssign(vacancyId) {
-  const lecturers = await get(`${API}?action=getLecturers`);
-  const top3 = lecturers.slice(0,3);
-  showLecturers(vacancyId, top3);
+Promise.all([
+  api('getVacancies'),
+  api('getLecturers'),
+  api('getAssignmentsToday')
+]).then(([v,l,a])=>{
+  vacancies=v;
+  lecturers=l.filter(x=>x.Status==="Active");
+  assignments=a.assignmentsToday||[];
+  buildFilters();
+  renderVacancies();
+  renderAssigned();
+});
+
+function buildFilters(){
+  fill('cityFilter',[...new Set(vacancies.map(v=>v.City))]);
+  fill('subjectFilter',[...new Set(vacancies.map(v=>v.Subject))]);
+  fill('levelFilter',[...new Set(vacancies.map(v=>v.Level))]);
 }
 
-async function manualAssign(vacancyId) {
-  const lecturers = await get(`${API}?action=getLecturers`);
-  showLecturers(vacancyId, lecturers);
+function fill(id,arr){
+  const s=document.getElementById(id);
+  s.innerHTML='<option value="">All</option>';
+  arr.forEach(v=>s.innerHTML+=`<option>${v}</option>`);
+  s.onchange=renderVacancies;
 }
 
-function showLecturers(vacancyId, list) {
-  const box = document.getElementById("vacancies");
-  box.innerHTML = "";
+function renderVacancies(){
+  const c=cityFilter.value,s=subjectFilter.value,l=levelFilter.value;
+  const box=document.getElementById('vacancies');
+  box.innerHTML='';
 
-  list.forEach(l => {
-    box.innerHTML += `
-    <div class="card">
-      <h3>${l.Name}</h3>
-      <div class="badge">${l.LecturerID}</div>
-      <p>${l.City}</p>
-      <p>₹${l.SalaryFrom} - ₹${l.SalaryTo}</p>
-      <button class="btn assign" onclick="assign('${vacancyId}','${l.LecturerID}')">Assign</button>
-    </div>`;
+  vacancies.filter(v=>
+    (!c||v.City===c)&&(!s||v.Subject===s)&&(!l||v.Level===l)
+  ).forEach(v=>{
+    const d=document.createElement('div');
+    d.className='card';
+    d.innerHTML=`
+      <h3>${v.CollegeName}</h3>
+      <div class="muted">${v.VacancyID}</div>
+      <div>${v.City} • ${v.Subject}</div>
+      <div class="badge">${v.Level}</div>
+      <div>Faculty Required: ${v.FacultyRequired}</div>
+      <div>Salary: ₹${v.SalaryFrom} – ₹${v.SalaryTo}</div>
+      <div class="muted">${v.Notes||''}</div>
+      <div class="actions">
+        <button class="auto">Auto Assign</button>
+        <button class="manual">Manual Assign</button>
+      </div>
+      <div class="lecturers"></div>
+    `;
+
+    const list=d.querySelector('.lecturers');
+
+    d.querySelector('.auto').onclick=()=>showLecturers(v,list,true);
+    d.querySelector('.manual').onclick=()=>showLecturers(v,list,false);
+
+    box.appendChild(d);
   });
 }
 
-async function assign(vacancyId, lecturerId) {
-  await get(`${API}?action=assign&vacancyId=${vacancyId}&lecturerId=${lecturerId}`);
-  loadAssignments();
-  loadVacancies();
+function showLecturers(v,list,auto){
+  list.innerHTML='';
+  let pool=lecturers.filter(l=>l.Subject===v.Subject);
+  if(auto) pool=pool.slice(0,3);
+
+  pool.forEach(l=>{
+    const r=document.createElement('div');
+    r.className='lect';
+    r.innerHTML=`
+      <div>${l.Name} • ${l.City}</div>
+      <button class="assign">Assign</button>
+    `;
+    r.querySelector('button').onclick=()=>assign(v,l);
+    list.appendChild(r);
+  });
 }
 
-async function loadAssignments() {
-  const rows = await get(`${API}?action=getAssignmentsToday`);
-  const box = document.getElementById("assigned");
-  box.innerHTML = "";
+function assign(v,l){
+  fetch(`${SCRIPT_URL}?action=assignLecture`,{
+    method:'POST',
+    body:JSON.stringify({
+      VacancyID:v.VacancyID,
+      CollegeName:v.CollegeName,
+      City:v.City,
+      Subject:v.Subject,
+      Level:v.Level,
+      LecturerID:l.LecturerID,
+      LecturerName:l.Name,
+      AssignmentType:'Manual'
+    })
+  }).then(()=>location.reload());
+}
 
-  rows.forEach(a => {
-    box.innerHTML += `
-    <div class="card">
+function renderAssigned(){
+  const box=document.getElementById('assigned');
+  box.innerHTML='';
+  assignments.forEach(a=>{
+    const d=document.createElement('div');
+    d.className='card';
+    d.innerHTML=`
       <h3>${a.CollegeName}</h3>
-      <p>${a.LecturerName}</p>
-      <button class="btn ok" onclick="update('${a.AssignmentID}','Selected')">Selected</button>
-      <button class="btn no" onclick="update('${a.AssignmentID}','Not Selected')">Not Selected</button>
-    </div>`;
+      <div>${a.LecturerName}</div>
+      <div>${a.Subject} • ${a.Level}</div>
+      <div class="actions">
+        <button class="selected">Selected</button>
+        <button class="notselected">Not Selected</button>
+      </div>
+    `;
+    box.appendChild(d);
   });
 }
-
-async function update(id,status){
-  await get(`${API}?action=updateAssignmentStatus&id=${id}&status=${status}`);
-  loadAssignments();
-  loadVacancies();
-}
-
-function logout(){
-  localStorage.clear();
-  location.href="index.html";
-}
-
-loadVacancies();
-loadAssignments();
 </script>
 
 </body>
