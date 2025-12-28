@@ -5,114 +5,109 @@
 <title>Assignments | Scheduler CRM</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: #f4f6fb;
-  color: #222;
+:root{
+  --bg:#f4f7fb;
+  --card:#ffffff;
+  --accent:#2563eb;
+  --accent-soft:#dbeafe;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --success:#16a34a;
+  --danger:#dc2626;
 }
 
-header {
-  background: linear-gradient(90deg, #1f2937, #374151);
-  color: #fff;
-  padding: 14px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+*{box-sizing:border-box;font-family:Inter,system-ui}
+
+body{
+  margin:0;
+  background:linear-gradient(180deg,#eef4ff,#fdfefe);
+  color:var(--text);
 }
 
-header img {
-  height: 36px;
-  border-radius: 8px;
+header{
+  background:linear-gradient(90deg,#2563eb,#1e40af);
+  color:white;
+  padding:16px 32px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
 
-nav a {
-  color: #e5e7eb;
-  margin-left: 20px;
-  text-decoration: none;
-  font-weight: 500;
+header h1{font-size:20px;margin:0}
+
+nav a{
+  color:white;
+  margin-left:24px;
+  text-decoration:none;
+  font-weight:500;
 }
 
-nav a:hover {
-  color: #fff;
+.container{
+  padding:24px 32px;
 }
 
-.container {
-  padding: 24px;
+.section-title{
+  font-size:18px;
+  margin:24px 0 12px;
 }
 
-h2 {
-  margin-top: 32px;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:16px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+.card{
+  background:var(--card);
+  border-radius:14px;
+  padding:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
+  border:1px solid #e5e7eb;
 }
 
-.card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 16px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+.card h3{
+  margin:0 0 8px;
+  font-size:16px;
 }
 
-.card h3 {
-  margin: 0 0 6px 0;
+.meta{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:4px;
 }
 
-.badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  background: #eef2ff;
-  color: #3730a3;
-  margin-bottom: 10px;
+.actions{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
 }
 
-.row {
-  font-size: 14px;
-  margin-bottom: 6px;
+button{
+  border:none;
+  border-radius:10px;
+  padding:8px 12px;
+  font-weight:600;
+  cursor:pointer;
 }
 
-.actions {
-  margin-top: 12px;
+.primary{background:var(--accent);color:white}
+.secondary{background:var(--accent-soft);color:var(--accent)}
+.success{background:var(--success);color:white}
+.danger{background:var(--danger);color:white}
+
+.hidden{display:none}
+
+.list{
+  margin-top:12px;
+  border-top:1px dashed #e5e7eb;
+  padding-top:12px;
 }
 
-button {
-  border: none;
-  border-radius: 8px;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.auto {
-  background: #2563eb;
-  color: #fff;
-}
-
-.manual {
-  background: #7c3aed;
-  color: #fff;
-}
-
-.assign {
-  background: #16a34a;
-  color: #fff;
-  margin-top: 8px;
-}
-
-.selected {
-  background: #16a34a;
-  color: #fff;
-}
-
-.not-selected {
-  background: #dc2626;
-  color: #fff;
+.lecturer{
+  padding:8px;
+  border-radius:10px;
+  background:#f8fafc;
+  margin-bottom:8px;
 }
 </style>
 </head>
@@ -120,107 +115,152 @@ button {
 <body>
 
 <header>
-  <img src="logo.png.jpg" alt="Logo">
+  <h1>Scheduler CRM</h1>
   <nav>
     <a href="dashboard.html">Dashboard</a>
     <a href="vacancies.html">Vacancies</a>
     <a href="lecturers.html">Lecturers</a>
-    <a href="assignments.html"><b>Assignments</b></a>
+    <a href="assignments.html">Assignments</a>
   </nav>
 </header>
 
 <div class="container">
 
-<h2>Open Vacancies</h2>
+<h2 class="section-title">Open Vacancies</h2>
 <div id="vacancies" class="grid"></div>
 
-<h2>Assigned Today</h2>
+<h2 class="section-title">Assigned Today</h2>
 <div id="assignedToday" class="grid"></div>
 
 </div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+/* 🔴 REPLACE THIS */
+const API = "YOUR_APPS_SCRIPT_URL";
 
-/* ---------- LOAD DATA ---------- */
-document.addEventListener("DOMContentLoaded", () => {
+/* UTIL */
+const $ = id => document.getElementById(id);
+
+/* LOAD */
+loadVacancies();
+loadAssignedToday();
+
+/* VACANCIES */
+async function loadVacancies(){
+  const res = await fetch(API+"?action=getOpenVacancies");
+  const data = await res.json();
+  console.log("Vacancies:",data);
+
+  $("vacancies").innerHTML = "";
+  data.forEach(v=>{
+    $("vacancies").appendChild(vacancyCard(v));
+  });
+}
+
+function vacancyCard(v){
+  const d = document.createElement("div");
+  d.className="card";
+  d.innerHTML=`
+    <h3>${v.CollegeName}</h3>
+    <div class="meta">${v.City} • ${v.Subject} • ${v.Level}</div>
+    <div class="meta">Vacancy ID: ${v.VacancyID}</div>
+    <div class="meta">Faculty Required: ${v.FacultyReq}</div>
+    <div class="meta">Salary: ₹${v.SalaryFrom} – ₹${v.SalaryTo}</div>
+    <div class="meta">Notes: ${v.Notes || "-"}</div>
+
+    <div class="actions">
+      <button class="primary" onclick="autoAssign('${v.VacancyID}')">Auto Assign</button>
+      <button class="secondary" onclick="manualAssign('${v.VacancyID}')">Manual Assign</button>
+    </div>
+
+    <div id="list-${v.VacancyID}" class="list hidden"></div>
+  `;
+  return d;
+}
+
+/* AUTO */
+async function autoAssign(vacancyId){
+  const res = await fetch(API+"?action=autoAssign&vacancyId="+vacancyId);
+  const list = await res.json();
+  renderLecturers(vacancyId,list,"Auto");
+}
+
+/* MANUAL */
+async function manualAssign(vacancyId){
+  const res = await fetch(API+"?action=getLecturersForVacancy&vacancyId="+vacancyId);
+  const list = await res.json();
+  renderLecturers(vacancyId,list,"Manual");
+}
+
+function renderLecturers(vacancyId,list,type){
+  const box = $("list-"+vacancyId);
+  box.classList.remove("hidden");
+  box.innerHTML="<strong>Available Lecturers</strong>";
+
+  list.forEach(l=>{
+    const d=document.createElement("div");
+    d.className="lecturer";
+    d.innerHTML=`
+      <div><b>${l.Name}</b> (${l.City})</div>
+      <div class="meta">${l.Subject} • ${l.Level}</div>
+      <div class="meta">₹${l.SalaryFrom} – ₹${l.SalaryTo}</div>
+      <button class="success" onclick="assign('${vacancyId}','${l.LecturerID}','${l.Name}','${type}')">Assign</button>
+    `;
+    box.appendChild(d);
+  });
+}
+
+/* ASSIGN */
+async function assign(vacancyId,lecturerId,name,type){
+  const salary = prompt("Agreed Salary?");
+  if(!salary) return;
+
+  await fetch(API,{
+    method:"POST",
+    body:JSON.stringify({
+      action:"createAssignment",
+      vacancyId,lecturerId,name,type,agreedSalary:salary
+    })
+  });
+
+  alert("Assigned");
   loadVacancies();
   loadAssignedToday();
-});
+}
 
-async function loadVacancies() {
-  const res = await fetch(API + "?action=getOpenVacancies");
+/* ASSIGNED TODAY */
+async function loadAssignedToday(){
+  const res = await fetch(API+"?action=getAssignmentsToday");
   const data = await res.json();
+  console.log("Assigned:",data);
 
-  const box = document.getElementById("vacancies");
-  box.innerHTML = "";
+  $("assignedToday").innerHTML="";
+  data.forEach(a=>{
+    const d=document.createElement("div");
+    d.className="card";
+    d.innerHTML=`
+      <h3>${a.CollegeName}</h3>
+      <div class="meta">${a.Subject} • ${a.Level}</div>
+      <div class="meta">Lecturer: ${a.LecturerName}</div>
+      <div class="meta">Salary: ₹${a.AgreedSalary}</div>
 
-  data.forEach(v => {
-    box.innerHTML += `
-      <div class="card">
-        <span class="badge">${v.VacancyID}</span>
-        <h3>${v.CollegeName}</h3>
-
-        <div class="row">📍 ${v.City}</div>
-        <div class="row">📚 ${v.Subject} | ${v.Level}</div>
-        <div class="row">👥 Faculty Required: ${v.FacultyRequired}</div>
-        <div class="row">💰 ₹${v.SalaryFrom} – ₹${v.SalaryTo}</div>
-        <div class="row">📝 ${v.Notes || "-"}</div>
-
-        <div class="actions">
-          <button class="auto" onclick="autoAssign('${v.VacancyID}')">Auto Assign</button>
-          <button class="manual" onclick="manualAssign('${v.VacancyID}')">Manual Assign</button>
-        </div>
+      <div class="actions">
+        <button class="success" onclick="markSelected('${a.AssignmentID}')">Selected</button>
+        <button class="danger" onclick="markRejected('${a.AssignmentID}')">Not Selected</button>
       </div>
     `;
+    $("assignedToday").appendChild(d);
   });
 }
 
-/* ---------- ASSIGNED TODAY ---------- */
-async function loadAssignedToday() {
-  const res = await fetch(API + "?action=getAssignmentsToday");
-  const data = await res.json();
-
-  const box = document.getElementById("assignedToday");
-  box.innerHTML = "";
-
-  data.forEach(a => {
-    box.innerHTML += `
-      <div class="card">
-        <span class="badge">${a.AssignmentID}</span>
-        <h3>${a.CollegeName}</h3>
-
-        <div class="row">👨‍🏫 ${a.LecturerName}</div>
-        <div class="row">📚 ${a.Subject} | ${a.Level}</div>
-        <div class="row">💰 ₹${a.AgreedSalary}</div>
-        <div class="row">📌 ${a.AssignmentType}</div>
-
-        <div class="actions">
-          <button class="selected" onclick="markSelected('${a.AssignmentID}')">Selected</button>
-          <button class="not-selected" onclick="markNotSelected('${a.AssignmentID}')">Not Selected</button>
-        </div>
-      </div>
-    `;
-  });
+async function markSelected(id){
+  await fetch(API+"?action=markSelected&id="+id);
+  loadVacancies(); loadAssignedToday();
 }
 
-/* ---------- ACTIONS ---------- */
-function autoAssign(vacancyId) {
-  alert("Auto assign logic triggered for " + vacancyId);
-}
-
-function manualAssign(vacancyId) {
-  alert("Manual assign logic triggered for " + vacancyId);
-}
-
-function markSelected(id) {
-  fetch(API + "?action=markSelected&assignmentId=" + id)
-    .then(() => loadAssignedToday());
-}
-
-function markNotSelected(id) {
-  fetch(API + "?action=markNotSelected&assignmentId=" + id)
-    .then(() => loadAssignedToday());
+async function markRejected(id){
+  await fetch(API+"?action=markRejected&id="+id);
+  loadVacancies(); loadAssignedToday();
 }
 </script>
 
