@@ -304,25 +304,28 @@
     status.style.color = "#333";
     status.innerText = "⏳ Saving vacancy...";
 
-    const payload = {
-      college: college.value,
-      city: city.value,
-      phone: phone.value,
-      subject: subject.value === "Others" ? subjectOther.value : subject.value,
-      level: level.value,
-      faculty: faculty.value,
-      salaryFrom: salaryFrom.value,
-      salaryTo: salaryTo.value,
-      urgency: urgency.value,
-      collectedBy: collectedBy.value,
-      notes: notes.value
-    };
+   const payload = {
+  type: "addVacancy",
+  data: {
+    college: college.value,
+    city: city.value,
+    phone: phone.value,
+    subject: subject.value,
+    level: level.value,
+    faculty: faculty.value,
+    salaryFrom: salaryFrom.value,
+    salaryTo: salaryTo.value,
+    urgency: urgency.value,
+    collectedBy: collectedBy.value,
+    notes: notes.value
+  }
+};
 
-    try {
-      const res = await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
+fetch(SCRIPT_URL, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(payload)
+});
 
       const result = await res.json();
 
