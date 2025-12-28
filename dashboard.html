@@ -2,207 +2,104 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard | Scheduler CRM</title>
-
+<title>Dashboard | Scheduler</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 :root{
-  --blue:#2563eb;
-  --indigo:#4f46e5;
-  --green:#10b981;
-  --orange:#f59e0b;
-  --pink:#ec4899;
-  --gray:#6b7280;
-  --bg:#f4f6fb;
-  --card:#ffffff;
-  --danger:#ef4444;
+  --blue:#2563eb;--indigo:#4f46e5;--green:#10b981;--orange:#f59e0b;--pink:#ec4899;
+  --bg:#f4f6fb;--card:#fff;--text:#1f2937
 }
 *{box-sizing:border-box;font-family:Inter,Arial,sans-serif}
-body{margin:0;background:var(--bg);color:#1f2937}
-
-/* HEADER */
+body{margin:0;background:var(--bg);color:var(--text)}
 header{
-  background:linear-gradient(135deg,#2563eb,#1e40af);
-  color:#fff;
-  padding:14px 24px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between
+  background:linear-gradient(135deg,var(--blue),var(--indigo));
+  color:#fff;padding:14px 22px;display:flex;align-items:center;justify-content:space-between
 }
-header img{height:38px}
-header nav{
-  display:flex;
-  gap:20px;
-  align-items:center
-}
-header nav a{
-  color:#fff;
-  text-decoration:none;
-  font-weight:500;
-  font-size:14px
-}
-header nav a:hover{text-decoration:underline}
-header button{
-  background:var(--danger);
-  border:none;
-  color:#fff;
-  padding:8px 14px;
-  border-radius:6px;
-  cursor:pointer
-}
+header .left{display:flex;align-items:center;gap:14px}
+header img{height:36px}
+nav a{color:#fff;text-decoration:none;margin-right:14px;font-weight:500}
+nav a:hover{text-decoration:underline}
+.logout{background:#ef4444;border:none;color:#fff;padding:8px 14px;border-radius:8px;cursor:pointer}
+main{padding:28px}
+h1{margin-bottom:18px}
 
-/* LAYOUT */
-main{padding:32px}
-h1{margin-bottom:24px}
+.stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;margin-bottom:28px
+}
+.stat{
+  background:var(--card);border-radius:16px;padding:22px;
+  box-shadow:0 18px 36px rgba(0,0,0,.08)
+}
+.stat h3{margin:0;color:#374151;font-size:15px}
+.stat .n{font-size:36px;font-weight:800;margin-top:10px}
 
-/* COUNT CARDS */
-.count-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:22px;
-  margin-bottom:40px
+.actions{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px
 }
-.count-card{
-  background:#fff;
-  border-radius:16px;
-  padding:26px;
-  box-shadow:0 14px 30px rgba(0,0,0,.08)
+.card{
+  border-radius:18px;padding:26px;color:#fff;text-decoration:none;
+  box-shadow:0 18px 36px rgba(0,0,0,.22);transition:.2s
 }
-.count-card h3{
-  margin:0;
-  font-size:15px;
-  color:#374151
-}
-.count-card .num{
-  font-size:40px;
-  font-weight:800;
-  margin-top:14px
-}
-.blue{color:var(--blue)}
-.green{color:var(--green)}
-.orange{color:var(--orange)}
-.pink{color:var(--pink)}
-
-/* ACTION CARDS */
-.action-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:22px
-}
-.action{
-  border-radius:18px;
-  padding:30px;
-  color:#fff;
-  text-decoration:none;
-  box-shadow:0 18px 36px rgba(0,0,0,.25);
-  transition:.25s ease;
-  display:flex;
-  flex-direction:column;
-  gap:10px
-}
-.action:hover{
-  transform:translateY(-6px);
-  opacity:.96
-}
-.action h2{margin:0;font-size:22px}
-.action p{margin:0;font-size:14px;opacity:.9}
-
-.bg-blue{background:linear-gradient(135deg,#2563eb,#1e40af)}
-.bg-green{background:linear-gradient(135deg,#10b981,#059669)}
-.bg-orange{background:linear-gradient(135deg,#f59e0b,#d97706)}
-.bg-pink{background:linear-gradient(135deg,#ec4899,#be185d)}
+.card:hover{transform:translateY(-5px)}
+.c1{background:linear-gradient(135deg,#2563eb,#1e40af)}
+.c2{background:linear-gradient(135deg,#10b981,#059669)}
+.c3{background:linear-gradient(135deg,#f59e0b,#d97706)}
 </style>
 </head>
-
-<body>
+<body onload="requireLogin();loadCounts()">
 
 <header>
-  <div style="display:flex;align-items:center;gap:18px">
-    <img src="logo.png.jpg" alt="Logo">
+  <div class="left">
+    <img src="logo.png.jpg">
     <nav>
       <a href="dashboard.html">Dashboard</a>
       <a href="vacancies.html">Vacancies</a>
       <a href="lecturers.html">Lecturers</a>
-      <a href="assignment-manual.html">Assignments</a>
+      <a href="assignments.html">Assignments</a>
     </nav>
   </div>
-  <button onclick="logout()">Logout</button>
+  <button class="logout" onclick="logout()">Logout</button>
 </header>
 
 <main>
+  <h1>Dashboard</h1>
 
-<h1>Dashboard</h1>
-
-<!-- LIVE COUNTS -->
-<div class="count-grid">
-  <div class="count-card">
-    <h3>Total Vacancies</h3>
-    <div class="num blue" id="totalVacancies">0</div>
+  <div class="stats">
+    <div class="stat"><h3>Total Vacancies</h3><div id="vacCount" class="n">—</div></div>
+    <div class="stat"><h3>Active Lecturers</h3><div id="lecCount" class="n">—</div></div>
+    <div class="stat"><h3>Assignments Today</h3><div id="asgToday" class="n">—</div></div>
   </div>
-  <div class="count-card">
-    <h3>Active Lecturers</h3>
-    <div class="num green" id="activeLecturers">0</div>
+
+  <div class="actions">
+    <a class="card c1" href="add-vacancy.html"><h3>Add Vacancy</h3></a>
+    <a class="card c2" href="add-lecturer.html"><h3>Add Lecturer</h3></a>
+    <a class="card c3" href="assignments.html"><h3>Manual Assignment</h3></a>
   </div>
-  <div class="count-card">
-    <h3>Assignments Today</h3>
-    <div class="num orange" id="assignmentsToday">0</div>
-  </div>
-  <div class="count-card">
-    <h3>Pending Matches</h3>
-    <div class="num pink" id="pendingMatches">0</div>
-  </div>
-</div>
-
-<!-- ACTIONS -->
-<div class="action-grid">
-  <a class="action bg-blue" href="add-vacancy.html">
-    <h2>➕ Add Vacancy</h2>
-    <p>Create new college requirement</p>
-  </a>
-
-  <a class="action bg-green" href="add-lecturer.html">
-    <h2>➕ Add Lecturer</h2>
-    <p>Register available faculty</p>
-  </a>
-
-  <a class="action bg-orange" href="assignment-manual.html">
-    <h2>📝 Manual Assignment</h2>
-    <p>Assign lecturer manually</p>
-  </a>
-
-  <a class="action bg-pink" href="assignment-auto.html">
-    <h2>⚙️ Auto Assignment</h2>
-    <p>System-based matching</p>
-  </a>
-</div>
-
 </main>
 
 <script>
-/* SESSION PROTECTION */
-if(localStorage.getItem("scheduler_session")!=="active"){
-  location.replace("index.html");
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+
+function requireLogin(){
+  if(!localStorage.getItem('scheduler_session')) location.href='index.html';
 }
-
-const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
-
 function logout(){
-  localStorage.removeItem("scheduler_session");
-  location.replace("index.html");
+  localStorage.clear(); sessionStorage.clear(); location.href='index.html';
 }
-
-async function loadDashboard(){
-  const res = await fetch(SCRIPT_URL+"?action=getDashboard");
-  const d = await res.json();
-
-  document.getElementById("totalVacancies").innerText = d.totalVacancies || 0;
-  document.getElementById("activeLecturers").innerText = d.activeLecturers || 0;
-  document.getElementById("assignmentsToday").innerText = d.assignmentsToday || 0;
-  document.getElementById("pendingMatches").innerText = d.pendingMatches || 0;
+async function loadCounts(){
+  try{
+    const r=await fetch(SCRIPT_URL+'?action=getCounts');
+    const d=await r.json();
+    document.getElementById('vacCount').textContent=d.vacancies ?? '0';
+    document.getElementById('lecCount').textContent=d.lecturers ?? '0';
+    document.getElementById('asgToday').textContent=d.assignmentsToday ?? '0';
+  }catch(e){
+    document.getElementById('vacCount').textContent='—';
+    document.getElementById('lecCount').textContent='—';
+    document.getElementById('asgToday').textContent='—';
+  }
 }
-
-loadDashboard();
 </script>
-
 </body>
 </html>
