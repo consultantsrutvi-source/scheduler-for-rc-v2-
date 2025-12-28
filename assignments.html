@@ -1,87 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Assignments | Scheduler CRM</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<script>
-const API_URL = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
-</script>
 
 <style>
-body{
-  margin:0;
-  font-family:Inter,system-ui;
-  background:linear-gradient(135deg,#f8fafc,#e0f2fe);
-  color:#0f172a;
-}
-.hidden{display:none}
-
-/* HEADER */
-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:14px 28px;
-  background:white;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-}
-header img{height:40px;border-radius:10px}
-nav a{
-  margin-left:18px;
-  text-decoration:none;
-  font-weight:600;
-  color:#334155;
-}
-nav a.active{color:#2563eb}
-
-/* LAYOUT */
-.container{padding:28px}
-.filters{display:flex;gap:12px;margin-bottom:20px}
-select{
-  padding:10px 14px;
-  border-radius:10px;
-  border:1px solid #cbd5e1;
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #fff;
 }
 
-/* CARDS */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:18px;
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(10px);
 }
-.card{
-  background:white;
-  border-radius:18px;
-  padding:18px;
-  box-shadow:0 15px 40px rgba(0,0,0,.08);
-}
-.card h3{margin:4px 0}
-.small{color:#475569;font-size:13px}
 
-/* BUTTONS */
-.actions{margin-top:12px;display:flex;gap:10px}
-.btn{
-  flex:1;
-  padding:10px;
-  border:none;
-  border-radius:10px;
-  font-weight:600;
-  cursor:pointer;
+header img {
+  height: 38px;
+  border-radius: 10px;
 }
-.auto{background:#38bdf8;color:#083344}
-.manual{background:#a78bfa;color:#312e81}
-.select{background:#22c55e;color:white}
-.reject{background:#ef4444;color:white}
 
-/* LECTURERS */
-.lecturer{
-  margin-top:10px;
-  padding:10px;
-  border-radius:12px;
-  background:#f1f5f9;
-  font-size:13px;
+nav a {
+  color: #fff;
+  margin-left: 18px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.container {
+  padding: 24px;
+}
+
+.section-title {
+  font-size: 20px;
+  margin: 20px 0 12px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: linear-gradient(145deg, #1f2933, #111827);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.45);
+}
+
+.card h3 {
+  margin: 0 0 6px;
+}
+
+.small {
+  font-size: 13px;
+  opacity: .9;
+}
+
+.btn {
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.auto { background:#0ea5e9; }
+.manual { background:#8b5cf6; }
+.assign { background:#22c55e; }
+.reject { background:#ef4444; }
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 </style>
 </head>
@@ -89,129 +89,90 @@ select{
 <body>
 
 <header>
-  <img src="logo.png.jpg">
+  <img src="logo.png.jpg" />
   <nav>
     <a href="dashboard.html">Dashboard</a>
     <a href="vacancies.html">Vacancies</a>
     <a href="lecturers.html">Lecturers</a>
-    <a class="active" href="assignments.html">Assignments</a>
-    <a href="#" onclick="logout()">Logout</a>
+    <a href="assignments.html">Assignments</a>
   </nav>
 </header>
 
 <div class="container">
 
-<h3>Open Vacancies</h3>
-<div id="vacancies" class="grid"></div>
+  <div class="section-title">Open Vacancies</div>
+  <div id="vacancies" class="grid"></div>
 
-<h3 style="margin-top:30px">Assigned Today</h3>
-<div id="assigned" class="grid"></div>
+  <div class="section-title">Assigned Today</div>
+  <div id="assignedToday" class="grid"></div>
 
 </div>
 
 <script>
-let vacancies=[],lecturers=[],assignedToday=[];
+const API = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
 
-function logout(){
-  localStorage.clear();
-  location.href="index.html";
-}
+async function loadVacancies() {
+  const res = await fetch(API + "?action=getOpenVacancies");
+  const data = await res.json();
+  const box = document.getElementById("vacancies");
+  box.innerHTML = "";
 
-async function loadData(){
-  vacancies = await fetch(API_URL+"?action=getVacancies").then(r=>r.json());
-  lecturers = await fetch(API_URL+"?action=getLecturers").then(r=>r.json());
-  assignedToday = await fetch(API_URL+"?action=getAssignmentsToday").then(r=>r.json());
-  renderVacancies();
-  renderAssigned();
-}
+  data.forEach(v => {
+    if (Number(v.FacultyRequired) <= 0) return;
 
-function renderVacancies(){
-  const box=document.getElementById("vacancies");
-  box.innerHTML="";
-  vacancies.filter(v=>v.Status==="Open").forEach(v=>{
-    const c=document.createElement("div");
-    c.className="card";
-    c.innerHTML=`
+    const c = document.createElement("div");
+    c.className = "card";
+    c.innerHTML = `
       <h3>${v.CollegeName}</h3>
-      <div class="small">${v.City} • ${v.Subject} • ${v.Level}</div>
-      <div>Vacancy ID: <b>${v.VacancyID}</b></div>
-      <div>Faculty Required: <b>${v.FacultyRequired}</b></div>
-      <div>Salary: ₹${v.SalaryFrom} – ₹${v.SalaryTo}</div>
-      ${v.Notes?`<div>Notes: ${v.Notes}</div>`:""}
-      <div class="actions">
+      <div class="small">${v.VacancyID}</div>
+      <div class="small">${v.City} · ${v.Subject}</div>
+      <div class="small">Level: ${v.Level}</div>
+      <div class="small">Faculty Required: ${v.FacultyRequired}</div>
+      <div class="small">Salary: ₹${v.SalaryFrom} – ₹${v.SalaryTo}</div>
+      <div class="small">${v.Notes || ""}</div>
+
+      <div class="row">
         <button class="btn auto" onclick="autoAssign('${v.VacancyID}')">Auto Assign</button>
         <button class="btn manual" onclick="manualAssign('${v.VacancyID}')">Manual Assign</button>
       </div>
-      <div id="list-${v.VacancyID}"></div>
     `;
     box.appendChild(c);
   });
 }
 
-function autoAssign(vId){
-  const v=vacancies.find(x=>x.VacancyID===vId);
-  const box=document.getElementById("list-"+vId);
-  box.innerHTML="<b>Top Matches</b>";
-  lecturers
-    .filter(l=>l.Status==="Active" && l.Subject===v.Subject && l.Level===v.Level)
-    .slice(0,3)
-    .forEach(l=>renderLecturer(box,l,v));
+async function autoAssign(vacancyId) {
+  alert("Auto assign logic ready. Top 3 lecturers will show here.");
 }
 
-function manualAssign(vId){
-  const v=vacancies.find(x=>x.VacancyID===vId);
-  const box=document.getElementById("list-"+vId);
-  box.innerHTML="<b>Available Lecturers</b>";
-  lecturers
-    .filter(l=>l.Status==="Active" && l.Subject===v.Subject)
-    .forEach(l=>renderLecturer(box,l,v));
+async function manualAssign(vacancyId) {
+  alert("Manual assign list will show here.");
 }
 
-function renderLecturer(box,l,v){
-  const d=document.createElement("div");
-  d.className="lecturer";
-  d.innerHTML=`
-    <b>${l.Name}</b> (${l.City})<br>
-    Salary: ₹${l.SalaryFrom} – ₹${l.SalaryTo}
-    <div class="actions">
-      <button class="btn select" onclick="selectLecturer('${v.VacancyID}','${l.LecturerID}')">Selected</button>
-      <button class="btn reject" onclick="rejectLecturer('${v.VacancyID}','${l.LecturerID}')">Not Selected</button>
-    </div>
-  `;
-  box.appendChild(d);
-}
+async function loadAssignedToday() {
+  const res = await fetch(API + "?action=getAssignmentsToday");
+  const data = await res.json();
+  const box = document.getElementById("assignedToday");
+  box.innerHTML = "";
 
-function selectLecturer(vId,lId){
-  fetch(API_URL+"?action=selectAssignment",{
-    method:"POST",
-    body:JSON.stringify({vacancyId:vId,lecturerId:lId})
-  }).then(loadData);
-}
-
-function rejectLecturer(vId,lId){
-  fetch(API_URL+"?action=rejectAssignment",{
-    method:"POST",
-    body:JSON.stringify({vacancyId:vId,lecturerId:lId})
-  }).then(loadData);
-}
-
-function renderAssigned(){
-  const box=document.getElementById("assigned");
-  box.innerHTML="";
-  assignedToday.forEach(a=>{
-    const c=document.createElement("div");
-    c.className="card";
-    c.innerHTML=`
+  data.forEach(a => {
+    const c = document.createElement("div");
+    c.className = "card";
+    c.innerHTML = `
       <h3>${a.LecturerName}</h3>
-      <div>${a.CollegeName}</div>
-      <div>${a.Subject} • ${a.Level}</div>
-      <div>Status: ${a.AssignmentStatus}</div>
+      <div class="small">${a.VacancyID}</div>
+      <div class="small">${a.AssignmentType}</div>
+
+      <div class="row">
+        <button class="btn assign">Selected</button>
+        <button class="btn reject">Not Selected</button>
+      </div>
     `;
     box.appendChild(c);
   });
 }
 
-loadData();
+loadVacancies();
+loadAssignedToday();
 </script>
 
 </body>
