@@ -1,217 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Add Lecturer | Scheduler for RC</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<title>Add Lecturer | Scheduler for RC</title>
 
-  <!-- Main Styles -->
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/add-vacancy.css" />
+<link rel="stylesheet" href="css/style.css">
 
-  <style>
-    body {
-      background: linear-gradient(135deg, #eef2ff, #f8fafc);
-    }
-    .form-card {
-      max-width: 1000px;
-      margin: 40px auto;
-      background: #ffffff;
-      border-radius: 14px;
-      padding: 28px 32px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-    }
-    .form-title {
-      font-size: 26px;
-      font-weight: 700;
-      color: #1e3a8a;
-      margin-bottom: 4px;
-    }
-    .form-subtitle {
-      color: #64748b;
-      margin-bottom: 24px;
-    }
-    .status-msg {
-      margin-top: 14px;
-      font-weight: 600;
-    }
-    .success { color: #15803d; }
-    .error { color: #b91c1c; }
-  </style>
+<style>
+body {
+  background: linear-gradient(135deg,#eef2f7,#f9fbfd);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.container {
+  max-width: 720px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 20px 45px rgba(0,0,0,.08);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 16px;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+textarea { resize: vertical }
+
+button {
+  width: 100%;
+  margin-top: 18px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  background: linear-gradient(90deg,#4f8cff,#35c27b);
+}
+
+.status {
+  margin-top: 12px;
+  text-align: center;
+  font-weight: 600;
+}
+.success { color: #1aa36f }
+.error { color: #e74c3c }
+
+.topbar {
+  background: linear-gradient(90deg,#0f766e,#2563eb);
+  padding: 14px 30px;
+  color: #fff;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.topbar a {
+  color:#fff;
+  margin-left:18px;
+  text-decoration:none;
+  font-weight:500;
+}
+</style>
 </head>
 
-<body class="app-body" onload="requireLogin()">
+<body onload="requireLogin()">
 
-<!-- ================= HEADER ================= -->
-<header class="app-header">
-  <div class="header-left">
-    <img src="logo.png.jpg" class="app-logo" />
-    <span class="app-name">Scheduler for RC</span>
-  </div>
-
-  <nav class="header-nav">
+<div class="topbar">
+  <strong>Scheduler for RC</strong>
+  <div>
     <a href="dashboard.html">Dashboard</a>
     <a href="vacancies.html">Vacancies</a>
-    <a href="lecturers.html" class="active">Lecturers</a>
+    <a href="lecturers.html">Lecturers</a>
     <a href="assignments.html">Assignments</a>
-  </nav>
-
-  <div class="nav-right">
-    <button class="logout-btn" onclick="logout()">Logout</button>
+    <a href="#" onclick="logout()">Logout</a>
   </div>
-</header>
+</div>
 
-<!-- ================= FORM ================= -->
-<main class="app-container">
-  <div class="form-card">
-    <div class="form-title">Add Lecturer</div>
-    <div class="form-subtitle">Register available faculty for assignments</div>
+<div class="container">
+<h2>Add Lecturer</h2>
 
-    <form id="lecturerForm">
-      <div class="form-grid">
-
-        <div>
-          <label>Name *</label>
-          <input type="text" name="name" required />
-        </div>
-
-        <div>
-          <label>Phone *</label>
-          <input type="tel" name="phone" required />
-        </div>
-
-        <div>
-          <label>City *</label>
-          <input type="text" name="city" required />
-        </div>
-
-        <div>
-          <label>Subject *</label>
-          <select name="subject" required>
-            <option value="">Select</option>
-            <option>Physics</option>
-            <option>Chemistry</option>
-            <option>Biology</option>
-            <option>Mathematics</option>
-            <option>Other</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Level *</label>
-          <select name="level" required>
-            <option value="">Select</option>
-            <option>KCET</option>
-            <option>Boards</option>
-            <option>NEET</option>
-            <option>JEE</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Experience (Years)</label>
-          <input type="number" name="experience" min="0" />
-        </div>
-
-        <div>
-          <label>Salary From *</label>
-          <select name="salaryFrom" required>
-            <option value="">Select</option>
-            <option value="50000">₹50k</option>
-            <option value="100000">₹1L</option>
-            <option value="150000">₹1.5L</option>
-            <option value="200000">₹2L</option>
-            <option value="250000">₹2.5L</option>
-            <option value="300000">₹3L</option>
-            <option value="350000">₹3.5L</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Salary To *</label>
-          <select name="salaryTo" required>
-            <option value="">Select</option>
-            <option value="50000">₹50k</option>
-            <option value="100000">₹1L</option>
-            <option value="150000">₹1.5L</option>
-            <option value="200000">₹2L</option>
-            <option value="250000">₹2.5L</option>
-            <option value="300000">₹3L</option>
-            <option value="350000">₹3.5L</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Availability *</label>
-          <select name="availability" required>
-            <option>Immediate</option>
-            <option>Within 1 Week</option>
-            <option>Within 15 Days</option>
-            <option>Within 1 Month</option>
-          </select>
-        </div>
-
-        <div class="full">
-          <label>Notes</label>
-          <textarea name="notes" rows="3"></textarea>
-        </div>
-      </div>
-
-      <button type="submit" class="primary-btn">
-        💾 Save Lecturer
-      </button>
-
-      <div id="status" class="status-msg"></div>
-    </form>
+<div class="grid">
+  <div>
+    <label>Name *</label>
+    <input id="name">
   </div>
-</main>
+  <div>
+    <label>Phone *</label>
+    <input id="phone">
+  </div>
 
-<!-- ================= SCRIPT ================= -->
+  <div>
+    <label>City *</label>
+    <select id="city"></select>
+  </div>
+
+  <div>
+    <label>Subject *</label>
+    <select id="subject">
+      <option value="">Select</option>
+      <option>Physics</option>
+      <option>Chemistry</option>
+      <option>Biology</option>
+      <option>Maths</option>
+      <option>Other</option>
+    </select>
+  </div>
+
+  <div>
+    <label>Level *</label>
+    <select id="level">
+      <option value="">Select</option>
+      <option>KCET</option>
+      <option>NEET</option>
+      <option>Boards</option>
+      <option>Other</option>
+    </select>
+  </div>
+
+  <div>
+    <label>Experience (Years)</label>
+    <input id="experience" type="number">
+  </div>
+
+  <div>
+    <label>Salary From *</label>
+    <select id="salaryFrom"></select>
+  </div>
+
+  <div>
+    <label>Salary To *</label>
+    <select id="salaryTo"></select>
+  </div>
+
+  <div>
+    <label>Availability *</label>
+    <select id="availability">
+      <option>Immediate</option>
+      <option>Within 1 Week</option>
+      <option>Within 15 Days</option>
+    </select>
+  </div>
+
+  <div>
+    <label>Notes</label>
+    <textarea id="notes"></textarea>
+  </div>
+</div>
+
+<button onclick="saveLecturer()">Save Lecturer</button>
+<div id="msg" class="status"></div>
+
+</div>
+
+<script src="js/places.js"></script>
+
 <script>
-  const SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
 
-  document.getElementById("lecturerForm").addEventListener("submit", async e => {
-    e.preventDefault();
-    const status = document.getElementById("status");
-    status.textContent = "Saving lecturer...";
-    status.className = "status-msg";
+function requireLogin(){
+  if(!sessionStorage.getItem("scheduler_session")){
+    location.href="index.html";
+  }
+}
 
-    const formData = new FormData(e.target);
-    const payload = { type: "addLecturer" };
-    formData.forEach((v, k) => payload[k] = v);
+function logout(){
+  sessionStorage.clear();
+  location.href="index.html";
+}
 
-    try {
-      const res = await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
-      const out = await res.json();
+const salaryOptions = [50000,75000,100000,125000,150000,200000,250000,300000,350000];
 
-      if (out.success) {
-        status.textContent = "✅ Lecturer saved successfully";
-        status.classList.add("success");
-        e.target.reset();
-      } else {
-        throw new Error();
-      }
-    } catch {
-      status.textContent = "❌ Could not save lecturer";
-      status.classList.add("error");
-    }
+function loadSalary(){
+  ["salaryFrom","salaryTo"].forEach(id=>{
+    const s=document.getElementById(id);
+    s.innerHTML='<option value="">Select</option>';
+    salaryOptions.forEach(v=>{
+      const o=document.createElement("option");
+      o.value=v;
+      o.textContent="₹"+(v/1000)+"k";
+      s.appendChild(o);
+    });
   });
+}
+loadSalary();
 
-  function logout() {
-    localStorage.clear();
-    sessionStorage.clear();
-    location.href = "index.html";
-  }
+async function saveLecturer(){
+  const data={
+    name:name.value,
+    phone:phone.value,
+    city:city.value,
+    subject:subject.value,
+    level:level.value,
+    experience:Number(experience.value||0),
+    salaryFrom:Number(salaryFrom.value),
+    salaryTo:Number(salaryTo.value),
+    availability:availability.value,
+    notes:notes.value
+  };
 
-  function requireLogin() {
-    if (!localStorage.getItem("scheduler_session")) {
-      location.href = "index.html";
-    }
+  try{
+    const res=await fetch(SCRIPT_URL+"?action=addLecturer",{
+      method:"POST",
+      body:JSON.stringify(data)
+    });
+    const j=await res.json();
+    if(j.success){
+      msg.className="status success";
+      msg.innerText="Saved ✔ Lecturer ID: "+j.id;
+      document.querySelectorAll("input,select,textarea").forEach(e=>e.value="");
+    }else throw j;
+  }catch{
+    msg.className="status error";
+    msg.innerText="Could not save lecturer";
   }
+}
 </script>
 
 </body>
