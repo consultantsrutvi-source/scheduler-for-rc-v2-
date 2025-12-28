@@ -35,3 +35,16 @@ document.addEventListener("DOMContentLoaded", () => {
     list.appendChild(option);
   });
 });
+function loadCities(selectId = "city") {
+  const select = document.getElementById(selectId);
+  if (!select) return;
+
+  select.innerHTML = '<option value="">Select</option>';
+
+  cities.forEach(city => {
+    const opt = document.createElement("option");
+    opt.value = city;
+    opt.textContent = city;
+    select.appendChild(opt);
+  });
+}
