@@ -1,166 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Vacancies | Scheduler for RC</title>
+<meta charset="UTF-8" />
+<title>Vacancies | Scheduler CRM</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: #f4f6f9;
-  color: #333;
+:root{
+  --primary:#2563eb;
+  --danger:#ef4444;
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --text:#1f2937;
+}
+*{box-sizing:border-box;font-family:Inter,Arial,sans-serif}
+body{margin:0;background:var(--bg);color:var(--text)}
+
+header{
+  background:linear-gradient(135deg,#2563eb,#1e40af);
+  color:#fff;padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between
+}
+header img{height:36px}
+header nav a{
+  color:#fff;text-decoration:none;margin-right:16px;font-weight:500
+}
+header button{
+  background:var(--danger);border:none;color:#fff;
+  padding:8px 14px;border-radius:6px;cursor:pointer
 }
 
-header {
-  background: #ffffff;
-  border-bottom: 1px solid #ddd;
-  padding: 10px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+main{padding:24px}
+
+.card{
+  background:var(--card);
+  border-radius:10px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 10px 20px rgba(0,0,0,.06)
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.filters{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:12px
+}
+.filters input,.filters select{
+  padding:8px;border:1px solid #d1d5db;border-radius:6px
 }
 
-.brand img {
-  height: 36px;
+.actions{
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+.actions button{
+  background:var(--primary);
+  border:none;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:6px;
+  cursor:pointer
 }
 
-nav a {
-  margin: 0 10px;
-  text-decoration: none;
-  color: #555;
-  font-weight: 500;
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:16px
+}
+th,td{
+  padding:10px;
+  border-bottom:1px solid #e5e7eb;
+  text-align:left;
+  font-size:14px
+}
+th{background:#f1f5f9}
+
+.badge{
+  padding:4px 8px;
+  border-radius:12px;
+  font-size:12px;
+  color:#fff;
+  background:#10b981
 }
 
-nav a.active {
-  color: #1976d2;
-  border-bottom: 2px solid #1976d2;
-  padding-bottom: 4px;
+button.del{
+  background:var(--danger);
+  border:none;
+  color:#fff;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer
 }
 
-.logout-btn {
-  background: #e53935;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-main {
-  padding: 24px;
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
-}
-
-.page-header h2 {
-  margin: 0;
-}
-
-.actions button {
-  margin-left: 8px;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.btn-print {
-  background: #4caf50;
-  color: white;
-}
-
-.btn-add {
-  background: #1976d2;
-  color: white;
-}
-
-.filters {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
-  background: #ffffff;
-  padding: 14px;
-  border-radius: 6px;
-  margin-bottom: 16px;
-}
-
-.filters input,
-.filters select {
-  padding: 7px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.table-wrapper {
-  background: white;
-  border-radius: 6px;
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  text-align: left;
-  font-size: 14px;
-}
-
-th {
-  background: #f0f2f5;
-}
-
-.status-badge {
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  color: white;
-  background: #43a047;
-}
-
-.actions-col button {
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-@media print {
-  body {
-    background: white;
-  }
-
-  header, .actions, .filters, .actions-col {
-    display: none;
-  }
-
-  main {
-    padding: 20px;
-  }
-
-  table {
-    margin-top: 10px;
-  }
-
-  @page {
-    margin: 20mm;
-  }
+/* PRINT */
+@media print{
+  body{background:#fff}
+  header,.filters,.actions,button.del{display:none}
+  table{font-size:12px}
 }
 </style>
 </head>
@@ -168,215 +104,144 @@ th {
 <body>
 
 <header>
-  <div class="brand">
-    <img src="logo.png.jpg" alt="Rutvi Consultants">
-    <strong>Scheduler for RC</strong>
+  <div style="display:flex;align-items:center;gap:16px">
+    <img src="logo.png.jpg" alt="Logo">
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="add-vacancy.html">Add Vacancy</a>
+      <a href="lecturers.html">Lecturers</a>
+    </nav>
   </div>
-
-  <nav>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="vacancies.html" class="active">Vacancies</a>
-    <a href="lecturers.html">Lecturers</a>
-    <a href="assignments.html">Assignments</a>
-  </nav>
-
-  <button class="logout-btn" onclick="logout()">Logout</button>
+  <button onclick="logout()">Logout</button>
 </header>
 
 <main>
 
-<div class="page-header">
+<div class="card actions">
   <h2>Vacancies</h2>
-  <div class="actions">
-    <button class="btn-print" onclick="window.print()">Print</button>
-    <button class="btn-add" onclick="location.href='add-vacancy.html'">Add Vacancy</button>
+  <button onclick="window.print()">Print</button>
+</div>
+
+<div class="card">
+  <div class="filters">
+    <input id="fCollege" placeholder="College">
+    <input id="fCity" placeholder="City">
+    <input id="fSubject" placeholder="Subject">
+    <input id="fLevel" placeholder="Level">
+
+    <select id="fSalaryFrom">
+      <option value="">Salary From</option>
+      <option value="50000">₹50k</option>
+      <option value="100000">₹1L</option>
+      <option value="150000">₹1.5L</option>
+      <option value="200000">₹2L</option>
+      <option value="250000">₹2.5L</option>
+      <option value="300000">₹3L</option>
+      <option value="350000">₹3.5L</option>
+    </select>
+
+    <select id="fSalaryTo">
+      <option value="">Salary To</option>
+      <option value="50000">₹50k</option>
+      <option value="100000">₹1L</option>
+      <option value="150000">₹1.5L</option>
+      <option value="200000">₹2L</option>
+      <option value="250000">₹2.5L</option>
+      <option value="300000">₹3L</option>
+      <option value="350000">₹3.5L</option>
+    </select>
+
+    <input id="fUrgency" placeholder="Urgency">
+    <input id="fStatus" placeholder="Status">
   </div>
-</div>
 
-<div class="filters">
-  <input type="text" id="filterCollege" placeholder="Search College" oninput="applyFilters()">
-<input
-  type="text"
-  id="filterCity"
-  list="citiesList"
-  placeholder="Search / Select City"
-  oninput="applyFilters()"
-/>
-
-<datalist id="citiesList"></datalist>
-
-
-  <select id="filterSubject" onchange="applyFilters()">
-    <option value="">All Subjects</option>
-    <option>Physics</option>
-    <option>Chemistry</option>
-    <option>Mathematics</option>
-    <option>Biology</option>
-    <option>Zoology</option>
-    <option>Botany</option>
-  </select>
-
-  <select id="filterLevel" onchange="applyFilters()">
-    <option value="">All Levels</option>
-    <option>Boards</option>
-    <option>KCET</option>
-    <option>NEET</option>
-    <option>JEE Mains</option>
-    <option>JEE Advanced</option>
-    <option>Foundation</option>
-  </select>
-
-  <select id="filterUrgency" onchange="applyFilters()">
-    <option value="">All Urgency</option>
-    <option>Immediate</option>
-    <option>Within 1 Week</option>
-    <option>Within 15 Days</option>
-    <option>Within 1 Month</option>
-  </select>
-
-  <select id="filterStatus" onchange="applyFilters()">
-    <option value="">All Status</option>
-    <option>Open</option>
-    <option>Assigned</option>
-    <option>Closed</option>
-  </select>
-
- <select id="salaryFromFilter" onchange="applyFilters()">
-  <option value="">Min Salary</option>
-  <option value="50000">₹50k</option>
-  <option value="75000">₹75k</option>
-  <option value="100000">₹100k</option>
-  <option value="125000">₹125k</option>
-  <option value="150000">₹150k</option>
-  <option value="175000">₹175k</option>
-  <option value="200000">₹200k</option>
-  <option value="225000">₹225k</option>
-  <option value="250000">₹250k</option>
-  <option value="275000">₹275k</option>
-  <option value="300000">₹300k</option>
-  <option value="325000">₹325k</option>
-  <option value="350000">₹350k</option>
-</select>
-
-<select id="salaryToFilter" onchange="applyFilters()">
-  <option value="">Max Salary</option>
-  <option value="50000">₹50k</option>
-  <option value="75000">₹75k</option>
-  <option value="100000">₹100k</option>
-  <option value="125000">₹125k</option>
-  <option value="150000">₹150k</option>
-  <option value="175000">₹175k</option>
-  <option value="200000">₹200k</option>
-  <option value="225000">₹225k</option>
-  <option value="250000">₹250k</option>
-  <option value="275000">₹275k</option>
-  <option value="300000">₹300k</option>
-  <option value="325000">₹325k</option>
-  <option value="350000">₹350k</option>
-</select>
-
-</div>
-
-<div class="table-wrapper">
-<table>
-<thead>
-<tr>
-  <th>ID</th>
-  <th>College</th>
-  <th>City</th>
-  <th>Subject</th>
-  <th>Level</th>
-  <th>Salary</th>
-  <th>Urgency</th>
-  <th>Faculty</th>
-  <th>Status</th>
-  <th>Actions</th>
-</tr>
-</thead>
-
-<tbody id="vacancyTable"></tbody>
-</table>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>College</th>
+        <th>City</th>
+        <th>Subject</th>
+        <th>Level</th>
+        <th>Salary</th>
+        <th>Urgency</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="vacBody"></tbody>
+  </table>
 </div>
 
 </main>
-<script src="js/places.js"></script>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzavtUCQIuWK53poEkRRd16Db8T0jL2g18aZkfk4_6hdrz3J3g6zlkEKFvZBzz2Enh9-Q/exec";
-let allVacancies = [];
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+let vacancies=[];
 
-async function loadVacancies() {
-  const res = await fetch(SCRIPT_URL);
-  allVacancies = await res.json();
-  renderRows(allVacancies);
+function logout(){
+  localStorage.clear();
+  location.href="index.html";
 }
 
-function renderRows(data) {
-  const tbody = document.getElementById("vacancyTable");
-  tbody.innerHTML = "";
+async function loadVacancies(){
+  const res = await fetch(SCRIPT_URL+"?action=getVacancies");
+  vacancies = await res.json();
+  render();
+}
 
-  data.forEach(v => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
+function render(){
+  const body=document.getElementById("vacBody");
+  body.innerHTML="";
+
+  const fc=fCollege.value.toLowerCase();
+  const city=fCity.value.toLowerCase();
+  const sub=fSubject.value.toLowerCase();
+  const lvl=fLevel.value.toLowerCase();
+  const salFrom=Number(fSalaryFrom.value||0);
+  const salTo=Number(fSalaryTo.value||99999999);
+  const urg=fUrgency.value.toLowerCase();
+  const st=fStatus.value.toLowerCase();
+
+  vacancies.filter(v=>{
+    return (!fc||v.college.toLowerCase().includes(fc)) &&
+           (!city||v.city.toLowerCase().includes(city)) &&
+           (!sub||v.subject.toLowerCase().includes(sub)) &&
+           (!lvl||v.level.toLowerCase().includes(lvl)) &&
+           (v.salaryFrom>=salFrom) &&
+           (v.salaryTo<=salTo) &&
+           (!urg||v.urgency.toLowerCase().includes(urg)) &&
+           (!st||v.status.toLowerCase().includes(st));
+  }).forEach(v=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
       <td>${v.id}</td>
       <td>${v.college}</td>
       <td>${v.city}</td>
       <td>${v.subject}</td>
       <td>${v.level}</td>
-      <td>₹${v.salaryFrom} - ₹${v.salaryTo}</td>
+      <td>₹${v.salaryFrom} – ₹${v.salaryTo}</td>
       <td>${v.urgency}</td>
-      <td>${v.faculty}</td>
-      <td><span class="status-badge">${v.status}</span></td>
-      <td class="actions-col">
-        <button onclick="deleteVacancy('${v.id}')">🗑️</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
+      <td><span class="badge">${v.status}</span></td>
+      <td><button class="del" onclick="delVac('${v.id}')">Delete</button></td>`;
+    body.appendChild(tr);
   });
 }
 
-function applyFilters() {
-  const college = filterCollege.value.toLowerCase();
-  const city = filterCity.value.toLowerCase();
-  const subject = filterSubject.value;
-  const level = filterLevel.value;
-  const urgency = filterUrgency.value;
-  const status = filterStatus.value;
-  const min = Number(salaryFromFilter.value || 0);
-  const max = Number(salaryToFilter.value || 9999999);
-
-  const filtered = allVacancies.filter(v =>
-    (!college || v.college.toLowerCase().includes(college)) &&
-    (!city || v.city.toLowerCase().includes(city)) &&
-    (!subject || v.subject === subject) &&
-    (!level || v.level === level) &&
-    (!urgency || v.urgency === urgency) &&
-    (!status || v.status === status) &&
-    (v.salaryFrom >= min && v.salaryTo <= max)
-  );
-
-  renderRows(filtered);
-}
-
-async function deleteVacancy(id) {
-  if (!confirm("Delete vacancy " + id + "?")) return;
-  await fetch(`${SCRIPT_URL}?id=${id}`, { method: "DELETE" });
+async function delVac(id){
+  if(!confirm("Delete vacancy?"))return;
+  await fetch(SCRIPT_URL+"?action=deleteVacancy",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({id})
+  });
   loadVacancies();
 }
 
-function logout() {
-  localStorage.clear();
-  location.href = "index.html";
-}
+["fCollege","fCity","fSubject","fLevel","fSalaryFrom","fSalaryTo","fUrgency","fStatus"]
+.forEach(id=>document.getElementById(id).addEventListener("input",render));
 
-document.addEventListener("DOMContentLoaded", loadVacancies);
-</script>
-<script>
-function logout() {
-  localStorage.clear();
-  sessionStorage.clear();
-  location.href = "index.html";
-}
+loadVacancies();
 </script>
 
 </body>
