@@ -7,6 +7,7 @@
 <style>
 :root{
   --primary:#2563eb;
+  --secondary:#1e40af;
   --bg:#f4f6fb;
   --card:#ffffff;
   --text:#1f2937;
@@ -16,89 +17,95 @@
 body{margin:0;background:var(--bg);color:var(--text)}
 
 header{
-  background:linear-gradient(135deg,#2563eb,#1e40af);
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
   color:#fff;
-  padding:16px 24px;
+  padding:14px 24px;
   display:flex;
   align-items:center;
   justify-content:space-between
 }
-header img{height:36px}
+header img{height:38px}
 header nav a{
   color:#fff;
   text-decoration:none;
-  margin-right:16px;
-  font-weight:500
+  margin-right:18px;
+  font-weight:500;
+  font-size:14px
 }
+header nav a:hover{text-decoration:underline}
 header button{
   background:var(--danger);
   border:none;
   color:#fff;
   padding:8px 14px;
   border-radius:6px;
-  cursor:pointer
+  cursor:pointer;
+  font-weight:500
 }
 
-main{padding:32px}
+main{padding:28px}
 
 h1{margin-bottom:24px}
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:20px
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:22px
 }
 
 .card{
   background:var(--card);
-  border-radius:12px;
+  border-radius:14px;
   padding:24px;
-  box-shadow:0 12px 24px rgba(0,0,0,.08);
-  transition:transform .2s
+  box-shadow:0 12px 26px rgba(0,0,0,.08);
+  transition:.2s ease
 }
 .card:hover{transform:translateY(-4px)}
 
 .card h2{
   margin:0;
-  font-size:18px;
+  font-size:17px;
   color:#374151
 }
 .card .count{
-  font-size:36px;
+  font-size:38px;
   font-weight:700;
   margin-top:12px;
   color:var(--primary)
 }
-.card small{
-  color:#6b7280
-}
+.card small{color:#6b7280}
 
-.quick{
-  margin-top:32px;
-  display:flex;
-  gap:16px;
-  flex-wrap:wrap
+.actions{
+  margin-top:36px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px
 }
-.quick a{
-  background:var(--primary);
+.action-btn{
+  background:linear-gradient(135deg,#2563eb,#1e40af);
   color:#fff;
-  padding:12px 18px;
-  border-radius:8px;
+  padding:16px;
+  border-radius:12px;
   text-decoration:none;
-  font-weight:500
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  box-shadow:0 8px 18px rgba(37,99,235,.35)
 }
+.action-btn:hover{opacity:.95}
 </style>
 </head>
 
 <body>
 
 <header>
-  <div style="display:flex;align-items:center;gap:16px">
+  <div style="display:flex;align-items:center;gap:18px">
     <img src="logo.png.jpg" alt="Logo">
     <nav>
       <a href="dashboard.html">Dashboard</a>
       <a href="vacancies.html">Vacancies</a>
-      <a href="add-vacancy.html">Add Vacancy</a>
       <a href="lecturers.html">Lecturers</a>
     </nav>
   </div>
@@ -113,50 +120,65 @@ h1{margin-bottom:24px}
   <div class="card">
     <h2>Total Vacancies</h2>
     <div class="count" id="totalVacancies">0</div>
-    <small>All active job requirements</small>
+    <small>All active requirements</small>
   </div>
 
   <div class="card">
     <h2>Active Lecturers</h2>
     <div class="count" id="activeLecturers">0</div>
-    <small>Available faculty pool</small>
+    <small>Currently available faculty</small>
   </div>
 
   <div class="card">
     <h2>Assignments Today</h2>
     <div class="count">0</div>
-    <small>To be enabled</small>
+    <small>Manual / Auto</small>
   </div>
 
   <div class="card">
     <h2>Pending Matches</h2>
     <div class="count">0</div>
-    <small>Auto-matching queue</small>
+    <small>To be processed</small>
   </div>
 </div>
 
-<div class="quick">
-  <a href="add-vacancy.html">➕ Add Vacancy</a>
-  <a href="vacancies.html">📋 View Vacancies</a>
-  <a href="lecturers.html">👨‍🏫 View Lecturers</a>
+<div class="actions">
+  <a class="action-btn" href="add-vacancy.html">➕ Add Vacancy</a>
+  <a class="action-btn" href="add-lecturer.html">➕ Add Lecturer</a>
+  <a class="action-btn" href="assignment-manual.html">📝 Manual Assignment</a>
+  <a class="action-btn" href="assignment-auto.html">⚙️ Auto Assignment</a>
 </div>
 
 </main>
 
 <script>
+/* ===== SESSION PROTECTION ===== */
+(function(){
+  const session = localStorage.getItem("scheduler_session");
+  if(!session){
+    location.replace("index.html");
+  }
+})();
+
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
 
+/* ===== LOGOUT ===== */
 function logout(){
-  localStorage.clear();
-  location.href="index.html";
+  localStorage.removeItem("scheduler_session");
+  location.replace("index.html");
 }
 
+/* ===== LOAD DASHBOARD COUNTS ===== */
 async function loadDashboard(){
-  const res = await fetch(SCRIPT_URL + "?action=getDashboard");
-  const data = await res.json();
+  try{
+    const res = await fetch(SCRIPT_URL + "?action=getDashboard");
+    const data = await res.json();
 
-  document.getElementById("totalVacancies").innerText = data.totalVacancies || 0;
-  document.getElementById("activeLecturers").innerText = data.activeLecturers || 0;
+    document.getElementById("totalVacancies").innerText = data.totalVacancies || 0;
+    document.getElementById("activeLecturers").innerText = data.activeLecturers || 0;
+  }catch(e){
+    console.error("Dashboard load failed",e);
+  }
 }
 
 loadDashboard();
