@@ -231,7 +231,19 @@
 </div>
 
 <!-- IMPORTANT: places.js -->
+<script src="js/places.js" defer></script>
 <script src="js/places.js"></script>
+
+<script>
+  window.addEventListener("load", () => {
+    if (typeof loadCities === "function") {
+      loadCities("city");
+    } else {
+      console.error("places.js not loaded");
+    }
+  });
+</script>
+
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
