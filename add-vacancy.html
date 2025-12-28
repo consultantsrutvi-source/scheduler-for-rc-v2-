@@ -243,74 +243,61 @@
     }
   });
 </script>
-
-
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
 
-const salarySteps = [
-  { l:"₹50k", v:50000 },{ l:"₹1L", v:100000 },
-  { l:"₹1.5L", v:150000 },{ l:"₹2L", v:200000 },
-  { l:"₹2.5L", v:250000 },{ l:"₹3L", v:300000 },
-  { l:"₹3.5L", v:350000 }
-];
-
-function fillSalary(id){
-  const s=document.getElementById(id);
-  s.innerHTML='<option value="">Select</option>';
-  salarySteps.forEach(o=>{
-    const op=document.createElement("option");
-    op.value=o.v;
-    op.textContent=o.l;
-    s.appendChild(op);
-  });
-}
-
-fillSalary("salaryFrom");
-fillSalary("salaryTo");
-
-function saveVacancy(){
-  const btn=document.getElementById("saveBtn");
-  const msg=document.getElementById("msg");
-  btn.disabled=true;
-  btn.textContent="Saving…";
-  msg.textContent="";
-
-  const payload={
-    action:"addVacancy",
-    college:college.value.trim(),
-    city:city.value,
-    phone:phone.value.trim(),
-    subject:subject.value,
-    level:level.value,
-    faculty:Number(faculty.value),
-    salaryFrom:Number(salaryFrom.value),
-    salaryTo:Number(salaryTo.value),
-    urgency:urgency.value,
-    collectedBy:collectedBy.value.trim(),
-    notes:notes.value.trim()
+async function saveVacancy() {
+  const data = {
+    college: document.getElementById("college").value.trim(),
+    city: document.getElementById("city").value,
+    phone: document.getElementById("phone").value.trim(),
+    subject: document.getElementById("subject").value,
+    level: document.getElementById("level").value,
+    faculty: document.getElementById("faculty").value,   // 🔥 REQUIRED
+    salaryFrom: document.getElementById("salaryFrom").value,
+    salaryTo: document.getElementById("salaryTo").value,
+    urgency: document.getElementById("urgency").value,
+    collectedBy: document.getElementById("collectedBy").value,
+    notes: document.getElementById("notes").value
   };
 
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify(payload)
-  })
-  .then(r=>r.json())
-  .then(j=>{
-    if(j.success){
-      msg.textContent="Vacancy saved successfully";
-      msg.className="status ok";
-      btn.textContent="Saved";
-    } else throw j;
-  })
-  .catch(()=>{
-    msg.textContent="Could not save vacancy";
-    msg.className="status err";
-    btn.disabled=false;
-    btn.textContent="Save Vacancy";
+  // basic validation
+  for (let k in data) {
+    if (!data[k] && k !== "notes") {
+      showMessage("Please fill all required fields", false);
+      return;
+    }
+  }
+
+  showMessage("Saving...", true);
+
+  const res = await fetch(SCRIPT_URL + "?action=addVacancy", {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+
+  const json = await res.json();
+
+  if (json.success) {
+    showMessage(`Vacancy Saved ✅ ID: ${json.id}`, true);
+    clearForm();
+  } else {
+    showMessage(json.error || "Could not save vacancy", false);
+  }
+}
+
+function clearForm() {
+  document.querySelectorAll("input, select, textarea").forEach(el => {
+    if (el.tagName !== "SELECT") el.value = "";
+    else el.selectedIndex = 0;
   });
 }
-</script>
 
+function showMessage(msg, success) {
+  const box = document.getElementById("statusMsg");
+  box.innerText = msg;
+  box.style.color = success ? "green" : "red";
+}
+</script>
 </body>
 </html>
