@@ -2,28 +2,28 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Assignments | Scheduler CRM</title>
+<title>Assignments | Scheduler</title>
 
 <style>
 body {
   margin: 0;
-  font-family: Inter, Arial, sans-serif;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  color: #fff;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: #f4f6f9;
+  color: #222;
 }
 
 header {
+  background: linear-gradient(90deg, #1f3c88, #3a6ea5);
+  color: white;
+  padding: 14px 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 24px;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(10px);
 }
 
 header img {
   height: 38px;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 nav a {
@@ -33,55 +33,62 @@ nav a {
   font-weight: 500;
 }
 
-.container {
+main {
   padding: 24px;
 }
 
 .section-title {
   font-size: 20px;
-  margin: 20px 0 12px;
+  margin: 18px 0 12px;
 }
 
-.grid {
+.card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 18px;
 }
 
 .card {
-  background: linear-gradient(145deg, #1f2933, #111827);
-  border-radius: 16px;
+  background: #fff;
+  border-radius: 12px;
   padding: 16px;
-  box-shadow: 0 20px 40px rgba(0,0,0,.45);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
 
 .card h3 {
   margin: 0 0 6px;
 }
 
-.small {
-  font-size: 13px;
-  opacity: .9;
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  background: #e8edf5;
+  margin-right: 6px;
 }
 
 .btn {
+  padding: 8px 14px;
   border: none;
-  border-radius: 10px;
-  padding: 8px 12px;
-  margin-top: 10px;
+  border-radius: 6px;
   cursor: pointer;
+  margin-right: 6px;
   font-weight: 600;
 }
 
-.auto { background:#0ea5e9; }
-.manual { background:#8b5cf6; }
-.assign { background:#22c55e; }
-.reject { background:#ef4444; }
+.btn-auto { background: #3a6ea5; color: white; }
+.btn-manual { background: #6a5acd; color: white; }
+.btn-assign { background: #28a745; color: white; }
+.btn-selected { background: #28a745; color: white; }
+.btn-reject { background: #dc3545; color: white; }
 
-.row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+.hidden { display: none; }
+
+.print-btn {
+  background: #444;
+  color: #fff;
+  float: right;
 }
 </style>
 </head>
@@ -89,90 +96,129 @@ nav a {
 <body>
 
 <header>
-  <img src="logo.png.jpg" />
+  <img src="logo.png.jpg" alt="Logo">
   <nav>
     <a href="dashboard.html">Dashboard</a>
     <a href="vacancies.html">Vacancies</a>
-    <a href="lecturers.html">Lecturers</a>
-    <a href="assignments.html">Assignments</a>
+    <a href="lectures.html">Lecturers</a>
+    <a href="#" onclick="logout()">Logout</a>
   </nav>
 </header>
 
-<div class="container">
+<main>
 
-  <div class="section-title">Open Vacancies</div>
-  <div id="vacancies" class="grid"></div>
+<h2 class="section-title">Open Vacancies</h2>
+<div id="vacancyCards" class="card-grid"></div>
 
-  <div class="section-title">Assigned Today</div>
-  <div id="assignedToday" class="grid"></div>
+<h2 class="section-title">
+  Assigned Today
+  <button class="btn print-btn" onclick="window.print()">Print</button>
+</h2>
+<div id="assignedCards" class="card-grid"></div>
 
-</div>
+</main>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+const API_BASE = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+
+function safe(v) {
+  return v === undefined || v === null || v === "" ? "-" : v;
+}
+
+async function fetchJSON(url) {
+  const res = await fetch(url);
+  return res.json();
+}
 
 async function loadVacancies() {
-  const res = await fetch(API + "?action=getOpenVacancies");
-  const data = await res.json();
-  const box = document.getElementById("vacancies");
-  box.innerHTML = "";
+  const data = await fetchJSON(`${API_BASE}?action=getOpenVacancies`);
+  const container = document.getElementById("vacancyCards");
+  container.innerHTML = "";
 
   data.forEach(v => {
-    if (Number(v.FacultyRequired) <= 0) return;
-
-    const c = document.createElement("div");
-    c.className = "card";
-    c.innerHTML = `
-      <h3>${v.CollegeName}</h3>
-      <div class="small">${v.VacancyID}</div>
-      <div class="small">${v.City} · ${v.Subject}</div>
-      <div class="small">Level: ${v.Level}</div>
-      <div class="small">Faculty Required: ${v.FacultyRequired}</div>
-      <div class="small">Salary: ₹${v.SalaryFrom} – ₹${v.SalaryTo}</div>
-      <div class="small">${v.Notes || ""}</div>
-
-      <div class="row">
-        <button class="btn auto" onclick="autoAssign('${v.VacancyID}')">Auto Assign</button>
-        <button class="btn manual" onclick="manualAssign('${v.VacancyID}')">Manual Assign</button>
-      </div>
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <h3>${safe(v.CollegeName)}</h3>
+      <div class="badge">${safe(v.VacancyID)}</div>
+      <div class="badge">${safe(v.Subject)} | ${safe(v.Level)}</div>
+      <p>City: ${safe(v.City)}</p>
+      <p>Salary: ${safe(v.SalaryFrom)} – ${safe(v.SalaryTo)}</p>
+      <p>Faculty Required: ${safe(v.FacultyRequired)}</p>
+      <p>${safe(v.Notes)}</p>
+      <button class="btn btn-auto" onclick="autoAssign('${v.VacancyID}')">Auto Assign</button>
+      <button class="btn btn-manual" onclick="manualAssign('${v.VacancyID}')">Manual Assign</button>
     `;
-    box.appendChild(c);
+    container.appendChild(card);
   });
 }
 
 async function autoAssign(vacancyId) {
-  alert("Auto assign logic ready. Top 3 lecturers will show here.");
+  const data = await fetchJSON(`${API_BASE}?action=autoAssign&vacancyId=${vacancyId}`);
+  renderLecturers(data, vacancyId);
 }
 
 async function manualAssign(vacancyId) {
-  alert("Manual assign list will show here.");
+  const data = await fetchJSON(`${API_BASE}?action=getMatchingLecturers&vacancyId=${vacancyId}`);
+  renderLecturers(data, vacancyId);
 }
 
-async function loadAssignedToday() {
-  const res = await fetch(API + "?action=getAssignmentsToday");
-  const data = await res.json();
-  const box = document.getElementById("assignedToday");
-  box.innerHTML = "";
+function renderLecturers(list, vacancyId) {
+  const container = document.getElementById("vacancyCards");
+  container.innerHTML = "";
 
-  data.forEach(a => {
-    const c = document.createElement("div");
-    c.className = "card";
-    c.innerHTML = `
-      <h3>${a.LecturerName}</h3>
-      <div class="small">${a.VacancyID}</div>
-      <div class="small">${a.AssignmentType}</div>
-
-      <div class="row">
-        <button class="btn assign">Selected</button>
-        <button class="btn reject">Not Selected</button>
-      </div>
+  list.forEach(l => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <h3>${safe(l.Name)}</h3>
+      <div class="badge">${safe(l.LecturerID)}</div>
+      <p>City: ${safe(l.City)}</p>
+      <p>Salary: ${safe(l.SalaryFrom)} – ${safe(l.SalaryTo)}</p>
+      <button class="btn btn-assign" onclick="assign('${vacancyId}','${l.LecturerID}')">Assign</button>
     `;
-    box.appendChild(c);
+    container.appendChild(card);
   });
 }
 
+async function assign(vacancyId, lecturerId) {
+  await fetchJSON(`${API_BASE}?action=assign&vacancyId=${vacancyId}&lecturerId=${lecturerId}`);
+  loadAssignments();
+  loadVacancies();
+}
+
+async function loadAssignments() {
+  const data = await fetchJSON(`${API_BASE}?action=getTodayAssignments`);
+  const container = document.getElementById("assignedCards");
+  container.innerHTML = "";
+
+  data.forEach(a => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <h3>${safe(a.CollegeName)}</h3>
+      <p>${safe(a.LecturerName)}</p>
+      <div class="badge">${safe(a.AssignmentStatus)}</div>
+      <button class="btn btn-selected" onclick="updateStatus('${a.AssignmentID}','Selected')">Selected</button>
+      <button class="btn btn-reject" onclick="updateStatus('${a.AssignmentID}','Not Selected')">Not Selected</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+async function updateStatus(id, status) {
+  await fetchJSON(`${API_BASE}?action=updateAssignmentStatus&id=${id}&status=${status}`);
+  loadAssignments();
+  loadVacancies();
+}
+
+function logout() {
+  localStorage.clear();
+  location.href = "index.html";
+}
+
 loadVacancies();
-loadAssignedToday();
+loadAssignments();
 </script>
 
 </body>
