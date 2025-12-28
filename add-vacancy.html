@@ -1,353 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Add Vacancy | Rutvi Consultants</title>
+<meta charset="UTF-8">
+<title>Add Vacancy | Scheduler CRM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="places.js"></script>
 
-  <!-- MAIN STYLE -->
-  <link rel="stylesheet" href="css/style.css" />
+<style>
+:root{
+  --bg:#f4f7ff;
+  --card:#ffffff;
+  --text:#1f2937;
+  --blue:#6366f1;
+  --green:#22c55e;
+  --orange:#f59e0b;
+  --red:#ef4444;
+}
+*{box-sizing:border-box;font-family:Inter,Arial,sans-serif}
+body{margin:0;background:var(--bg);color:var(--text)}
 
-  <style>
-    body {
-      background: #f4f6f9;
-      font-family: "Segoe UI", sans-serif;
-      margin: 0;
-    }
+header{
+  background:linear-gradient(135deg,#eef2ff,#ffffff);
+  padding:14px 26px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #e5e7eb
+}
+header img{height:38px}
+nav a{
+  margin-right:16px;
+  text-decoration:none;
+  color:#374151;
+  font-weight:500
+}
+nav a:hover{color:var(--blue)}
+.logout{
+  background:#ef4444;
+  border:none;
+  color:#fff;
+  padding:8px 16px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600
+}
 
-    header {
-      background: #ffffff;
-      border-bottom: 1px solid #ddd;
-      padding: 12px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+main{
+  max-width:900px;
+  margin:30px auto;
+  background:var(--card);
+  padding:32px;
+  border-radius:20px;
+  box-shadow:0 25px 50px rgba(0,0,0,.12)
+}
+h1{margin-bottom:24px}
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px
+}
+label{font-weight:600;font-size:14px}
+input,select{
+  width:100%;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #d1d5db;
+  font-size:14px
+}
+.hidden{display:none}
 
-    .brand img {
-      height: 42px;
-    }
-
-    nav a {
-      margin-right: 18px;
-      text-decoration: none;
-      color: #333;
-      font-weight: 500;
-    }
-
-    .logout-btn {
-      background: #dc3545;
-      color: white;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .container {
-      max-width: 980px;
-      margin: 40px auto;
-      padding: 0 16px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 28px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    }
-
-    h2 {
-      margin-top: 0;
-      margin-bottom: 6px;
-    }
-
-    .subtitle {
-      color: #666;
-      margin-bottom: 22px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    .grid-2 {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .grid-1 {
-      grid-template-columns: 1fr;
-    }
-
-    label {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 4px;
-      display: block;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-
-    textarea {
-      resize: vertical;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .actions {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 24px;
-      gap: 12px;
-    }
-
-    .save-btn {
-      background: #0d6efd;
-      color: white;
-      border: none;
-      padding: 10px 22px;
-      border-radius: 8px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    .status-msg {
-      margin-top: 16px;
-      font-weight: 600;
-    }
-  </style>
+.actions{
+  margin-top:28px;
+  display:flex;
+  gap:16px;
+  align-items:center
+}
+button{
+  padding:12px 26px;
+  border-radius:14px;
+  border:none;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer
+}
+.save{
+  background:linear-gradient(135deg,#6366f1,#818cf8);
+  color:#fff
+}
+.save:disabled{opacity:.6}
+.status{
+  font-weight:600
+}
+.success{color:var(--green)}
+.error{color:var(--red)}
+</style>
 </head>
 
-<body>
+<body onload="requireLogin();loadCities()">
 
 <header>
-  <div class="brand">
-    <img src="logo.png.jpg" >
-   
-</div>
-
-  <nav>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="vacancies.html">Vacancies</a>
-    <a href="lecturers.html">Lecturers</a>
-    <a href="assignments.html">Assignments</a>
-  </nav>
-
-  <button class="logout-btn" onclick="logout()">Logout</button>
+  <div>
+    <img src="logo.png.jpg">
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="vacancies.html">Vacancies</a>
+      <a href="lecturers.html">Lecturers</a>
+    </nav>
+  </div>
+  <button class="logout" onclick="logout()">Logout</button>
 </header>
 
-<div class="container">
-  <div class="card">
-    <h2>Add Vacancy</h2>
-    <div class="subtitle">Enter college faculty requirement details</div>
+<main>
+<h1>Add Vacancy</h1>
 
-    <form id="vacancyForm">
-      <div class="grid">
+<div class="form-grid">
 
-        <div>
-          <label>College Name *</label>
-          <input id="college" required />
-        </div>
-
-        <div>
-          <label>City *</label>
-          <input list="cityList" id="city" required />
-          <datalist id="cityList"></datalist>
-        </div>
-
-        <div>
-          <label>Phone *</label>
-          <input id="phone" required />
-        </div>
-
-        <div>
-          <label>Subject *</label>
-          <select id="subject" required>
-            <option value="">Select</option>
-            <option>Physics</option>
-            <option>Chemistry</option>
-            <option>Mathematics</option>
-            <option>Biology</option>
-            <option>Zoology</option>
-            <option>Botany</option>
-            <option>Others</option>
-          </select>
-        </div>
-
-        <div id="subjectOtherBox" class="hidden">
-          <label>Other Subject</label>
-          <input id="subjectOther" />
-        </div>
-
-        <div>
-          <label>Level *</label>
-          <select id="level" required>
-            <option value="">Select</option>
-            <option>Boards</option>
-            <option>KCET</option>
-            <option>NEET</option>
-            <option>JEE Mains</option>
-            <option>JEE Advanced</option>
-            <option>Foundation</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Faculty Required *</label>
-          <input type="number" id="faculty" required />
-        </div>
-
-        <div>
-          <label>Salary From *</label>
-          <select id="salaryFrom" required></select>
-        </div>
-
-        <div>
-          <label>Salary To *</label>
-          <select id="salaryTo" required></select>
-        </div>
-
-        <div>
-          <label>Urgency *</label>
-          <select id="urgency" required>
-            <option>Immediate</option>
-            <option>Within 1 Week</option>
-            <option>Within 15 Days</option>
-            <option>Within 1 Month</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Collected By *</label>
-          <input id="collectedBy" required />
-        </div>
-
-      </div>
-
-      <div class="grid grid-1" style="margin-top:16px">
-        <div>
-          <label>Notes</label>
-          <textarea id="notes" rows="3"></textarea>
-        </div>
-      </div>
-
-      <div class="actions">
-        <button type="submit" class="save-btn">💾 Save Vacancy</button>
-      </div>
-
-      <div id="status" class="status-msg"></div>
-    </form>
+  <div>
+    <label>College Name *</label>
+    <input id="college" required>
   </div>
+
+  <div>
+    <label>City *</label>
+    <select id="city"></select>
+  </div>
+
+  <div>
+    <label>Subject *</label>
+    <select id="subject" onchange="toggleOther(this,'subjectOther')">
+      <option value="">Select</option>
+      <option>Physics</option>
+      <option>Chemistry</option>
+      <option>Mathematics</option>
+      <option>Biology</option>
+      <option>Botany</option>
+      <option>Zoology</option>
+      <option>Other</option>
+    </select>
+    <input id="subjectOther" class="hidden" placeholder="Enter subject">
+  </div>
+
+  <div>
+    <label>Level *</label>
+    <select id="level" onchange="toggleOther(this,'levelOther')">
+      <option value="">Select</option>
+      <option>PU</option>
+      <option>KCET</option>
+      <option>NEET</option>
+      <option>JEE</option>
+      <option>Foundation</option>
+      <option>Other</option>
+    </select>
+    <input id="levelOther" class="hidden" placeholder="Enter level">
+  </div>
+
+  <div>
+    <label>Salary From *</label>
+    <select id="salaryFrom"></select>
+  </div>
+
+  <div>
+    <label>Salary To *</label>
+    <select id="salaryTo"></select>
+  </div>
+
+  <div>
+    <label>Urgency *</label>
+    <select id="urgency">
+      <option value="">Select</option>
+      <option>Immediate</option>
+      <option>Within 1 Week</option>
+      <option>Within 1 Month</option>
+    </select>
+  </div>
+
+  <div>
+    <label>Phone</label>
+    <input id="phone">
+  </div>
+
 </div>
 
-<!-- 🔹 PLACES SCRIPT (REPLACE URL IF NEEDED) -->
-<script src="js/places.js"></script>
+<div class="actions">
+  <button class="save" onclick="saveVacancy()">Save Vacancy</button>
+  <span id="status" class="status"></span>
+</div>
+
+</main>
 
 <script>
-  /* ---------- LOGOUT ---------- */
-  function logout() {
-    localStorage.clear();
-    sessionStorage.clear();
-    window.location.href = "index.html";
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+
+function requireLogin(){
+  if(!localStorage.getItem("scheduler_session")){
+    location.href="index.html";
   }
-
-  /* ---------- LOAD CITIES ---------- */
-  const cityList = document.getElementById("cityList");
-  if (typeof cities !== "undefined") {
-   cities.forEach(c => {
-      const o = document.createElement("option");
-      o.value = c;
-      cityList.appendChild(o);
-    });
-  }
-
-  /* ---------- SALARY DROPDOWN ---------- */
-  const salaryFrom = document.getElementById("salaryFrom");
-  const salaryTo = document.getElementById("salaryTo");
-
-  for (let s = 50000; s <= 350000; s += 25000) {
-    const label = "₹" + (s/1000) + "k";
-    salaryFrom.add(new Option(label, s));
-    salaryTo.add(new Option(label, s));
-  }
-
-  /* ---------- SUBJECT OTHER ---------- */
-  document.getElementById("subject").addEventListener("change", e => {
-    document.getElementById("subjectOtherBox")
-      .classList.toggle("hidden", e.target.value !== "Others");
-  });
-
-  /* ---------- SUBMIT ---------- */
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzavtUCQIuWK53poEkRRd16Db8T0jL2g18aZkfk4_6hdrz3J3g6zlkEKFvZBzz2Enh9-Q/exec";
-
-  document.getElementById("vacancyForm").addEventListener("submit", async e => {
-    e.preventDefault();
-
-    const status = document.getElementById("status");
-    status.style.color = "#333";
-    status.innerText = "⏳ Saving vacancy...";
-
-   const payload = {
-  type: "addVacancy",
-  data: {
-    college: college.value,
-    city: city.value,
-    phone: phone.value,
-    subject: subject.value,
-    level: level.value,
-    faculty: faculty.value,
-    salaryFrom: salaryFrom.value,
-    salaryTo: salaryTo.value,
-    urgency: urgency.value,
-    collectedBy: collectedBy.value,
-    notes: notes.value
-  }
-};
-
-fetch(SCRIPT_URL, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(payload)
-});
-
-      const result = await res.json();
-
-      if (result.success) {
-        status.style.color = "green";
-        status.innerText = "✅ Vacancy saved successfully (ID: " + result.id + ")";
-        e.target.reset();
-      } else {
-        status.style.color = "red";
-        status.innerText = "❌ Could not save: " + result.error;
-      }
-    } catch (err) {
-      status.style.color = "red";
-      status.innerText = "❌ Network / Script error";
-    }
-  });
-</script>
-<script>
-function logout() {
+}
+function logout(){
   localStorage.clear();
-  sessionStorage.clear();
-  location.href = "index.html";
+  location.href="index.html";
+}
+
+function loadCities(){
+  const c=document.getElementById("city");
+  c.innerHTML='<option value="">Select</option>';
+  cities.forEach(x=>{
+    const o=document.createElement("option");
+    o.textContent=x;o.value=x;c.appendChild(o);
+  });
+
+  for(let s=50000;s<=350000;s+=25000){
+    salaryFrom.innerHTML+=`<option>${s}</option>`;
+    salaryTo.innerHTML+=`<option>${s}</option>`;
+  }
+}
+
+function toggleOther(sel,id){
+  document.getElementById(id).classList.toggle("hidden",sel.value!=="Other");
+}
+
+async function saveVacancy(){
+  const status=document.getElementById("status");
+  status.textContent="Saving...";
+  status.className="status";
+
+  const data={
+    action:"addVacancy",
+    college:college.value.trim(),
+    city:city.value,
+    subject:subject.value==="Other"?subjectOther.value:subject.value,
+    level:level.value==="Other"?levelOther.value:level.value,
+    salaryFrom:salaryFrom.value,
+    salaryTo:salaryTo.value,
+    urgency:urgency.value,
+    phone:phone.value
+  };
+
+  if(!data.college||!data.city||!data.subject||!data.level||!data.salaryFrom||!data.salaryTo||!data.urgency){
+    status.textContent="Please fill all mandatory fields";
+    status.classList.add("error");
+    return;
+  }
+
+  try{
+    const res=await fetch(SCRIPT_URL,{
+      method:"POST",
+      body:JSON.stringify(data)
+    });
+    const r=await res.json();
+    if(r.success){
+      status.textContent="Vacancy saved successfully";
+      status.classList.add("success");
+    }else{
+      status.textContent=r.message||"Could not save vacancy";
+      status.classList.add("error");
+    }
+  }catch(e){
+    status.textContent="Server error while saving";
+    status.classList.add("error");
+  }
 }
 </script>
 
