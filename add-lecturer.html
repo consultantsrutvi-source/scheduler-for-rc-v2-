@@ -251,24 +251,28 @@ async function saveLecturer(){
   const status=document.getElementById("status");
   status.innerText="Saving...";
 
-  const payload={
-    action:"addLecturer",
-    name:lecName.value,
-    phone:lecPhone.value,
-    city:lecCity.value,
-    subject:lecSubject.value,
-    level:lecLevel.value,
-    salaryFrom:salaryFrom.value,
-    salaryTo:salaryTo.value,
-    experience:experience.value,
-    availability:availability.value,
-    notes:notes.value
-  };
+const payload = {
+  type: "addLecturer",
+  data: {
+    name: name.value,
+    phone: phone.value,
+    city: city.value,
+    subject: subject.value,
+    level: level.value,
+    salaryFrom: salaryFrom.value,
+    salaryTo: salaryTo.value,
+    experience: experience.value,
+    availability: availability.value,
+    notes: notes.value
+  }
+};
 
-  const res=await fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify(payload)
-  });
+fetch(SCRIPT_URL, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(payload)
+});
+
 
   const r=await res.json();
 
