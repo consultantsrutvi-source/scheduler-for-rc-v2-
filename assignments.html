@@ -3,119 +3,102 @@
 <head>
 <meta charset="UTF-8" />
 <title>Assignments | Scheduler CRM</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- ================== STYLE ================== -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
-:root{
-  --bg:#0f172a;
-  --card:#ffffffee;
-  --accent:#4f46e5;
-  --accent2:#06b6d4;
-  --success:#16a34a;
-  --danger:#dc2626;
-  --text:#0f172a;
-}
-
-*{box-sizing:border-box;font-family:Inter,system-ui,Arial}
 body{
   margin:0;
-  background:linear-gradient(135deg,#0f172a,#020617);
-  min-height:100vh;
+  font-family:Inter,system-ui;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:#0f172a;
 }
-
-/* HEADER */
 header{
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  padding:14px 28px;
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
+  padding:14px 28px;
+  background:linear-gradient(90deg,#2563eb,#22c55e);
   color:#fff;
 }
-header .logo{
-  display:flex;align-items:center;gap:12px;font-weight:700;font-size:18px;
+header img{
+  height:36px;
+  border-radius:10px;
 }
-header nav a{
-  color:#fff;text-decoration:none;margin:0 14px;font-weight:500;
+nav a{
+  margin:0 14px;
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
 }
-header nav a.active{border-bottom:2px solid #fff;padding-bottom:4px}
 .logout{
-  background:#ef4444;border:none;color:#fff;
-  padding:8px 14px;border-radius:10px;cursor:pointer;
+  background:#ef4444;
+  padding:8px 14px;
+  border-radius:8px;
+  cursor:pointer;
 }
-
-/* LAYOUT */
 .container{
-  padding:26px;
-  max-width:1400px;
-  margin:auto;
+  padding:28px;
 }
-
-/* FILTER BAR */
 .filters{
-  background:var(--card);
-  border-radius:16px;
-  padding:18px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  display:flex;
   gap:14px;
-  margin-bottom:22px;
+  margin-bottom:24px;
 }
-.filters select{
-  padding:10px;border-radius:10px;border:1px solid #ccc;
+select,input{
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #e5e7eb;
 }
-
-/* SECTION */
 .section-title{
-  color:#fff;font-size:20px;margin:22px 0 12px;
+  color:#fff;
+  margin:30px 0 12px;
 }
-
-/* CARDS */
 .cards{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
   gap:18px;
 }
 .card{
-  background:var(--card);
-  border-radius:18px;
+  background:#fff;
+  border-radius:16px;
   padding:18px;
-  box-shadow:0 20px 40px rgba(0,0,0,.25);
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
 }
-.card h3{margin:0 0 6px;color:var(--text)}
-.card p{margin:4px 0;font-size:14px}
-
-/* BUTTONS */
+.card h3{margin:0 0 6px}
+.badge{
+  display:inline-block;
+  background:#e5e7eb;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:12px;
+}
 .btn{
-  padding:10px 14px;border:none;border-radius:12px;
-  cursor:pointer;font-weight:600;
+  padding:10px 14px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
 }
-.btn.primary{background:var(--accent);color:#fff}
-.btn.auto{background:var(--accent2);color:#fff}
-.btn.success{background:var(--success);color:#fff}
-.btn.danger{background:var(--danger);color:#fff}
-.btn.small{padding:6px 10px;font-size:13px}
-
-/* LECTURER LIST */
-.lecturer{
-  border:1px solid #ddd;
-  border-radius:12px;
-  padding:12px;
-  margin-top:10px;
+.auto{background:linear-gradient(90deg,#2563eb,#38bdf8);color:#fff}
+.manual{background:linear-gradient(90deg,#7c3aed,#a78bfa);color:#fff}
+.assign{background:#22c55e;color:#fff}
+.reject{background:#ef4444;color:#fff}
+.sub{
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px dashed #e5e7eb;
 }
-.lecturer strong{display:block}
-
-/* ASSIGNED */
-.assigned{
-  border-left:6px solid var(--success);
+.print{
+  float:right;
+  background:#fff;
+  border-radius:10px;
+  padding:8px 14px;
+  cursor:pointer;
 }
-
-/* PRINT */
 @media print{
+  header,.filters,.section-title:not(.printable){display:none}
   body{background:#fff}
-  header,.filters,.btn{display:none}
-  .card{box-shadow:none;border:1px solid #ccc}
 }
 </style>
 </head>
@@ -123,140 +106,147 @@ header nav a.active{border-bottom:2px solid #fff;padding-bottom:4px}
 <body>
 
 <header>
-  <div class="logo">Scheduler CRM</div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <img src="logo.png" alt="Logo">
+    <strong>Scheduler CRM</strong>
+  </div>
   <nav>
     <a href="dashboard.html">Dashboard</a>
     <a href="vacancies.html">Vacancies</a>
     <a href="lecturers.html">Lecturers</a>
-    <a href="assignments.html" class="active">Assignments</a>
+    <a href="assignments.html">Assignments</a>
   </nav>
-  <button class="logout" onclick="logout()">Logout</button>
+  <div class="logout" onclick="logout()">Logout</div>
 </header>
 
 <div class="container">
 
   <!-- FILTERS -->
   <div class="filters">
-    <select id="filterCity"><option value="">All Cities</option></select>
-    <select id="filterSubject"><option value="">All Subjects</option></select>
-    <select id="filterLevel"><option value="">All Levels</option></select>
-    <button class="btn primary" onclick="loadVacancies()">Refresh</button>
-    <button class="btn small" onclick="window.print()">Print</button>
+    <select id="cityFilter"><option value="">All Cities</option></select>
+    <select id="subjectFilter"><option value="">All Subjects</option></select>
+    <select id="levelFilter"><option value="">All Levels</option></select>
   </div>
 
-  <!-- VACANCIES -->
-  <div class="section-title">Open Vacancies</div>
-  <div id="vacancyCards" class="cards"></div>
+  <!-- OPEN VACANCIES -->
+  <h2 class="section-title">Open Vacancies</h2>
+  <div class="cards" id="vacancies"></div>
 
-  <!-- ASSIGNED -->
-  <div class="section-title">Assigned Today</div>
-  <div id="assignedCards" class="cards"></div>
+  <!-- ASSIGNED TODAY -->
+  <h2 class="section-title printable">
+    Assigned Today
+    <span class="print" onclick="window.print()">Print</span>
+  </h2>
+  <div class="cards printable" id="assignedToday"></div>
 
 </div>
 
-<!-- ================== SCRIPT ================== -->
 <script src="js/places.js"></script>
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+const API = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
 
-/* LOGOUT */
 function logout(){
   localStorage.clear();
   location.href="index.html";
 }
 
-/* LOAD FILTERS */
-document.addEventListener("DOMContentLoaded",()=>{
-  cities.forEach(c=>{
-    filterCity.innerHTML+=`<option>${c}</option>`;
-  });
-  ["Physics","Chemistry","Biology","Maths"].forEach(s=>{
-    filterSubject.innerHTML+=`<option>${s}</option>`;
-  });
-  ["KCET","NEET","Boards","JEE","Foundation"].forEach(l=>{
-    filterLevel.innerHTML+=`<option>${l}</option>`;
-  });
+/* ---------- LOAD DATA ---------- */
+async function fetchJSON(params){
+  const r = await fetch(API+"?"+new URLSearchParams(params));
+  return r.json();
+}
+
+/* ---------- INIT ---------- */
+document.addEventListener("DOMContentLoaded",async()=>{
+  cities.forEach(c=>cityFilter.innerHTML+=`<option>${c}</option>`);
+  ["Physics","Chemistry","Biology","Maths"].forEach(s=>subjectFilter.innerHTML+=`<option>${s}</option>`);
+  ["KCET","NEET","Boards","JEE","Foundation"].forEach(l=>levelFilter.innerHTML+=`<option>${l}</option>`);
   loadVacancies();
+  loadAssignedToday();
 });
 
-/* LOAD VACANCIES */
+/* ---------- LOAD VACANCIES ---------- */
 async function loadVacancies(){
-  vacancyCards.innerHTML="Loading...";
-  const res = await fetch(`${SCRIPT_URL}?action=getVacancies`);
-  const data = await res.json();
-  vacancyCards.innerHTML="";
-
-  data.filter(v=>v.status==="Open").forEach(v=>{
+  const data = await fetchJSON({action:"getVacancies"});
+  vacancies.innerHTML="";
+  data.forEach(v=>{
     const card=document.createElement("div");
     card.className="card";
     card.innerHTML=`
-      <h3>${v.college}</h3>
-      <p><b>City:</b> ${v.city}</p>
-      <p><b>Subject:</b> ${v.subject}</p>
-      <p><b>Level:</b> ${v.level}</p>
-      <p><b>Faculty Required:</b> ${v.faculty}</p>
-      <p><b>Salary:</b> ₹${v.salaryFrom} – ₹${v.salaryTo}</p>
-
-      <div style="display:flex;gap:10px;margin-top:12px">
-        <button class="btn auto" onclick="autoAssign('${v.id}',${v.faculty})">Auto Assign</button>
-        <button class="btn primary" onclick="manualAssign('${v.id}',${v.faculty})">Manual Assign</button>
-      </div>
-      <div id="assign_${v.id}"></div>
+      <h3>${v.CollegeName}</h3>
+      <div class="badge">${v.City}</div>
+      <p>${v.Subject} • ${v.Level}</p>
+      <p>Faculty Required: <b>${v.FacultyRequired}</b></p>
+      <p>Salary: ₹${v.SalaryFrom} – ₹${v.SalaryTo}</p>
+      <button class="btn auto" onclick="autoAssign('${v.VacancyID}',this)">Auto Assign</button>
+      <button class="btn manual" onclick="manualAssign('${v.VacancyID}',this)">Manual Assign</button>
+      <div class="sub"></div>
     `;
-    vacancyCards.appendChild(card);
+    vacancies.appendChild(card);
   });
 }
 
-/* AUTO ASSIGN */
-async function autoAssign(vacancyId,needed){
-  const box=document.getElementById("assign_"+vacancyId);
-  box.innerHTML="Finding best matches...";
-  const res = await fetch(`${SCRIPT_URL}?action=getLecturers`);
-  const lecturers = await res.json();
-  const top = lecturers.filter(l=>l.status==="Active").slice(0,needed);
-
-  renderAssign(box,vacancyId,top);
-}
-
-/* MANUAL ASSIGN */
-async function manualAssign(vacancyId,needed){
-  const box=document.getElementById("assign_"+vacancyId);
-  box.innerHTML="Loading lecturers...";
-  const res = await fetch(`${SCRIPT_URL}?action=getLecturers`);
-  const lecturers = await res.json();
-  renderAssign(box,vacancyId,lecturers.filter(l=>l.status==="Active"),needed);
-}
-
-/* RENDER ASSIGNMENT */
-function renderAssign(box,vacancyId,list,limit){
-  box.innerHTML="";
-  list.slice(0,limit||list.length).forEach(l=>{
-    const d=document.createElement("div");
-    d.className="lecturer";
-    d.innerHTML=`
-      <strong>${l.name}</strong>
-      <small>${l.city} • ${l.subject} • ${l.level}</small>
-      <p>Salary Expected: ₹${l.salaryFrom} – ₹${l.salaryTo}</p>
-      <button class="btn success small" onclick="finalAssign('${vacancyId}','${l.id}')">Assign</button>
-    `;
-    box.appendChild(d);
+/* ---------- AUTO ASSIGN ---------- */
+async function autoAssign(vacancyId,btn){
+  const box=btn.parentElement.querySelector(".sub");
+  box.innerHTML="<b>Top 3 Suggested Lecturers</b>";
+  const list=await fetchJSON({action:"autoAssign",vacancyId});
+  list.forEach(l=>{
+    box.innerHTML+=`
+      <div class="card sub">
+        <b>${l.Name}</b> • ${l.City}<br>
+        Exp: ${l.Experience} yrs | ₹${l.SalaryFrom}–${l.SalaryTo}<br>
+        <button class="btn assign" onclick="assign('${vacancyId}','${l.LecturerID}')">Assign for Interview</button>
+      </div>`;
   });
 }
 
-/* FINAL ASSIGN */
-async function finalAssign(vacancyId,lecturerId){
-  const agreed = prompt("Agreed Salary?");
-  if(!agreed) return;
-
-  await fetch(`${SCRIPT_URL}?action=addAssignment`,{
-    method:"POST",
-    body:JSON.stringify({vacancyId,lecturerId,agreedSalary:agreed})
+/* ---------- MANUAL ASSIGN ---------- */
+async function manualAssign(vacancyId,btn){
+  const box=btn.parentElement.querySelector(".sub");
+  const list=await fetchJSON({action:"manualAssign",vacancyId});
+  box.innerHTML="<b>Available Lecturers</b>";
+  list.forEach(l=>{
+    box.innerHTML+=`
+      <div class="card sub">
+        <b>${l.Name}</b> • ${l.City}<br>
+        Exp: ${l.Experience} yrs | ₹${l.SalaryFrom}–${l.SalaryTo}<br>
+        <button class="btn assign" onclick="assign('${vacancyId}','${l.LecturerID}')">Assign for Interview</button>
+      </div>`;
   });
+}
 
-  alert("Assigned successfully");
+/* ---------- ASSIGN ---------- */
+async function assign(vacancyId,lecturerId){
+  await fetchJSON({action:"assign",vacancyId,lecturerId});
   loadVacancies();
+  loadAssignedToday();
+}
+
+/* ---------- ASSIGNED TODAY ---------- */
+async function loadAssignedToday(){
+  const data=await fetchJSON({action:"getAssignmentsToday"});
+  assignedToday.innerHTML="";
+  data.forEach(a=>{
+    assignedToday.innerHTML+=`
+      <div class="card">
+        <b>${a.CollegeName}</b><br>
+        ${a.Subject} • ${a.Level}<br>
+        Lecturer: <b>${a.LecturerName}</b><br><br>
+        <button class="btn assign" onclick="markSelected('${a.AssignmentID}')">Selected</button>
+        <button class="btn reject" onclick="markRejected('${a.AssignmentID}')">Not Selected</button>
+      </div>`;
+  });
+}
+
+async function markSelected(id){
+  await fetchJSON({action:"markSelected",id});
+  loadVacancies(); loadAssignedToday();
+}
+async function markRejected(id){
+  await fetchJSON({action:"markRejected",id});
+  loadVacancies(); loadAssignedToday();
 }
 </script>
-
 </body>
 </html>
