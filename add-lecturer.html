@@ -84,7 +84,6 @@ button {
 </style>
 </head>
 
-<body onload="requireLogin()">
 
 <div class="topbar">
   <strong>Scheduler for RC</strong>
@@ -177,12 +176,6 @@ button {
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
-
-function requireLogin(){
-  if(!sessionStorage.getItem("scheduler_session")){
-    location.href="index.html";
-  }
-}
 
 function logout(){
   sessionStorage.clear();
