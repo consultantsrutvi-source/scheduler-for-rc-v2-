@@ -647,6 +647,79 @@ function renderOpenVacancies(){
    🔧 PATCH END
 ========================================================= */
 </script>
+<script>
+/* =========================================================
+   🔧 PATCH OVERRIDE – ASSIGN SAVE (DO NOT EDIT CORE CODE)
+   ========================================================= */
+
+async function assign(vacancyId){
+
+  const select = document.getElementById("lect-"+vacancyId);
+  if(!select || !select.value){
+    alert("Please select lecturer");
+    return;
+  }
+
+  const btn = select.closest(".card").querySelector("button");
+  btn.disabled = true;
+  btn.innerText = "Saving…";
+
+  const [lecturerId, lecturerName] = select.value.split("|");
+  const vacancy = VACANCIES.find(v => v.id === vacancyId);
+
+  const payload = {
+    vacancyId: vacancy.id,
+    college: vacancy.college || "",
+    city: vacancy.city || "",
+    subject: vacancy.subject || "",
+    level: vacancy.level || "",
+    lecturerId,
+    lecturerName,
+    agreedSalary: 0,
+    assignmentType: "Manual"
+  };
+
+  try{
+    const res = await fetch(API_URL + "?action=addAssignment",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if(!data || data.success !== true){
+      throw new Error("Backend rejected save");
+    }
+
+    /* 🔻 decrement faculty */
+    vacancy.faculty = Number(vacancy.faculty) - 1;
+
+    /* 🔒 close vacancy if fulfilled */
+    if(vacancy.faculty <= 0){
+      vacancy.status = "Closed";
+    }
+
+    /* 🔄 reload fresh data */
+    await loadAll();
+    renderAll();
+
+    btn.innerText = "Saved ✓";
+
+  }catch(err){
+    console.error(err);
+    alert("Assignment failed. Check backend log.");
+    btn.innerText = "Assign";
+  }finally{
+    setTimeout(()=>{
+      btn.disabled = false;
+      btn.innerText = "Assign";
+    },700);
+  }
+}
+</script>
 
 </body>
 </html>
