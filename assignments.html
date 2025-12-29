@@ -530,21 +530,41 @@ async function assign(vacancyId){
 
   /* ✅ FULL DATA PAYLOAD (FIXES EMPTY ROW BUG) */
   const payload = {
-    vacancyId: vacancy.id,
-    college: vacancy.college,
-    city: vacancy.city,
-    subject: vacancy.subject,
-    level: vacancy.level,
-    lecturerId,
-    lecturerName,
-    agreedSalary: 0,
-    assignmentType: "Manual"
-  };
+  vacancyId: vacancy.id,
+  college: vacancy.college || "",
+  city: vacancy.city || "",
+  subject: vacancy.subject || "",
+  level: vacancy.level || "",
+  lecturerId: lecturer.id,
+  lecturerName: lecturer.name,
+  agreedSalary: Number(prompt("Agreed Salary?", "0")) || 0,
+  assignmentType: "Manual"
+};
 
-  await fetch(API_URL+"?action=addAssignment",{
-    method:"POST",
-    body: JSON.stringify(payload)
-  });
+fetch(API_URL + "?action=addAssignment", {
+  method: "POST",
+  contentType: "application/json",
+  body: JSON.stringify(payload)
+})
+.then(r => r.json())
+.then(res => {
+  if (!res.success) throw new Error("Backend failed");
+
+  // 🔽 IMPORTANT UI UPDATES
+  vacancy.facultyRequired--;
+  showToast("Saved");
+
+  if (vacancy.facultyRequired <= 0) {
+    vacancy.status = "Closed";
+  }
+
+  loadAssignmentsToday();
+  loadVacancies();
+})
+.catch(err => {
+  alert("Assignment failed. Check backend log.");
+});
+
 
   /* ---------- DECREMENT FACULTY REQUIRED ---------- */
   vacancy.faculty = Number(vacancy.faculty) - 1;
