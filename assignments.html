@@ -1,105 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Assignments | Scheduler CRM</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-/* ---------- BASE ---------- */
-body {
-  margin: 0;
-  font-family: Inter, system-ui, Arial, sans-serif;
-  background: linear-gradient(135deg, #f4f7fb, #eaf1ff);
-  color: #1f2937;
+:root{
+  --bg:#f6f8fb;
+  --card:#ffffff;
+  --primary:#2563eb;
+  --accent:#22c55e;
+  --danger:#ef4444;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --shadow:0 10px 30px rgba(0,0,0,.06);
 }
 
-header {
-  background: linear-gradient(90deg, #2563eb, #3b82f6);
-  padding: 14px 24px;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+*{box-sizing:border-box;font-family:Inter,system-ui,Arial}
+body{margin:0;background:var(--bg);color:var(--text)}
+
+header{
+  background:#fff;
+  padding:14px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
 }
 
-header b {
-  font-size: 18px;
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.logo img{
+  width:36px;height:36px;
+}
+.logo span{
+  font-weight:700;
+  font-size:18px;
 }
 
-nav a {
-  color: #fff;
-  text-decoration: none;
-  margin-left: 18px;
-  font-weight: 500;
+nav a{
+  margin-left:20px;
+  text-decoration:none;
+  color:var(--muted);
+  font-weight:500;
+}
+nav a.active{color:var(--primary)}
+
+main{padding:24px;max-width:1300px;margin:auto}
+
+h2{margin:0 0 12px 0}
+
+.section{
+  margin-bottom:32px;
 }
 
-.container {
-  padding: 24px;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:20px;
 }
 
-/* ---------- SECTIONS ---------- */
-.section-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 16px 0 10px;
+.card{
+  background:var(--card);
+  border-radius:14px;
+  padding:18px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 16px;
+.card h3{margin:0;font-size:16px}
+.meta{font-size:13px;color:var(--muted)}
+.badge{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:600;
+}
+.badge.open{background:#ecfeff;color:#0369a1}
+.badge.closed{background:#fef2f2;color:#991b1b}
+
+.actions{
+  margin-top:auto;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+button{
+  border:none;
+  padding:8px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+.primary{background:var(--primary);color:#fff}
+.success{background:var(--accent);color:#fff}
+.danger{background:var(--danger);color:#fff}
+.ghost{background:#f3f4f6}
+
+select,input{
+  width:100%;
+  padding:8px;
+  border-radius:8px;
+  border:1px solid var(--border);
 }
 
-/* ---------- CARDS ---------- */
-.card {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+.toggle{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:16px;
 }
 
-.card h3 {
-  margin: 0 0 6px;
-}
+.hidden{display:none}
 
-.badge {
-  display: inline-block;
-  padding: 4px 10px;
-  font-size: 12px;
-  border-radius: 999px;
-  background: #e0e7ff;
-  color: #1e3a8a;
-  margin-right: 6px;
-}
-
-/* ---------- BUTTONS ---------- */
-.btn {
-  border: none;
-  padding: 8px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.btn-primary { background: #2563eb; color: #fff; }
-.btn-secondary { background: #e5e7eb; }
-.btn-success { background: #16a34a; color: #fff; }
-.btn-danger { background: #dc2626; color: #fff; }
-
-input[type="number"] {
-  width: 80px;
-  padding: 4px;
-}
-
-/* ---------- LECTURERS ---------- */
-.lecturer {
-  background: #f9fafb;
-  padding: 10px;
-  margin-top: 8px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.print-btn{
+  background:#111827;
+  color:#fff;
 }
 </style>
 </head>
@@ -107,201 +133,190 @@ input[type="number"] {
 <body>
 
 <header>
-  <b>Scheduler CRM</b>
+  <div class="logo">
+    <img src="logo.png" onerror="this.src='https://dummyimage.com/72x72/2563eb/ffffff&text=CRM'">
+    <span>Scheduler CRM</span>
+  </div>
   <nav>
     <a href="dashboard.html">Dashboard</a>
     <a href="vacancies.html">Vacancies</a>
     <a href="lecturers.html">Lecturers</a>
-    <a href="assignments.html">Assignments</a>
+    <a class="active">Assignments</a>
   </nav>
 </header>
 
-<div class="container">
+<main>
 
-  <div class="section-title">Open Vacancies</div>
+<section class="section">
+  <h2>Open Vacancies</h2>
   <div id="vacancyGrid" class="grid"></div>
+</section>
 
-  <div class="section-title">Assigned Today</div>
+<section class="section">
+  <h2>Assigned Today</h2>
   <div id="assignedGrid" class="grid"></div>
+</section>
 
-</div>
+<section class="section">
+  <div class="toggle">
+    <button class="ghost" onclick="toggleClosed()">Show / Hide Closed Vacancies</button>
+  </div>
+  <div id="closedSection" class="hidden">
+    <h2>Closed Vacancies</h2>
+    <div id="closedGrid" class="grid"></div>
+  </div>
+</section>
+
+</main>
 
 <script>
-/* ================= CONFIG ================= */
-const API_BASE =
-"https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+const API = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
 
-/* ================= LOAD ================= */
-document.addEventListener("DOMContentLoaded", () => {
-  loadVacancies();
-  loadAssignments();
-});
+let vacancies=[], lecturers=[], assignments=[];
 
-/* ================= HELPERS ================= */
-async function apiGet(action, params={}) {
-  const q = new URLSearchParams({ action, ...params });
-  const r = await fetch(`${API_BASE}?${q}`);
-  return r.json();
+const qs = a => document.querySelector(a);
+
+async function loadAll(){
+  [vacancies,lecturers,assignments] = await Promise.all([
+    fetch(API+"?action=getVacancies").then(r=>r.json()),
+    fetch(API+"?action=getLecturers").then(r=>r.json()),
+    fetch(API+"?action=getAssignments").then(r=>r.json())
+  ]);
+  renderAll();
 }
 
-async function apiPost(action, data) {
-  const r = await fetch(`${API_BASE}?action=${action}`, {
-    method: "POST",
-    body: JSON.stringify(data)
-  });
-  return r.json();
+function renderAll(){
+  renderVacancies();
+  renderAssignments();
+  renderClosed();
 }
 
-/* ================= VACANCIES ================= */
-async function loadVacancies() {
-  const data = await apiGet("getVacancies");
-  const grid = document.getElementById("vacancyGrid");
-  grid.innerHTML = "";
-
-  data.forEach(v => {
-    if (v.status !== "Open") return;
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
+function renderVacancies(){
+  const g = qs("#vacancyGrid");
+  g.innerHTML="";
+  vacancies.filter(v=>v.status==="Open").forEach(v=>{
+    const c=document.createElement("div");
+    c.className="card";
+    c.innerHTML=`
+      <span class="badge open">OPEN</span>
       <h3>${v.college}</h3>
-      <div class="badge">${v.subject}</div>
-      <div class="badge">${v.level}</div>
-      <p><b>City:</b> ${v.city}</p>
-      <p><b>Faculty Required:</b>
-         <span id="fac-${v.id}">${v.faculty}</span></p>
-
-      <button class="btn btn-primary"
-        onclick="autoAssign('${v.id}','${v.subject}','${v.level}')">
-        Auto Assign
-      </button>
-
-      <button class="btn btn-secondary"
-        onclick="manualAssign('${v.id}','${v.subject}')">
-        Manual Assign
-      </button>
-
-      <div id="lecturers-${v.id}"></div>
+      <div class="meta">${v.city} • ${v.subject}</div>
+      <div class="meta">Faculty Required: <b>${v.faculty}</b></div>
+      <div class="meta">${v.notes||""}</div>
+      <div class="actions">
+        <button class="primary" onclick="openAssign('${v.id}')">Assign Lecturer</button>
+      </div>
     `;
-
-    grid.appendChild(card);
+    g.appendChild(c);
   });
 }
 
-/* ================= AUTO ASSIGN ================= */
-async function autoAssign(vacId, subject, level) {
-  const lecturers = await apiGet("getLecturers");
-  const matches = lecturers
-    .filter(l => l.subject === subject && l.level === level && l.status === "Active")
-    .slice(0, 3);
+function openAssign(vacancyId){
+  const v = vacancies.find(x=>x.id===vacancyId);
+  if(!v) return;
 
-  renderLecturers(vacId, matches, "Auto");
+  const matches = lecturers.filter(l=>l.subject===v.subject && l.status==="Active");
+  if(!matches.length){alert("No matching lecturers");return;}
+
+  const name = prompt(
+    "Select Lecturer:\n"+
+    matches.map((l,i)=>`${i+1}. ${l.name}`).join("\n")
+  );
+  const idx = parseInt(name)-1;
+  if(!matches[idx]) return;
+
+  addAssignment(v,matches[idx]);
 }
 
-/* ================= MANUAL ASSIGN ================= */
-async function manualAssign(vacId, subject) {
-  const lecturers = await apiGet("getLecturers");
-  const matches = lecturers.filter(l => l.subject === subject && l.status === "Active");
-  renderLecturers(vacId, matches, "Manual");
+async function addAssignment(v,l){
+  await fetch(API+"?action=addAssignment",{
+    method:"POST",
+    body:JSON.stringify({
+      vacancyId:v.id,
+      college:v.college,
+      city:v.city,
+      subject:v.subject,
+      level:v.level,
+      lecturerId:l.id,
+      lecturerName:l.name,
+      agreedSalary:0,
+      assignmentType:"Manual"
+    })
+  });
+
+  v.faculty--;
+  if(v.faculty<=0) v.status="Closed";
+
+  assignments.push({
+    vacancyId:v.id,
+    college:v.college,
+    lecturerName:l.name,
+    status:"Assigned",
+    subject:v.subject
+  });
+
+  renderAll();
 }
 
-/* ================= RENDER ================= */
-function renderLecturers(vacId, list, mode) {
-  const box = document.getElementById(`lecturers-${vacId}`);
-  box.innerHTML = "";
-
-  list.forEach(l => {
-    const row = document.createElement("div");
-    row.className = "lecturer";
-
-    row.innerHTML = `
-      <span>${l.name} (${l.city})</span>
-      <span>
-        ₹<input type="number" id="sal-${vacId}-${l.id}" value="0"/>
-        <button class="btn btn-success"
-          onclick="assign('${vacId}','${l.id}','${l.name}','${mode}')">
-          Assign
-        </button>
-      </span>
+function renderAssignments(){
+  const g=qs("#assignedGrid");
+  g.innerHTML="";
+  assignments.filter(a=>a.status==="Assigned").forEach(a=>{
+    const c=document.createElement("div");
+    c.className="card";
+    c.innerHTML=`
+      <h3>${a.college}</h3>
+      <div class="meta">${a.subject} • ${a.lecturerName}</div>
+      <div class="actions">
+        <button class="success" onclick="markSelected('${a.assignmentId}')">Selected</button>
+        <button class="danger" onclick="markRejected('${a.assignmentId}')">Not Selected</button>
+      </div>
     `;
-
-    box.appendChild(row);
+    g.appendChild(c);
   });
 }
 
-/* ================= ASSIGN ================= */
-async function assign(vacId, lecId, lecName, type) {
-  const facEl = document.getElementById(`fac-${vacId}`);
-  let remaining = Number(facEl.innerText);
-
-  if (remaining <= 0) {
-    alert("Faculty requirement already fulfilled");
-    return;
-  }
-
-  const salary =
-    Number(document.getElementById(`sal-${vacId}-${lecId}`).value || 0);
-
-  await apiPost("addAssignment", {
-    vacancyId: vacId,
-    lecturerId: lecId,
-    lecturerName: lecName,
-    assignmentType: type,
-    agreedSalary: salary
+async function markSelected(id){
+  await fetch(API+"?action=updateAssignmentStatus",{
+    method:"POST",
+    body:JSON.stringify({assignmentId:id,status:"Selected"})
   });
-
-  facEl.innerText = remaining - 1;
-
-  if (remaining - 1 === 0) {
-    await apiPost("updateAssignmentStatus", {
-      assignmentId: vacId,
-      status: "Closed"
-    });
-  }
-
-  loadAssignments();
+  assignments.find(a=>a.assignmentId===id).status="Selected";
+  renderAll();
 }
 
-/* ================= ASSIGNED ================= */
-async function loadAssignments() {
-  const data = await apiGet("getAssignments");
-  const grid = document.getElementById("assignedGrid");
-  grid.innerHTML = "";
+async function markRejected(id){
+  await fetch(API+"?action=updateAssignmentStatus",{
+    method:"POST",
+    body:JSON.stringify({assignmentId:id,status:"Not Selected"})
+  });
+  assignments.find(a=>a.assignmentId===id).status="Not Selected";
+  renderAll();
+}
 
-  data.forEach(a => {
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <h3>${a.lecturerName}</h3>
-      <div class="badge">${a.assignmentType}</div>
-      <div class="badge">${a.status}</div>
-
-      <button class="btn btn-success"
-        onclick="updateStatus('${a.assignmentId}','Selected')">
-        Selected
-      </button>
-
-      <button class="btn btn-danger"
-        onclick="updateStatus('${a.assignmentId}','Not Selected')">
-        Not Selected
-      </button>
+function renderClosed(){
+  const g=qs("#closedGrid");
+  g.innerHTML="";
+  vacancies.filter(v=>v.status==="Closed").forEach(v=>{
+    const c=document.createElement("div");
+    c.className="card";
+    c.innerHTML=`
+      <span class="badge closed">CLOSED</span>
+      <h3>${v.college}</h3>
+      <div class="meta">${v.subject}</div>
+      <div class="actions">
+        <button class="print-btn" onclick="window.print()">Print</button>
+      </div>
     `;
-
-    grid.appendChild(card);
+    g.appendChild(c);
   });
 }
 
-/* ================= STATUS ================= */
-async function updateStatus(id, status) {
-  await apiPost("updateAssignmentStatus", {
-    assignmentId: id,
-    status
-  });
-  loadVacancies();
-  loadAssignments();
+function toggleClosed(){
+  qs("#closedSection").classList.toggle("hidden");
 }
+
+loadAll();
 </script>
 
 </body>
