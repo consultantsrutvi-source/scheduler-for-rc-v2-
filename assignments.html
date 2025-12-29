@@ -1,157 +1,357 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Assignments | Scheduler CRM</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- =========================================================
+     PREMIUM LIGHT CRM THEME
+========================================================= -->
 <style>
-body{margin:0;font-family:Inter,system-ui;background:#f4f7fb}
-header{background:#fff;padding:14px 24px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #ddd}
-header img{height:36px;border-radius:8px}
-nav{margin-left:auto;display:flex;gap:18px}
-nav a{text-decoration:none;color:#334;font-weight:500}
-main{max-width:1300px;margin:auto;padding:24px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
-.card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
-.badge{padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600}
-.open{background:#dcfce7;color:#166534}
-button{border:none;border-radius:10px;padding:8px 14px;font-weight:600;cursor:pointer}
-.primary{background:#2563eb;color:#fff}
-.success{background:#16a34a;color:#fff}
-.danger{background:#dc2626;color:#fff}
-select{width:100%;padding:10px;border-radius:10px;margin-top:8px}
-table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden}
-th,td{padding:12px;border-bottom:1px solid #eee;text-align:left}
-th{background:#f1f5f9}
-@media print{header,button{display:none}}
+:root{
+  --bg:#f6f9ff;
+  --card:#ffffff;
+  --primary:#2563eb;
+  --primary-soft:#e0eaff;
+  --success:#16a34a;
+  --success-soft:#dcfce7;
+  --danger:#dc2626;
+  --danger-soft:#fee2e2;
+  --text:#0f172a;
+  --muted:#64748b;
+  --border:#e5e7eb;
+  --shadow:0 12px 30px rgba(0,0,0,.08);
+}
+
+*{box-sizing:border-box;font-family:Inter,system-ui}
+body{margin:0;background:var(--bg);color:var(--text)}
+
+header{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 28px;background:#fff;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:10
+}
+header img{height:36px}
+nav{margin-left:auto;display:flex;gap:22px}
+nav a{text-decoration:none;color:#334155;font-weight:500}
+nav a.active{color:var(--primary);font-weight:700}
+
+main{max-width:1300px;margin:auto;padding:28px}
+
+h2{margin:36px 0 14px;font-size:22px}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:20px;
+}
+
+.card{
+  background:var(--card);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+  animation:fade .25s ease;
+}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+
+.badge{
+  display:inline-block;
+  padding:4px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:600;
+}
+.badge.open{background:var(--success-soft);color:var(--success)}
+.badge.assigned{background:var(--primary-soft);color:var(--primary)}
+.badge.closed{background:var(--danger-soft);color:var(--danger)}
+
+.small{font-size:13px;color:var(--muted);margin-top:4px}
+
+select{
+  width:100%;
+  padding:10px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  margin-top:12px;
+}
+
+button{
+  border:none;cursor:pointer;
+  padding:10px 16px;
+  border-radius:12px;
+  font-weight:600;
+}
+button.primary{background:var(--primary);color:#fff}
+button.success{background:var(--success);color:#fff}
+button.danger{background:var(--danger);color:#fff}
+button.soft{background:var(--primary-soft);color:var(--primary)}
+
+.row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+
+table{
+  width:100%;border-collapse:collapse;
+  background:#fff;border-radius:14px;
+  overflow:hidden;box-shadow:var(--shadow)
+}
+th,td{padding:12px;border-bottom:1px solid var(--border)}
+th{background:#f1f5f9;font-weight:600}
+tr:last-child td{border-bottom:none}
+
+@media print{
+  header,button,nav{display:none}
+  body{background:#fff}
+}
 </style>
 </head>
 
 <body>
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
 <header>
-  <img src="logo.png.jpg">
+  <img src="logo.png.jpg" alt="CRM Logo">
   <strong>Scheduler CRM</strong>
   <nav>
     <a href="dashboard.html">Dashboard</a>
     <a href="vacancies.html">Vacancies</a>
     <a href="lecturers.html">Lecturers</a>
-    <a style="color:#2563eb;font-weight:700">Assignments</a>
+    <a class="active">Assignments</a>
   </nav>
 </header>
 
 <main>
-<h2>Open Vacancies</h2>
-<div id="vacancyCards" class="grid"></div>
 
+<!-- =========================================================
+     OPEN VACANCIES
+========================================================= -->
+<h2>Open Vacancies</h2>
+<div id="openVacancies" class="grid"></div>
+
+<!-- =========================================================
+     ASSIGNED TODAY
+========================================================= -->
 <h2>Assigned Today</h2>
-<button onclick="window.print()">Print</button>
+<button class="soft" onclick="window.print()">Print</button>
+
 <table>
 <thead>
-<tr><th>College</th><th>Subject</th><th>Lecturer</th><th>Status</th><th>Action</th></tr>
+<tr>
+  <th>College</th>
+  <th>Subject</th>
+  <th>Lecturer</th>
+  <th>Status</th>
+  <th>Action</th>
+</tr>
 </thead>
-<tbody id="todayBody"></tbody>
+<tbody id="assignedToday"></tbody>
 </table>
+
+<!-- =========================================================
+     CLOSED HISTORY
+========================================================= -->
+<h2>Closed Vacancies History</h2>
+<table>
+<thead>
+<tr>
+  <th>College</th>
+  <th>Subject</th>
+  <th>Selected Lecturers</th>
+  <th>Closed At</th>
+</tr>
+</thead>
+<tbody id="closedHistory"></tbody>
+</table>
+
 </main>
 
 <script>
-const CORE_API = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
-const ASSIGN_API = "https://script.google.com/macros/s/AKfycbzzyHnG5DX0-nXMNWVgP-l5xENYA7yAln5TowtGa3FxeTdJmyyt0XO5h0Zc8uW2LLI_0Q/exec";
+/* =========================================================
+   🔴 BACKEND URL CONFIG – PASTE HERE ONLY
+========================================================= */
 
-let vacancies=[],lecturers=[],assignments=[];
+// OLD backend (Vacancies + Lecturers)
+const OLD_API_URL = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
 
-init();
-async function init(){
-  [vacancies,lecturers,assignments] = await Promise.all([
-    fetch(CORE_API+"?action=getVacancies").then(r=>r.json()),
-    fetch(CORE_API+"?action=getLecturers").then(r=>r.json()),
-    fetch(ASSIGN_API+"?action=getAssignments").then(r=>r.json())
+// NEW backend (Assignments only)
+const NEW_API_URL = "https://script.google.com/macros/s/AKfycbzzyHnG5DX0-nXMNWVgP-l5xENYA7yAln5TowtGa3FxeTdJmyyt0XO5h0Zc8uW2LLI_0Q/exec";
+
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
+let VACANCIES = [];
+let LECTURERS = [];
+let ASSIGNMENTS = [];
+
+/* =========================================================
+   INIT
+========================================================= */
+document.addEventListener("DOMContentLoaded", async ()=>{
+  await loadAll();
+  renderAll();
+});
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+async function loadAll(){
+  const [v,l,a] = await Promise.all([
+    fetch(OLD_API_URL+"?action=getVacancies").then(r=>r.json()),
+    fetch(OLD_API_URL+"?action=getLecturers").then(r=>r.json()),
+    fetch(NEW_API_URL+"?action=getAssignments").then(r=>r.json())
   ]);
-  render();
+  VACANCIES = v || [];
+  LECTURERS = l || [];
+  ASSIGNMENTS = a || [];
 }
 
-function render(){
-  renderVacancies();
-  renderToday();
+/* =========================================================
+   RENDER ALL
+========================================================= */
+function renderAll(){
+  renderOpenVacancies();
+  renderAssignedToday();
+  renderClosedHistory();
 }
 
-function renderVacancies(){
-  const box=document.getElementById("vacancyCards");
-  box.innerHTML="";
-  vacancies.filter(v=>v.status==="Open"&&v.faculty>0).forEach(v=>{
-    const opts=lecturers.filter(l=>l.subject===v.subject&&l.status==="Active");
-    const c=document.createElement("div");
-    c.className="card";
-    c.innerHTML=`
-      <span class="badge open">OPEN</span>
-      <h3>${v.college}</h3>
-      <div>${v.city} • ${v.subject}</div>
-      <div>Faculty Required: <b>${v.faculty}</b></div>
-      <select id="sel-${v.id}">
-        <option value="">Select Lecturer</option>
-        ${opts.map(l=>`<option value="${l.id}|${l.name}">${l.name}</option>`).join("")}
-      </select>
-      <button class="primary" onclick="assign('${v.id}')">Assign</button>
-    `;
-    box.appendChild(c);
-  });
+/* =========================================================
+   OPEN VACANCIES
+========================================================= */
+function renderOpenVacancies(){
+  const wrap = document.getElementById("openVacancies");
+  wrap.innerHTML = "";
+
+  VACANCIES
+    .filter(v=>v.status==="Open" && Number(v.faculty)>0)
+    .forEach(v=>{
+      const matches = LECTURERS.filter(l =>
+        l.subject===v.subject && l.status==="Active"
+      );
+
+      const card=document.createElement("div");
+      card.className="card";
+      card.innerHTML=`
+        <span class="badge open">OPEN</span>
+        <h3>${v.college}</h3>
+        <div class="small">${v.city} • ${v.subject}</div>
+        <div class="small">Faculty Required: <b>${v.faculty}</b></div>
+
+        <select id="lect-${v.id}">
+          <option value="">Select Lecturer</option>
+          ${matches.map(l=>
+            `<option value="${l.id}|${l.name}">
+              ${l.name} – ${l.subject} (${l.city})
+            </option>`
+          ).join("")}
+        </select>
+
+        <button class="primary" onclick="assignLecturer('${v.id}')">Assign</button>
+      `;
+      wrap.appendChild(card);
+    });
 }
 
-async function assign(vId){
-  const sel=document.getElementById("sel-"+vId);
-  if(!sel.value)return alert("Select lecturer");
-  const [lid,lname]=sel.value.split("|");
-  const v=vacancies.find(x=>x.id===vId);
+/* =========================================================
+   ASSIGN LECTURER (MANUAL)
+========================================================= */
+async function assignLecturer(vacancyId){
+  const sel=document.getElementById("lect-"+vacancyId);
+  if(!sel||!sel.value){alert("Select lecturer");return}
 
-  const res=await fetch(ASSIGN_API+"?action=addAssignment",{
+  const [lecturerId,lecturerName]=sel.value.split("|");
+  const v=VACANCIES.find(x=>x.id===vacancyId);
+  if(!v)return;
+
+  const payload={
+    vacancyId:v.id,
+    college:v.college,
+    city:v.city,
+    subject:v.subject,
+    level:v.level,
+    lecturerId,
+    lecturerName,
+    assignmentStatus:"Assigned",
+    agreedSalary:0
+  };
+
+  const res=await fetch(NEW_API_URL+"?action=addAssignment",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      vacancyId:v.id,
-      college:v.college,
-      city:v.city,
-      subject:v.subject,
-      level:v.level,
-      lecturerId:lid,
-      lecturerName:lname,
-      agreedSalary:0
-    })
+    body:JSON.stringify(payload)
   });
-  const j=await res.json();
-  if(!j.success)return alert("Failed");
+  const data=await res.json();
+  if(!data.success){alert("Assignment failed");return}
 
   v.faculty--;
   if(v.faculty<=0)v.status="Closed";
 
-  init();
+  await loadAll();
+  renderAll();
 }
 
-function renderToday(){
-  const tb=document.getElementById("todayBody");
+/* =========================================================
+   ASSIGNED TODAY
+========================================================= */
+function renderAssignedToday(){
+  const tb=document.getElementById("assignedToday");
   tb.innerHTML="";
-  assignments.filter(a=>a.assignmentStatus==="Assigned").forEach(a=>{
+
+  ASSIGNMENTS
+    .filter(a=>a.assignmentStatus==="Assigned")
+    .forEach(a=>{
+      const tr=document.createElement("tr");
+      tr.innerHTML=`
+        <td>${a.college}</td>
+        <td>${a.subject}</td>
+        <td>${a.lecturerName}</td>
+        <td><span class="badge assigned">Assigned</span></td>
+        <td>
+          <button class="success" onclick="updateStatus('${a.assignmentId}','Selected')">Selected</button>
+          <button class="danger" onclick="updateStatus('${a.assignmentId}','Not Selected')">Not Selected</button>
+        </td>`;
+      tb.appendChild(tr);
+    });
+}
+
+/* =========================================================
+   STATUS TOGGLE
+========================================================= */
+async function updateStatus(id,status){
+  await fetch(NEW_API_URL+"?action=updateAssignmentStatus",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({assignmentId:id,status})
+  });
+  await loadAll();
+  renderAll();
+}
+
+/* =========================================================
+   CLOSED HISTORY
+========================================================= */
+function renderClosedHistory(){
+  const tb=document.getElementById("closedHistory");
+  tb.innerHTML="";
+
+  VACANCIES.filter(v=>v.status!=="Open").forEach(v=>{
+    const names=ASSIGNMENTS
+      .filter(a=>a.vacancyId===v.id && a.assignmentStatus==="Selected")
+      .map(a=>a.lecturerName).join(", ");
+
     const tr=document.createElement("tr");
     tr.innerHTML=`
-      <td>${a.college}</td>
-      <td>${a.subject}</td>
-      <td>${a.lecturerName}</td>
-      <td>Assigned</td>
-      <td>
-        <button class="success" onclick="update('${a.assignmentId}','Selected')">Selected</button>
-        <button class="danger" onclick="update('${a.assignmentId}','Not Selected')">Not Selected</button>
-      </td>
-    `;
+      <td>${v.college}</td>
+      <td>${v.subject}</td>
+      <td>${names}</td>
+      <td>${new Date().toLocaleString()}</td>`;
     tb.appendChild(tr);
   });
 }
-
-async function update(id,status){
-  await fetch(ASSIGN_API+"?action=updateAssignmentStatus",{
-    method:"POST",
-    body:JSON.stringify({assignmentId:id,status})
-  });
-  init();
-}
 </script>
+
 </body>
 </html>
