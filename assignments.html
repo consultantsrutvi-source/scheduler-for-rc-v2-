@@ -480,3 +480,173 @@ function renderClosedHistory(){
 
 </body>
 </html>
+<script>
+/* =========================================================
+   🔧 PATCH START – ASSIGNMENT & VACANCY FIXES
+========================================================= */
+
+/* ---------- UI FEEDBACK ---------- */
+function setBtnState(btn, text, disabled=true){
+  btn.dataset.oldText = btn.innerText;
+  btn.innerText = text;
+  btn.disabled = disabled;
+}
+function restoreBtn(btn){
+  btn.innerText = btn.dataset.oldText || "Assign";
+  btn.disabled = false;
+}
+
+/* ---------- SAFE FINDERS ---------- */
+function getVacancyById(id){
+  return VACANCIES.find(v => v.id === id);
+}
+function getAssignmentsByVacancy(id){
+  return ASSIGNMENTS.filter(a => a.vacancyId === id);
+}
+
+/* ---------- OVERRIDE ASSIGN FUNCTION ---------- */
+async function assign(vacancyId){
+  const select = document.getElementById("lect-"+vacancyId);
+  if(!select || !select.value){
+    alert("Select a lecturer first");
+    return;
+  }
+
+  const btn = select.closest(".card").querySelector("button");
+  setBtnState(btn,"Saving…");
+
+  const [lecturerId, lecturerName] = select.value.split("|");
+  const vacancy = getVacancyById(vacancyId);
+
+  /* ❌ Prevent duplicate lecturer for same vacancy */
+  if(
+    ASSIGNMENTS.some(a =>
+      a.vacancyId === vacancyId &&
+      a.lecturerId === lecturerId &&
+      a.status === "Assigned"
+    )
+  ){
+    alert("This lecturer is already assigned to this vacancy");
+    restoreBtn(btn);
+    return;
+  }
+
+  /* ✅ FULL DATA PAYLOAD (FIXES EMPTY ROW BUG) */
+  const payload = {
+    vacancyId: vacancy.id,
+    college: vacancy.college,
+    city: vacancy.city,
+    subject: vacancy.subject,
+    level: vacancy.level,
+    lecturerId,
+    lecturerName,
+    agreedSalary: 0,
+    assignmentType: "Manual"
+  };
+
+  await fetch(API_URL+"?action=addAssignment",{
+    method:"POST",
+    body: JSON.stringify(payload)
+  });
+
+  /* ---------- DECREMENT FACULTY REQUIRED ---------- */
+  vacancy.faculty = Number(vacancy.faculty) - 1;
+
+  /* ---------- AUTO CLOSE VACANCY ---------- */
+  if(vacancy.faculty <= 0){
+    vacancy.status = "Closed";
+  }
+
+  /* ---------- REFRESH STATE ---------- */
+  await loadAll();
+  renderAll();
+
+  restoreBtn(btn);
+}
+
+/* ---------- FIX ASSIGNED TODAY RENDER ---------- */
+function renderAssignedToday(){
+  const tbody = document.getElementById("assignedToday");
+  tbody.innerHTML = "";
+
+  ASSIGNMENTS
+    .filter(a => a.status === "Assigned")
+    .forEach(a => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${a.college || "-"}</td>
+        <td>${a.subject || "-"}</td>
+        <td>${a.lecturerName}</td>
+        <td><span class="badge assigned">Assigned</span></td>
+        <td>
+          <button class="success" onclick="updateStatus('${a.assignmentId}','Selected')">Selected</button>
+          <button class="danger" onclick="updateStatus('${a.assignmentId}','Not Selected')">Not Selected</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+}
+
+/* ---------- STATUS TOGGLE FIX ---------- */
+async function updateStatus(assignmentId,status){
+  await fetch(API_URL+"?action=updateAssignmentStatus",{
+    method:"POST",
+    body: JSON.stringify({ assignmentId, status })
+  });
+
+  /* 🔁 If NOT SELECTED → restore vacancy */
+  if(status === "Not Selected"){
+    const a = ASSIGNMENTS.find(x => x.assignmentId === assignmentId);
+    if(a){
+      const v = getVacancyById(a.vacancyId);
+      if(v){
+        v.faculty = Number(v.faculty) + 1;
+        v.status = "Open";
+      }
+    }
+  }
+
+  await loadAll();
+  renderAll();
+}
+
+/* ---------- OPEN VACANCY FILTER FIX ---------- */
+function renderOpenVacancies(){
+  const wrap = document.getElementById("openVacancies");
+  wrap.innerHTML = "";
+
+  VACANCIES
+    .filter(v => v.status === "Open" && Number(v.faculty) > 0)
+    .forEach(v => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const matches = LECTURERS.filter(l =>
+        l.subject === v.subject && l.status === "Active"
+      );
+
+      card.innerHTML = `
+        <span class="badge open">OPEN</span>
+        <h3>${v.college}</h3>
+        <div class="small">${v.city} • ${v.subject}</div>
+        <div class="small">Faculty Required: <b>${v.faculty}</b></div>
+
+        <select id="lect-${v.id}">
+          <option value="">Select Lecturer</option>
+          ${matches.map(l =>
+            `<option value="${l.id}|${l.name}">${l.name}</option>`
+          ).join("")}
+        </select>
+
+        <div class="row">
+          <button class="primary" onclick="assign('${v.id}')">Assign</button>
+        </div>
+      `;
+      wrap.appendChild(card);
+    });
+}
+
+/* =========================================================
+   🔧 PATCH END
+========================================================= */
+</script>
