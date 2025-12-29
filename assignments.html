@@ -562,31 +562,60 @@ function getAssignmentsByVacancy(id){
 }
 
 /* ---------- OVERRIDE ASSIGN FUNCTION ---------- */
-async function assign(vacancyId){
-  const select = document.getElementById("lect-"+vacancyId);
-  if(!select || !select.value){
-    alert("Select a lecturer first");
+async function assign(vacancyId) {
+  const sel = document.getElementById("lect-" + vacancyId);
+  if (!sel || !sel.value) {
+    alert("Please select a lecturer");
     return;
   }
 
-  const btn = select.closest(".card").querySelector("button");
-  setBtnState(btn,"Saving…");
+  const [lecturerId, lecturerName] = sel.value.split("|");
 
-  const [lecturerId, lecturerName] = select.value.split("|");
-  const vacancy = getVacancyById(vacancyId);
+  try {
+    // 🔹 Fetch vacancy fresh from backend (NO TRUST ON FRONTEND)
+    const vacRes = await fetch(API_URL + "?action=getVacancies");
+    const vacList = await vacRes.json();
+    const vacancy = vacList.find(v => v.id === vacancyId);
 
-  /* ❌ Prevent duplicate lecturer for same vacancy */
-  if(
-    ASSIGNMENTS.some(a =>
-      a.vacancyId === vacancyId &&
-      a.lecturerId === lecturerId &&
-      a.status === "Assigned"
-    )
-  ){
-    alert("This lecturer is already assigned to this vacancy");
-    restoreBtn(btn);
-    return;
+    if (!vacancy) {
+      alert("Vacancy not found in backend");
+      return;
+    }
+
+    const payload = {
+      vacancyId: vacancy.id,
+      college: vacancy.college,
+      city: vacancy.city,
+      subject: vacancy.subject,
+      level: vacancy.level,
+      lecturerId: lecturerId,
+      lecturerName: lecturerName,
+      agreedSalary: 0,
+      assignmentType: "Manual"
+    };
+
+    const res = await fetch(API_URL + "?action=addAssignment", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      alert("Backend error: " + (data.error || "Unknown"));
+      return;
+    }
+
+    await loadAll();
+    renderAll();
+
+  } catch (err) {
+    console.error(err);
+    alert("Assignment failed (network/backend)");
   }
+}
+
 
   /* ✅ FULL DATA PAYLOAD (FIXES EMPTY ROW BUG) */
   const payload = {
@@ -734,47 +763,60 @@ function renderOpenVacancies(){
    🔧 PATCH OVERRIDE – ASSIGN SAVE (DO NOT EDIT CORE CODE)
    ========================================================= */
 
-async function assign(vacancyId){
-
-  const select = document.getElementById("lect-"+vacancyId);
-  if(!select || !select.value){
-    alert("Please select lecturer");
+async function assign(vacancyId) {
+  const sel = document.getElementById("lect-" + vacancyId);
+  if (!sel || !sel.value) {
+    alert("Please select a lecturer");
     return;
   }
 
-  const btn = select.closest(".card").querySelector("button");
-  btn.disabled = true;
-  btn.innerText = "Saving…";
+  const [lecturerId, lecturerName] = sel.value.split("|");
 
-  const [lecturerId, lecturerName] = select.value.split("|");
-  const vacancy = VACANCIES.find(v => v.id === vacancyId);
+  try {
+    // 🔹 Fetch vacancy fresh from backend (NO TRUST ON FRONTEND)
+    const vacRes = await fetch(API_URL + "?action=getVacancies");
+    const vacList = await vacRes.json();
+    const vacancy = vacList.find(v => v.id === vacancyId);
 
-  const payload = {
-    vacancyId: vacancy.id,
-    college: vacancy.college || "",
-    city: vacancy.city || "",
-    subject: vacancy.subject || "",
-    level: vacancy.level || "",
-    lecturerId,
-    lecturerName,
-    agreedSalary: 0,
-    assignmentType: "Manual"
-  };
+    if (!vacancy) {
+      alert("Vacancy not found in backend");
+      return;
+    }
 
-  try{
-    const res = await fetch(API_URL + "?action=addAssignment",{
+    const payload = {
+      vacancyId: vacancy.id,
+      college: vacancy.college,
+      city: vacancy.city,
+      subject: vacancy.subject,
+      level: vacancy.level,
+      lecturerId: lecturerId,
+      lecturerName: lecturerName,
+      agreedSalary: 0,
+      assignmentType: "Manual"
+    };
+
+    const res = await fetch(API_URL + "?action=addAssignment", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
 
     const data = await res.json();
 
-    if(!data || data.success !== true){
-      throw new Error("Backend rejected save");
+    if (!data.success) {
+      alert("Backend error: " + (data.error || "Unknown"));
+      return;
     }
+
+    await loadAll();
+    renderAll();
+
+  } catch (err) {
+    console.error(err);
+    alert("Assignment failed (network/backend)");
+  }
+}
+
 
     /* 🔻 decrement faculty */
     vacancy.faculty = Number(vacancy.faculty) - 1;
