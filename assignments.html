@@ -410,27 +410,56 @@ async function assign(vacancyId){
 /* =========================================================
    ASSIGNED TODAY (STATUS TOGGLE)
 ========================================================= */
-function renderAssignedToday(){
-  const tbody = document.getElementById("assignedToday");
-  tbody.innerHTML = "";
+async function assign(vacancyId) {
+  const sel = document.getElementById("lect-" + vacancyId);
+  if (!sel || !sel.value) {
+    alert("Please select a lecturer");
+    return;
+  }
 
-  ASSIGNMENTS
-  .filter(a => a.status === "Assigned")
-  .forEach(a => {
+  const vacancy = vacancies.find(v => v.id === vacancyId);
+  if (!vacancy) {
+    alert("Vacancy not found");
+    return;
+  }
 
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${a.college}</td>
-      <td>${a.subject}</td>
-      <td>${a.lecturerName}</td>
-      <td><span class="badge assigned">Assigned</span></td>
-      <td>
-        <button class="success" onclick="updateStatus('${a.assignmentId}','Selected')">Selected</button>
-        <button class="danger" onclick="updateStatus('${a.assignmentId}','Not Selected')">Not Selected</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
+  const [lecturerId, lecturerName] = sel.value.split("|");
+
+  const payload = {
+    vacancyId: vacancy.id,
+    college: vacancy.college,
+    city: vacancy.city,
+    subject: vacancy.subject,
+    level: vacancy.level,
+    lecturerId,
+    lecturerName,
+    agreedSalary: 0
+  };
+
+  try {
+    const res = await fetch(API_URL + "?action=addAssignment", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      alert("Assignment failed: " + (data.error || "Unknown error"));
+      return;
+    }
+
+    // decrement faculty locally
+    vacancy.faculty = Math.max(0, Number(vacancy.faculty) - 1);
+
+    await loadAll();
+    renderAll();
+
+  } catch (e) {
+    console.error(e);
+    alert("Assignment failed (network error)");
+  }
 }
 
 /* =========================================================
