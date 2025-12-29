@@ -543,7 +543,9 @@ async function assign(vacancyId){
 
 fetch(API_URL + "?action=addAssignment", {
   method: "POST",
-  contentType: "application/json",
+  headers: {
+    "Content-Type": "application/json"
+  },
   body: JSON.stringify(payload)
 })
 .then(r => r.json())
