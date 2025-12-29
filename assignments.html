@@ -7,46 +7,34 @@
 
 <style>
 :root{
-  --bg:#f5f8ff;
+  --bg:#f4f7ff;
   --card:#ffffff;
   --primary:#2563eb;
   --success:#16a34a;
   --danger:#dc2626;
   --muted:#64748b;
   --border:#e5e7eb;
-  --shadow:0 10px 25px rgba(0,0,0,.08);
+  --shadow:0 12px 30px rgba(0,0,0,.08);
 }
-
 *{box-sizing:border-box;font-family:Inter,system-ui}
-
 body{margin:0;background:var(--bg)}
 
 header{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  padding:14px 24px;
-  background:#fff;
+  display:flex;align-items:center;gap:14px;
+  padding:14px 24px;background:#fff;
   border-bottom:1px solid var(--border);
-  position:sticky;
-  top:0;
-  z-index:10;
 }
-
 header img{height:38px}
-header strong{font-size:18px}
-
 nav{margin-left:auto;display:flex;gap:18px}
 nav a{text-decoration:none;color:#334155;font-weight:500}
 nav a.active{color:var(--primary);font-weight:600}
 
-main{max-width:1300px;margin:auto;padding:26px}
-
+main{max-width:1400px;margin:auto;padding:24px}
 h2{margin:30px 0 14px}
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
   gap:20px;
 }
 
@@ -58,8 +46,6 @@ h2{margin:30px 0 14px}
   box-shadow:var(--shadow);
 }
 
-.small{font-size:13px;color:var(--muted);margin-top:4px}
-
 .badge{
   display:inline-block;
   padding:4px 10px;
@@ -68,30 +54,23 @@ h2{margin:30px 0 14px}
   font-weight:600;
 }
 .open{background:#dcfce7;color:#166534}
-.closed{background:#fee2e2;color:#991b1b}
 .assigned{background:#dbeafe;color:#1e40af}
 
-select,button{
-  width:100%;
-  padding:10px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  margin-top:10px;
-}
+.small{font-size:13px;color:var(--muted)}
 
 button{
+  border:none;
+  border-radius:12px;
+  padding:10px 16px;
   cursor:pointer;
   font-weight:600;
-  background:var(--primary);
-  color:#fff;
-  border:none;
 }
-
-button.success{background:var(--success)}
-button.danger{background:var(--danger)}
+.primary{background:var(--primary);color:#fff}
+.success{background:var(--success);color:#fff}
+.danger{background:var(--danger);color:#fff}
 button:disabled{opacity:.6}
 
-.row{display:flex;gap:10px;margin-top:12px}
+.row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
 
 table{
   width:100%;
@@ -101,18 +80,15 @@ table{
   overflow:hidden;
   box-shadow:var(--shadow);
 }
-
 th,td{
   padding:12px;
   border-bottom:1px solid var(--border);
   text-align:left;
 }
-
 th{background:#f1f5f9}
 
 @media print{
-  header,nav,button,select{display:none}
-  body{background:#fff}
+  header,nav,button{display:none}
 }
 </style>
 </head>
@@ -133,49 +109,33 @@ th{background:#f1f5f9}
 <main>
 
 <h2>Open Vacancies</h2>
-<div id="openVacancies" class="grid"></div>
+<div id="vacancyCards" class="grid"></div>
 
 <h2>Assigned Today</h2>
-<button onclick="window.print()">Print</button>
-
 <table>
 <thead>
 <tr>
+  <th>Assignment ID</th>
   <th>College</th>
   <th>Subject</th>
   <th>Lecturer</th>
   <th>Status</th>
-  <th>Action</th>
 </tr>
 </thead>
 <tbody id="assignedToday"></tbody>
 </table>
 
-<h2>Closed Vacancies</h2>
-<table>
-<thead>
-<tr>
-  <th>College</th>
-  <th>Subject</th>
-  <th>Selected Lecturers</th>
-  <th>Closed At</th>
-</tr>
-</thead>
-<tbody id="closedHistory"></tbody>
-</table>
-
 </main>
 
 <script>
-const API =
-"https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+const API = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
 
-let VACANCIES=[],LECTURERS=[],ASSIGNMENTS=[];
+let VACANCIES=[], LECTURERS=[], ASSIGNMENTS=[];
 
-document.addEventListener("DOMContentLoaded",loadAll);
+document.addEventListener("DOMContentLoaded", init);
 
-async function loadAll(){
-  const [v,l,a]=await Promise.all([
+async function init(){
+  const [v,l,a] = await Promise.all([
     fetch(API+"?action=getVacancies").then(r=>r.json()),
     fetch(API+"?action=getLecturers").then(r=>r.json()),
     fetch(API+"?action=getAssignments").then(r=>r.json())
@@ -187,40 +147,55 @@ async function loadAll(){
 }
 
 function render(){
-  renderOpen();
-  renderAssigned();
-  renderClosed();
+  renderVacancies();
+  renderAssignedToday();
 }
 
-function renderOpen(){
-  const wrap=document.getElementById("openVacancies");
+function renderVacancies(){
+  const wrap=document.getElementById("vacancyCards");
   wrap.innerHTML="";
-  VACANCIES.filter(v=>v.status==="Open"&&Number(v.faculty)>0).forEach(v=>{
-    const opts=LECTURERS.filter(l=>l.subject===v.subject&&l.status==="Active");
-    const d=document.createElement("div");
-    d.className="card";
-    d.innerHTML=`
-      <span class="badge open">OPEN</span>
-      <h3>${v.college}</h3>
-      <div class="small">${v.city} • ${v.subject}</div>
-      <div class="small">Faculty Required: <b>${v.faculty}</b></div>
-      <select id="lect-${v.id}">
-        <option value="">Select Lecturer</option>
-        ${opts.map(o=>`<option value="${o.id}|${o.name}">${o.name}</option>`).join("")}
-      </select>
-      <button onclick="assign('${v.id}',this)">Assign</button>
-    `;
-    wrap.appendChild(d);
-  });
+
+  VACANCIES
+    .filter(v=>v.status==="Open" && Number(v.faculty)>0)
+    .forEach(v=>{
+      const card=document.createElement("div");
+      card.className="card";
+
+      const matched=LECTURERS.filter(l=>
+        l.subject===v.subject && l.status==="Active"
+      );
+
+      card.innerHTML=`
+        <span class="badge open">OPEN</span>
+        <h3>${v.college}</h3>
+        <div class="small">${v.city} • ${v.subject} • ${v.level}</div>
+        <div class="small">Faculty Required: <b>${v.faculty}</b></div>
+        <hr>
+
+        ${matched.map(l=>`
+          <div class="card" style="margin-top:10px;background:#f8fafc">
+            <b>${l.name}</b>
+            <div class="small">
+              ${l.subject} • ${l.level}<br>
+              Exp: ${l.experience} yrs<br>
+              City: ${l.city}<br>
+              Salary: ₹${l.salaryFrom} - ₹${l.salaryTo}
+            </div>
+            <button class="primary" onclick="assign('${v.id}','${l.id}')">
+              Assign
+            </button>
+          </div>
+        `).join("")}
+      `;
+
+      wrap.appendChild(card);
+    });
 }
 
-async function assign(vacId,btn){
-  const sel=document.getElementById("lect-"+vacId);
-  if(!sel||!sel.value){alert("Select lecturer");return;}
-  btn.disabled=true;
-
-  const [lid,lname]=sel.value.split("|");
-  const v=VACANCIES.find(x=>x.id===vacId);
+async function assign(vacancyId, lecturerId){
+  const v = VACANCIES.find(x=>x.id===vacancyId);
+  const l = LECTURERS.find(x=>x.id===lecturerId);
+  if(!v || !l) return;
 
   const payload={
     vacancyId:v.id,
@@ -228,64 +203,42 @@ async function assign(vacId,btn){
     city:v.city,
     subject:v.subject,
     level:v.level,
-    lecturerId:lid,
-    lecturerName:lname,
+    lecturerId:l.id,
+    lecturerName:l.name,
     agreedSalary:0,
     assignmentType:"Manual"
   };
 
-  const res=await fetch(API+"?action=addAssignment",{
+  const res = await fetch(API+"?action=addAssignment",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify(payload)
   });
-  const data=await res.json();
-  if(!data.success){alert("Failed");btn.disabled=false;return;}
+  const data = await res.json();
 
-  await loadAll();
+  if(!data.success){
+    alert("Assignment failed");
+    return;
+  }
+
+  alert("Assignment saved successfully\nAssignment ID: "+(data.assignmentId||"Generated"));
+
+  init();
 }
 
-function renderAssigned(){
-  const t=document.getElementById("assignedToday");
-  t.innerHTML="";
+function renderAssignedToday(){
+  const tbody=document.getElementById("assignedToday");
+  tbody.innerHTML="";
   ASSIGNMENTS.filter(a=>a.status==="Assigned").forEach(a=>{
     const tr=document.createElement("tr");
     tr.innerHTML=`
+      <td>${a.assignmentId}</td>
       <td>${a.college}</td>
       <td>${a.subject}</td>
       <td>${a.lecturerName}</td>
       <td><span class="badge assigned">Assigned</span></td>
-      <td>
-        <button class="success" onclick="updateStatus('${a.assignmentId}','Selected')">Selected</button>
-        <button class="danger" onclick="updateStatus('${a.assignmentId}','Not Selected')">Not Selected</button>
-      </td>
     `;
-    t.appendChild(tr);
-  });
-}
-
-async function updateStatus(id,status){
-  await fetch(API+"?action=updateAssignmentStatus",{
-    method:"POST",
-    body:JSON.stringify({assignmentId:id,status})
-  });
-  await loadAll();
-}
-
-function renderClosed(){
-  const t=document.getElementById("closedHistory");
-  t.innerHTML="";
-  VACANCIES.filter(v=>v.status!=="Open").forEach(v=>{
-    const sel=ASSIGNMENTS.filter(a=>a.vacancyId===v.id&&a.status==="Selected")
-      .map(a=>a.lecturerName).join(", ");
-    const tr=document.createElement("tr");
-    tr.innerHTML=`
-      <td>${v.college}</td>
-      <td>${v.subject}</td>
-      <td>${sel}</td>
-      <td>${v.updatedAt||""}</td>
-    `;
-    t.appendChild(tr);
+    tbody.appendChild(tr);
   });
 }
 </script>
