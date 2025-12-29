@@ -4,46 +4,41 @@
 <meta charset="UTF-8" />
 <title>Assignments | Scheduler CRM</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- =================== CONFIG =================== -->
+<script>
+const API = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
+</script>
 
+<!-- =================== STYLE =================== -->
 <style>
 :root{
-  --bg:#f6f8fb;
-  --card:#ffffff;
   --primary:#2563eb;
-  --accent:#22c55e;
-  --danger:#ef4444;
-  --text:#1f2937;
-  --muted:#6b7280;
+  --bg:#f8fafc;
+  --card:#ffffff;
   --border:#e5e7eb;
-  --shadow:0 10px 30px rgba(0,0,0,.06);
+  --text:#0f172a;
+  --muted:#64748b;
+  --success:#16a34a;
+  --danger:#dc2626;
 }
-
-*{box-sizing:border-box;font-family:Inter,system-ui,Arial}
-body{margin:0;background:var(--bg);color:var(--text)}
-
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui,Arial;
+  background:var(--bg);
+  color:var(--text);
+}
 header{
-  background:#fff;
-  padding:14px 24px;
+  background:white;
+  border-bottom:1px solid var(--border);
+  padding:14px 28px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  border-bottom:1px solid var(--border);
 }
-
-.logo{
-  display:flex;
-  align-items:center;
-  gap:10px;
+header img{
+  height:36px;
 }
-.logo img{
-  width:36px;height:36px;
-}
-.logo span{
-  font-weight:700;
-  font-size:18px;
-}
-
 nav a{
   margin-left:20px;
   text-decoration:none;
@@ -52,268 +47,204 @@ nav a{
 }
 nav a.active{color:var(--primary)}
 
-main{padding:24px;max-width:1300px;margin:auto}
-
-h2{margin:0 0 12px 0}
-
-.section{
-  margin-bottom:32px;
+main{
+  padding:28px;
+  max-width:1400px;
+  margin:auto;
 }
+
+h2{margin-top:40px}
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
   gap:20px;
 }
 
 .card{
   background:var(--card);
+  border:1px solid var(--border);
   border-radius:14px;
   padding:18px;
-  box-shadow:var(--shadow);
-  border:1px solid var(--border);
-  display:flex;
-  flex-direction:column;
-  gap:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,.04);
 }
 
-.card h3{margin:0;font-size:16px}
-.meta{font-size:13px;color:var(--muted)}
 .badge{
   display:inline-block;
   padding:4px 10px;
-  border-radius:999px;
   font-size:12px;
-  font-weight:600;
+  border-radius:20px;
+  background:#e0e7ff;
+  color:#1e40af;
+  margin-bottom:10px;
 }
-.badge.open{background:#ecfeff;color:#0369a1}
-.badge.closed{background:#fef2f2;color:#991b1b}
 
-.actions{
-  margin-top:auto;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-button{
+.btn{
+  background:var(--primary);
+  color:white;
   border:none;
-  padding:8px 14px;
   border-radius:8px;
+  padding:10px 14px;
   cursor:pointer;
-  font-weight:600;
 }
-.primary{background:var(--primary);color:#fff}
-.success{background:var(--accent);color:#fff}
-.danger{background:var(--danger);color:#fff}
-.ghost{background:#f3f4f6}
-
+.btn.secondary{
+  background:#e5e7eb;
+  color:#111827;
+}
+.btn.success{background:var(--success)}
+.btn.danger{background:var(--danger)}
 select,input{
   width:100%;
   padding:8px;
+  margin-top:6px;
   border-radius:8px;
   border:1px solid var(--border);
 }
-
-.toggle{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:16px;
-}
-
+.row{margin-top:8px}
+.small{font-size:13px;color:var(--muted)}
 .hidden{display:none}
-
-.print-btn{
-  background:#111827;
-  color:#fff;
-}
 </style>
 </head>
 
 <body>
 
+<!-- =================== HEADER =================== -->
 <header>
-  <div class="logo">
-    <img src="logo.png" onerror="this.src='https://dummyimage.com/72x72/2563eb/ffffff&text=CRM'">
-    <span>Scheduler CRM</span>
+  <div style="display:flex;align-items:center;gap:12px">
+    <img src="logo.png.jpg" alt="CRM Logo" onerror="this.style.display='none'">
+    <strong>Scheduler CRM</strong>
   </div>
   <nav>
     <a href="dashboard.html">Dashboard</a>
     <a href="vacancies.html">Vacancies</a>
     <a href="lecturers.html">Lecturers</a>
-    <a class="active">Assignments</a>
+    <a class="active" href="assignments.html">Assignments</a>
   </nav>
 </header>
 
+<!-- =================== MAIN =================== -->
 <main>
 
-<section class="section">
-  <h2>Open Vacancies</h2>
-  <div id="vacancyGrid" class="grid"></div>
-</section>
+<h2>Open Vacancies</h2>
+<div id="vacancies" class="grid"></div>
 
-<section class="section">
-  <h2>Assigned Today</h2>
-  <div id="assignedGrid" class="grid"></div>
-</section>
-
-<section class="section">
-  <div class="toggle">
-    <button class="ghost" onclick="toggleClosed()">Show / Hide Closed Vacancies</button>
-  </div>
-  <div id="closedSection" class="hidden">
-    <h2>Closed Vacancies</h2>
-    <div id="closedGrid" class="grid"></div>
-  </div>
-</section>
+<h2>Assigned Today</h2>
+<div id="assignedToday" class="grid"></div>
 
 </main>
 
+<!-- =================== SCRIPT =================== -->
 <script>
-const API = "https://script.google.com/macros/s/AKfycbw0KWk6HU-bszXrPOIG4xguuTxiaH7WxOQvFy4FcIsv3t7pBvwK-U-Vb4_rScr71CIsyg/exec";
-
-let vacancies=[], lecturers=[], assignments=[];
-
-const qs = a => document.querySelector(a);
+let VACANCIES=[], LECTURERS=[], ASSIGNMENTS=[];
+const cache = {};
 
 async function loadAll(){
-  [vacancies,lecturers,assignments] = await Promise.all([
+  const [v,l,a] = await Promise.all([
     fetch(API+"?action=getVacancies").then(r=>r.json()),
     fetch(API+"?action=getLecturers").then(r=>r.json()),
     fetch(API+"?action=getAssignments").then(r=>r.json())
   ]);
-  renderAll();
+  VACANCIES=v; LECTURERS=l; ASSIGNMENTS=a;
+  render();
 }
 
-function renderAll(){
+function render(){
   renderVacancies();
-  renderAssignments();
-  renderClosed();
+  renderAssignedToday();
 }
 
+/* ---------------- VACANCIES ---------------- */
 function renderVacancies(){
-  const g = qs("#vacancyGrid");
-  g.innerHTML="";
-  vacancies.filter(v=>v.status==="Open").forEach(v=>{
-    const c=document.createElement("div");
-    c.className="card";
-    c.innerHTML=`
-      <span class="badge open">OPEN</span>
+  const box=document.getElementById("vacancies");
+  box.innerHTML="";
+  VACANCIES.filter(v=>v.status==="Open").forEach(v=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`
+      <span class="badge">OPEN</span>
       <h3>${v.college}</h3>
-      <div class="meta">${v.city} • ${v.subject}</div>
-      <div class="meta">Faculty Required: <b>${v.faculty}</b></div>
-      <div class="meta">${v.notes||""}</div>
-      <div class="actions">
-        <button class="primary" onclick="openAssign('${v.id}')">Assign Lecturer</button>
+      <div class="small">${v.city} • ${v.subject}</div>
+      <div class="row small">Faculty Required: <b id="fac-${v.id}">${v.faculty}</b></div>
+
+      <div class="row">
+        <select id="lec-${v.id}">
+          <option value="">Select Lecturer</option>
+          ${LECTURERS.filter(l=>l.subject===v.subject && l.status==="Active")
+            .map(l=>`<option value="${l.id}|${l.name}">${l.name}</option>`).join("")}
+        </select>
+      </div>
+
+      <div class="row">
+        <input type="number" id="sal-${v.id}" placeholder="Agreed Salary (dummy)">
+      </div>
+
+      <div class="row">
+        <button class="btn" onclick="assign('${v.id}')">Assign Lecturer</button>
       </div>
     `;
-    g.appendChild(c);
+    box.appendChild(card);
   });
 }
 
-function openAssign(vacancyId){
-  const v = vacancies.find(x=>x.id===vacancyId);
-  if(!v) return;
+/* ---------------- ASSIGN ---------------- */
+async function assign(vacancyId){
+  const sel=document.getElementById("lec-"+vacancyId);
+  if(!sel.value) return alert("Select lecturer");
+  const [lecId,lecName]=sel.value.split("|");
+  const sal=document.getElementById("sal-"+vacancyId).value||0;
 
-  const matches = lecturers.filter(l=>l.subject===v.subject && l.status==="Active");
-  if(!matches.length){alert("No matching lecturers");return;}
+  const v=VACANCIES.find(x=>x.id===vacancyId);
 
-  const name = prompt(
-    "Select Lecturer:\n"+
-    matches.map((l,i)=>`${i+1}. ${l.name}`).join("\n")
-  );
-  const idx = parseInt(name)-1;
-  if(!matches[idx]) return;
-
-  addAssignment(v,matches[idx]);
-}
-
-async function addAssignment(v,l){
-  await fetch(API+"?action=addAssignment",{
+  await fetch(API,{
     method:"POST",
     body:JSON.stringify({
+      action:"addAssignment",
       vacancyId:v.id,
       college:v.college,
       city:v.city,
       subject:v.subject,
       level:v.level,
-      lecturerId:l.id,
-      lecturerName:l.name,
-      agreedSalary:0,
-      assignmentType:"Manual"
+      lecturerId:lecId,
+      lecturerName:lecName,
+      agreedSalary:sal
     })
   });
 
   v.faculty--;
   if(v.faculty<=0) v.status="Closed";
-
-  assignments.push({
-    vacancyId:v.id,
-    college:v.college,
-    lecturerName:l.name,
-    status:"Assigned",
-    subject:v.subject
-  });
-
-  renderAll();
+  render();
 }
 
-function renderAssignments(){
-  const g=qs("#assignedGrid");
-  g.innerHTML="";
-  assignments.filter(a=>a.status==="Assigned").forEach(a=>{
-    const c=document.createElement("div");
-    c.className="card";
-    c.innerHTML=`
+/* ---------------- ASSIGNED TODAY ---------------- */
+function renderAssignedToday(){
+  const box=document.getElementById("assignedToday");
+  box.innerHTML="";
+  ASSIGNMENTS.filter(a=>a.status==="Assigned").forEach(a=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`
       <h3>${a.college}</h3>
-      <div class="meta">${a.subject} • ${a.lecturerName}</div>
-      <div class="actions">
-        <button class="success" onclick="markSelected('${a.assignmentId}')">Selected</button>
-        <button class="danger" onclick="markRejected('${a.assignmentId}')">Not Selected</button>
+      <div class="small">${a.subject} • ${a.lecturerName}</div>
+      <div class="row">
+        <button class="btn success" onclick="updateStatus('${a.assignmentId}','Selected')">Selected</button>
+        <button class="btn danger" onclick="updateStatus('${a.assignmentId}','Not Selected')">Not Selected</button>
       </div>
     `;
-    g.appendChild(c);
+    box.appendChild(card);
   });
 }
 
-async function markSelected(id){
-  await fetch(API+"?action=updateAssignmentStatus",{
+/* ---------------- STATUS UPDATE ---------------- */
+async function updateStatus(id,status){
+  await fetch(API,{
     method:"POST",
-    body:JSON.stringify({assignmentId:id,status:"Selected"})
+    body:JSON.stringify({
+      action:"updateAssignmentStatus",
+      assignmentId:id,
+      status
+    })
   });
-  assignments.find(a=>a.assignmentId===id).status="Selected";
-  renderAll();
-}
-
-async function markRejected(id){
-  await fetch(API+"?action=updateAssignmentStatus",{
-    method:"POST",
-    body:JSON.stringify({assignmentId:id,status:"Not Selected"})
-  });
-  assignments.find(a=>a.assignmentId===id).status="Not Selected";
-  renderAll();
-}
-
-function renderClosed(){
-  const g=qs("#closedGrid");
-  g.innerHTML="";
-  vacancies.filter(v=>v.status==="Closed").forEach(v=>{
-    const c=document.createElement("div");
-    c.className="card";
-    c.innerHTML=`
-      <span class="badge closed">CLOSED</span>
-      <h3>${v.college}</h3>
-      <div class="meta">${v.subject}</div>
-      <div class="actions">
-        <button class="print-btn" onclick="window.print()">Print</button>
-      </div>
-    `;
-    g.appendChild(c);
-  });
-}
-
-function toggleClosed(){
-  qs("#closedSection").classList.toggle("hidden");
+  loadAll();
 }
 
 loadAll();
