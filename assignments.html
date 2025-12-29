@@ -384,27 +384,58 @@ function renderOpenVacancies(){
 /* =========================================================
    ASSIGN LECTURER (MANUAL ONLY)
 ========================================================= */
-async function assign(vacancyId){
-  const sel = document.getElementById("lect-"+vacancyId);
-  if(!sel || !sel.value){
+async function assign(vacancyId) {
+  const sel = document.getElementById("lect-" + vacancyId);
+  if (!sel || !sel.value) {
     alert("Please select a lecturer");
     return;
   }
 
   const [lecturerId, lecturerName] = sel.value.split("|");
 
-  await fetch(API_URL+"?action=addAssignment",{
-    method:"POST",
-    body:JSON.stringify({
-      vacancyId,
-      lecturerId,
-      lecturerName,
-      agreedSalary:0
-    })
-  });
+  try {
+    // 🔹 Fetch vacancy fresh from backend (NO TRUST ON FRONTEND)
+    const vacRes = await fetch(API_URL + "?action=getVacancies");
+    const vacList = await vacRes.json();
+    const vacancy = vacList.find(v => v.id === vacancyId);
 
-  await loadAll();
-  renderAll();
+    if (!vacancy) {
+      alert("Vacancy not found in backend");
+      return;
+    }
+
+    const payload = {
+      vacancyId: vacancy.id,
+      college: vacancy.college,
+      city: vacancy.city,
+      subject: vacancy.subject,
+      level: vacancy.level,
+      lecturerId: lecturerId,
+      lecturerName: lecturerName,
+      agreedSalary: 0,
+      assignmentType: "Manual"
+    };
+
+    const res = await fetch(API_URL + "?action=addAssignment", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      alert("Backend error: " + (data.error || "Unknown"));
+      return;
+    }
+
+    await loadAll();
+    renderAll();
+
+  } catch (err) {
+    console.error(err);
+    alert("Assignment failed (network/backend)");
+  }
 }
 
 /* =========================================================
